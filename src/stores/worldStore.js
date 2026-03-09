@@ -2,12 +2,22 @@ import { defineStore } from "pinia";
 
 export const useWorldStore = defineStore("world", {
     state: () => ({
-        entries: {}
+        world: []
     }),
     actions: {
         async fetchWorld() {
-            const res = await fetch("http://localhost:3000/api/world");
-            this.entries = await res.json();
+            try {
+                // Mock data
+                this.world = [
+                    { name: "Norrun" },
+                    { name: "Talona" },
+                    { name: "Liira" },
+                    { name: "Sune" }
+                ];
+
+            } catch (error) {
+                console.error("fetchWorld error:", error);
+            }
         }
     }
 });
