@@ -35,7 +35,7 @@ const router = createRouter({
 
     {
       path: "/world/talona",
-      name: "sune",
+      name: "talona",
       component: TalonaView
     }
 
