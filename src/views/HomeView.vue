@@ -114,15 +114,34 @@ body {
   text-align: center;
 }
 
-/* ===== TABS ===== */
 .tabs {
   display: flex;
   gap: 1rem;
   justify-content: center;
   margin-bottom: 1.5rem;
+
+  /* Scrollable on small screens */
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #90caf9 transparent;
+}
+
+.tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tabs::-webkit-scrollbar-thumb {
+  background-color: #90caf9;
+  border-radius: 3px;
 }
 
 .tabs button {
+  flex: 0 0 auto; /* Prevent shrinking */
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 6px;
@@ -130,6 +149,7 @@ body {
   color: #fff;
   cursor: pointer;
   transition: background 0.2s;
+  white-space: nowrap; /* Prevent text wrapping */
 }
 
 .tabs button.active {
