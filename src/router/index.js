@@ -5,6 +5,7 @@ import NorrunView from "../views/NorrunView.vue";
 import SuneView from "../views/SuneView.vue";
 import LiiraView from "@/views/LiiraView.vue";
 import TalonaView from "@/views/TalonaView.vue";
+import DredelView from "@/views/DredelView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,6 +38,12 @@ const router = createRouter({
       path: "/world/talona",
       name: "talona",
       component: TalonaView
+    },
+
+    {
+      path: "/kingdoms/dredel",
+      name: "dredel",
+      component: DredelView
     }
 
   ]
