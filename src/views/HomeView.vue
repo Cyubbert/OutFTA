@@ -1,3 +1,37 @@
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useWorldStore } from "../stores/worldStore";
+
+const store = useWorldStore();
+onMounted(store.fetchWorld);
+
+// Tabs
+const tabs = ["World & Deities", "Kingdoms", "NPCs"];
+const activeTab = ref("World & Deities");
+
+// Card data
+const cards = [
+  // World & Deities
+  { name: "Norrun", img: "/src/assets/images/Map.png", route: "/world/norrun", category: "World & Deities" },
+  { name: "Talona", img: "/src/assets/images/2.png", route: "/world/talona", category: "World & Deities" },
+  { name: "Liira", img: "/src/assets/images/Liira.png", route: "/world/liira", category: "World & Deities" },
+  { name: "Sune", img: "/src/assets/images/Illustration.png", route: "/world/sune", category: "World & Deities" },
+
+  // Kingdoms
+  { name: "Kingdom A", img: "/src/assets/images/kingdom-a.png", route: "/kingdoms/a", category: "Kingdoms" },
+  { name: "Kingdom B", img: "/src/assets/images/kingdom-b.png", route: "/kingdoms/b", category: "Kingdoms" },
+
+  // NPCs
+  { name: "NPC 1", img: "/src/assets/images/npc1.png", route: "/npcs/1", category: "NPCs" },
+  { name: "NPC 2", img: "/src/assets/images/npc2.png", route: "/npcs/2", category: "NPCs" },
+];
+
+const filteredCards = computed(() =>
+    cards.filter(card => card.category === activeTab.value)
+);
+</script>
+
+
 <template>
   <article class="page sans">
 
@@ -29,7 +63,8 @@
           <section class="collection-content">
             <h3 class="collection-title">{{ activeTab }}</h3>
 
-            <div class="cards-container">
+            <!-- Fade transition for cards -->
+            <transition-group name="fade" tag="div" class="cards-container">
               <router-link
                   v-for="card in filteredCards"
                   :key="card.name"
@@ -39,7 +74,8 @@
                 <img :src="card.img" :alt="card.name" />
                 <div class="card-name">{{ card.name }}</div>
               </router-link>
-            </div>
+            </transition-group>
+
           </section>
         </div>
       </div>
@@ -48,39 +84,6 @@
   </article>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from "vue";
-import { useWorldStore } from "../stores/worldStore";
-
-const store = useWorldStore();
-onMounted(store.fetchWorld);
-
-// Tabs
-const tabs = ["World & Deities", "Kingdoms", "NPCs"];
-const activeTab = ref("World & Deities");
-
-// Card data
-const cards = [
-  // World & Deities
-  { name: "Norrun", img: "/src/assets/images/Map.png", route: "/world/norrun", category: "World & Deities" },
-  { name: "Talona", img: "/src/assets/images/2.png", route: "/world/talona", category: "World & Deities" },
-  { name: "Liira", img: "/src/assets/images/Liira.png", route: "/world/liira", category: "World & Deities" },
-  { name: "Sune", img: "/src/assets/images/Illustration.png", route: "/world/sune", category: "World & Deities" },
-
-  // Kingdoms
-  { name: "Kingdom A", img: "/src/assets/images/kingdom-a.png", route: "/kingdoms/a", category: "Kingdoms" },
-  { name: "Kingdom B", img: "/src/assets/images/kingdom-b.png", route: "/kingdoms/b", category: "Kingdoms" },
-
-  // NPCs
-  { name: "NPC 1", img: "/src/assets/images/npc1.png", route: "/npcs/1", category: "NPCs" },
-  { name: "NPC 2", img: "/src/assets/images/npc2.png", route: "/npcs/2", category: "NPCs" },
-];
-
-// Compute cards for the active tab
-const filteredCards = computed(() =>
-    cards.filter(card => card.category === activeTab.value)
-);
-</script>
 
 <style>
 * {
@@ -150,7 +153,7 @@ body {
 }
 
 .column-large {
-  width: 60%;
+  width: 100%; /* full width to align cards */
 }
 
 .collection-title {
@@ -158,16 +161,20 @@ body {
   color: #ffffff;
 }
 
+/* ===== CARDS ===== */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1.5rem;
   margin-top: 1rem;
+  justify-items: center; /* center cards */
 }
 
 .card {
   position: relative;
   height: 180px;
+  width: 100%;
+  max-width: 220px;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5);
@@ -196,13 +203,15 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.7);
 }
 
-/* ===== RESPONSIVE ===== */
-@media (min-width: 1200px) {
-  .cards-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* ===== FADE TRANSITION ===== */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .column-list {
     flex-direction: column;
