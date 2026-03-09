@@ -31,7 +31,6 @@ const cardsByTab = {
   ],
 };
 
-const spotifyPlaylist = "https://open.spotify.com/embed/playlist/3Frb2hSA7fBOCn4m5KpPoY";
 </script>
 
 <template>
@@ -42,17 +41,6 @@ const spotifyPlaylist = "https://open.spotify.com/embed/playlist/3Frb2hSA7fBOCn4
     </header>
 
     <main class="container">
-      <!-- Linke Spotify Player -->
-      <aside class="spotify-player">
-        <iframe
-            :src="spotifyPlaylist"
-            width="300"
-            height="380"
-            frameborder="0"
-            allowtransparency="true"
-            allow="encrypted-media"
-        ></iframe>
-      </aside>
 
       <!-- Rechte Seite: Tabs + Cards -->
       <div class="content">
@@ -105,13 +93,6 @@ const spotifyPlaylist = "https://open.spotify.com/embed/playlist/3Frb2hSA7fBOCn4
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
-}
-
-/* Linker Spotify Player */
-.spotify-player {
-  flex: 0 0 320px; /* feste Breite */
-  position: sticky;
-  top: 2rem;
 }
 
 /* Rechte Seite: Tabs + Cards */
@@ -218,16 +199,4 @@ const spotifyPlaylist = "https://open.spotify.com/embed/playlist/3Frb2hSA7fBOCn4
   transform: translateY(-20px);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .container {
-    flex-direction: column;
-  }
-
-  .spotify-player {
-    width: 100%;
-    position: relative;
-    top: auto;
-  }
-}
 </style>
