@@ -12,26 +12,26 @@ const activeTab = ref("World & Deities");
 // Card data
 const cards = [
   // World & Deities
-  { name: "Norrun", img: "/src/assets/images/Map.png", route: "/world/norrun", category: "World & Deities" },
-  { name: "Talona", img: "/src/assets/images/2.png", route: "/world/talona", category: "World & Deities" },
-  { name: "Liira", img: "/src/assets/images/Liira.png", route: "/world/liira", category: "World & Deities" },
-  { name: "Sune", img: "/src/assets/images/Illustration.png", route: "/world/sune", category: "World & Deities" },
+  { name: "Norrun", img: "@/assets/images/Map.png", route: "/world/norrun", category: "World & Deities" },
+  { name: "Talona", img: "@/assets/images/2.png", route: "/world/talona", category: "World & Deities" },
+  { name: "Liira", img: "@/assets/images/Liira.png", route: "/world/liira", category: "World & Deities" },
+  { name: "Sune", img: "@/assets/images/Illustration.png", route: "/world/sune", category: "World & Deities" },
 
 
   // Kingdoms
-  { name: "Lacrima", img: "/src/assets/images/AUGH.png", route: "/kingdoms/lacrima", category: "Kingdoms" },
-  { name: "Duweil", img: "/src/assets/images/AUGH.png", route: "/kingdoms/duweil", category: "Kingdoms" },
-  { name: "Ivia", img: "/src/assets/images/AUGH.png", route: "/kingdoms/ivia", category: "Kingdoms" },
-  { name: "Letlon", img: "/src/assets/images/AUGH.png", route: "/kingdoms/letlon", category: "Kingdoms" },
-  { name: "Dredel", img: "/src/assets/images/AUGH.png", route: "/kingdoms/dredel", category: "Kingdoms" },
+  { name: "Lacrima", img: "@/assets/images/AUGH.png", route: "/kingdoms/lacrima", category: "Kingdoms" },
+  { name: "Duweil", img: "@/assets/images/AUGH.png", route: "/kingdoms/duweil", category: "Kingdoms" },
+  { name: "Ivia", img: "@/assets/images/AUGH.png", route: "/kingdoms/ivia", category: "Kingdoms" },
+  { name: "Letlon", img: "@/assets/images/AUGH.png", route: "/kingdoms/letlon", category: "Kingdoms" },
+  { name: "Dredel", img: "@/assets/images/AUGH.png", route: "/kingdoms/dredel", category: "Kingdoms" },
 
   // NPCs
-  { name: "Aasmias Wiltfen Galanodel", img: "/src/assets/images/AUGH.png", route: "/npcs/aasmias", category: "NPCs" },
-  { name: "Aarely", img: "/src/assets/images/AUGH.png", route: "/npcs/aarely", category: "NPCs" },
-  { name: "Selene Witword", img: "/src/assets/images/AUGH.png", route: "/npcs/selene", category: "NPCs" },
-  { name: "Virex Halden", img: "/src/assets/images/AUGH.png", route: "/npcs/virex", category: "NPCs" },
-  { name: "Moltyn Zeghal", img: "/src/assets/images/AUGH.png", route: "/npcs/moltyn", category: "NPCs" },
-  { name: "Naelith", img: "/src/assets/images/AUGH.png", route: "/npcs/naelith", category: "NPCs" },
+  { name: "Aasmias Wiltfen Galanodel", img: "@/assets/images/AUGH.png", route: "/npcs/aasmias", category: "NPCs" },
+  { name: "Aarely", img: "@/assets/images/AUGH.png", route: "/npcs/aarely", category: "NPCs" },
+  { name: "Selene Witword", img: "@/assets/images/AUGH.png", route: "/npcs/selene", category: "NPCs" },
+  { name: "Virex Halden", img: "@/assets/images/AUGH.png", route: "/npcs/virex", category: "NPCs" },
+  { name: "Moltyn Zeghal", img: "@/assets/images/AUGH.png", route: "/npcs/moltyn", category: "NPCs" },
+  { name: "Naelith", img: "@/assets/images/AUGH.png", route: "/npcs/naelith", category: "NPCs" },
 ];
 
 const filteredCards = computed(() =>
