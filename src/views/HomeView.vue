@@ -1,7 +1,10 @@
 <script setup>
+import { onMounted } from "vue";
+import { useWorldStore } from "../stores/worldStore";
 import WorldCard from "../components/WorldCard.vue";
 
-
+const store = useWorldStore();
+onMounted(store.fetchWorld);
 </script>
 
 <template>
