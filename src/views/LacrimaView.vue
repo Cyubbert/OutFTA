@@ -12,8 +12,8 @@
   <header class="page-header">
     <img
         class="page-cover-image"
-        src="/src/assets/images/Map.png"
-        alt="Norrun Cover"
+        src="/src/assets/images/LacrimaBanner.png"
+        alt="Lacrima Cover"
     />
   </header>
 
@@ -87,7 +87,7 @@
     <img
         src="/src/assets/images/LacrimaMap.png"
         class="map-again"
-        alt="Map of Dredel"
+        alt="Map of Lacrima"
     />
   </main>
 </template>

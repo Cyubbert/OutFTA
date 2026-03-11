@@ -6,6 +6,7 @@ import TalonaImg from "@/assets/images/2.png";
 import LiiraImg from "@/assets/images/Liira.png";
 import SuneImg from "@/assets/images/Illustration.png";
 import AughImg from "@/assets/images/AUGH.png";
+import LacrimaBanner from "@/assets/images/LacrimaBanner.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);
@@ -24,7 +25,7 @@ const cards = [
 
 
   // Kingdoms
-  { name: "Lacrima", img: AughImg, route: "/kingdoms/lacrima", category: "Kingdoms" },
+  { name: "Lacrima", img: LacrimaBanner, route: "/kingdoms/lacrima", category: "Kingdoms" },
   { name: "Duweil", img: AughImg, route: "/kingdoms/duweil", category: "Kingdoms" },
   { name: "Ivia", img: AughImg, route: "/kingdoms/ivia", category: "Kingdoms" },
   { name: "Letlon", img: AughImg, route: "/kingdoms/letlon", category: "Kingdoms" },
