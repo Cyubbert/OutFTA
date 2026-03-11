@@ -71,9 +71,9 @@
     </section>
 
     <img
-        src="/src/assets/images/Map.png"
+        src="/src/assets/images/DredelMap.png"
         class="map-again"
-        alt="Map of Norrun"
+        alt="Map of Dredel"
     />
   </main>
 </template>
