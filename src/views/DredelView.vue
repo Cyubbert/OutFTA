@@ -12,8 +12,8 @@
   <header class="page-header">
     <img
         class="page-cover-image"
-        src="/src/assets/images/Map.png"
-        alt="Norrun Cover"
+        src="/src/assets/images/Dredel_.png"
+        alt="Dredel Cover"
     />
   </header>
 

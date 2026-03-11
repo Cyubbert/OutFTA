@@ -52,23 +52,23 @@ const router = createRouter({
 
     {
       path: "/kingdoms/lacrima",
-      name: "dredel",
+      name: "lacrima",
       component: LacrimaView
     },
 
     {
       path: "/kingdoms/duweil",
-      name: "dredel",
+      name: "duweil",
       component: DuweilView
     },
     {
       path: "/kingdoms/ivia",
-      name: "dredel",
+      name: "ivia",
       component: IviaView
     },
     {
       path: "/kingdoms/letlon",
-      name: "dredel",
+      name: "letlon",
       component: LetlonView
     }
 

@@ -7,6 +7,7 @@ import LiiraImg from "@/assets/images/Liira.png";
 import SuneImg from "@/assets/images/Illustration.png";
 import AughImg from "@/assets/images/AUGH.png";
 import LacrimaBanner from "@/assets/images/LacrimaBanner.png";
+import DredelBanner from "@/assets/images/Dredel_.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);
@@ -29,7 +30,7 @@ const cards = [
   { name: "Duweil", img: AughImg, route: "/kingdoms/duweil", category: "Kingdoms" },
   { name: "Ivia", img: AughImg, route: "/kingdoms/ivia", category: "Kingdoms" },
   { name: "Letlon", img: AughImg, route: "/kingdoms/letlon", category: "Kingdoms" },
-  { name: "Dredel", img: AughImg, route: "/kingdoms/dredel", category: "Kingdoms" },
+  { name: "Dredel", img: DredelBanner, route: "/kingdoms/dredel", category: "Kingdoms" },
 
   // NPCs
   { name: "Aasmias Wiltfen Galanodel", img: AughImg, route: "/npcs/aasmias", category: "NPCs" },
