@@ -6,6 +6,10 @@ import SuneView from "../views/SuneView.vue";
 import LiiraView from "@/views/LiiraView.vue";
 import TalonaView from "@/views/TalonaView.vue";
 import DredelView from "@/views/DredelView.vue";
+import LacrimaView from "@/views/LacrimaView.vue";
+import DuweilView from "@/views/DuweilView.vue";
+import IviaView from "@/views/IviaView.vue";
+import LetlonView from "@/views/LetlonView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -44,6 +48,28 @@ const router = createRouter({
       path: "/kingdoms/dredel",
       name: "dredel",
       component: DredelView
+    },
+
+    {
+      path: "/kingdoms/lacrima",
+      name: "dredel",
+      component: LacrimaView
+    },
+
+    {
+      path: "/kingdoms/duweil",
+      name: "dredel",
+      component: DuweilView
+    },
+    {
+      path: "/kingdoms/ivia",
+      name: "dredel",
+      component: IviaView
+    },
+    {
+      path: "/kingdoms/letlon",
+      name: "dredel",
+      component: LetlonView
     }
 
   ]
