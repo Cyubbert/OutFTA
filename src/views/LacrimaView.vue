@@ -25,11 +25,13 @@
       <h2>Ruler</h2>
 
       <p>
-        Lacrima is currently ruled by Queen Cyria Powsky, leader of the Powsky family that has controlled the kingdom for many centuries.
-        The Powsky family is closely connected to stories of dragons, great warriors and powerful magic.
-        Soon to be King Allen is supported by the Queen Mother, Cyria Powsky, who is known for being very clever in politics and often influences decisions behind the scenes.
-        The Powsky family and many noble houses use dragon symbols in their crests.
-        Some even keep dragon bones, claws, or scales as family heirlooms to show their history and power.
+        Lacrima is currently ruled by Queen Cyria Powsky, the Powsky family that has controlled the kingdom for many centuries.
+        The Powsky family is deeply tied to ancient legends of dragons, heroic warriors and powerful magic that once flowed through the land.
+        The soon to be king, Allen Powsky, receives strong guidance from the Queen Mother, Cyria Powsky.
+        Known for her sharp political mind, she often influences decisions behind the scenes and plays a crucial role in maintaining the stability of the throne.
+        Across Lacrima, the Powsky family and many noble houses display dragon symbols on their crests.
+        These emblems represent power, legacy and their ancient connection to dragonkind.
+        Some noble families even keep dragon bones, claws, or scales as treasured heirlooms, preserving them as symbols of their heritage and proof of their long standing ties to the war of scaled nature.
       </p>
 
       <h2>Landscape</h2>
@@ -68,7 +70,7 @@
       <p>
         One of the most important events in Lacrima’s history is the Battle of Scaled Nature.
         This battle ended a long war involving dragons.
-        Lacrima’s army, together with a famous Dragon Slayer, finally defeated the threat.
+        Lacrima’s army, together with a famous knight, later known as The Dragon Slayer, finally defeated the threat.
         The noble families that helped win the battle are still honored today.
         The most known families, besides The Powsky Family, are: The Galanodel Family, The Halden Family, The Witword Family, The Fortis Family, The Montmorency Family, The Abire Family and many more.
       </p>
