@@ -10,6 +10,7 @@ import LacrimaView from "@/views/LacrimaView.vue";
 import DuweilView from "@/views/DuweilView.vue";
 import IviaView from "@/views/IviaView.vue";
 import LetlonView from "@/views/LetlonView.vue";
+import AarelyView from "@/views/AarelyView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -70,6 +71,11 @@ const router = createRouter({
       path: "/kingdoms/letlon",
       name: "letlon",
       component: LetlonView
+    },
+    {
+      path: "/npcs/aarely",
+      name: "aarely",
+      component: AarelyView
     }
 
   ]

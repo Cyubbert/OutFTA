@@ -11,6 +11,7 @@ import DredelBanner from "@/assets/images/Dredel_.png";
 import IviaBanner from "@/assets/images/Ivia.png";
 import DuweilBanner from "@/assets/images/Duweil.png";
 import LetlonBanner from "@/assets/images/Letlon.png";
+import Aarely from "@/assets/images/Aarely.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);
@@ -37,7 +38,7 @@ const cards = [
 
   // NPCs
   { name: "Aasmias Wiltfen Galanodel", img: AughImg, route: "/npcs/aasmias", category: "NPCs" },
-  { name: "Aarely", img: AughImg, route: "/npcs/aarely", category: "NPCs" },
+  { name: "Aarely", img: Aarely, route: "/npcs/aarely", category: "NPCs" },
   { name: "Selene Witword", img: AughImg, route: "/npcs/selene", category: "NPCs" },
   { name: "Virex Halden", img: AughImg, route: "/npcs/virex", category: "NPCs" },
   { name: "Moltyn Zeghal", img: AughImg, route: "/npcs/moltyn", category: "NPCs" },
