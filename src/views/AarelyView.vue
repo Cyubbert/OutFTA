@@ -26,16 +26,18 @@
         He has gray blonde hair and pale, almost white eyes that give him a distant and calm appearance.
         His hair is tied into a long braid that rests down his back.
       </p>
+
       <p>
         He wears a long white gown that hides most of his body, making it difficult to see his true build.
         Only his slender hands emerge from the wide, puffy sleeves and part of his upper body is hugged by a black top.
         Covering the top of his head in a thin white cloth, slightly translucent, allowing hints of his hair to be seen beneath it.
-
       </p>
+
       <p>
         Aarely is a monk devoted to The Leader of the Pale Sun, his clothing and quiet presence reflect the purity and discipline most followers portray of this faith.
         His pale garments and calm movements make him appear almost ghostlike, as if he carries a piece of the pale sun’s light with him wherever he goes.
       </p>
+
     </section>
   </main>
 </template>
