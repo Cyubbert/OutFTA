@@ -8,6 +8,9 @@ import SuneImg from "@/assets/images/Illustration.png";
 import AughImg from "@/assets/images/AUGH.png";
 import LacrimaBanner from "@/assets/images/LacrimaBanner.png";
 import DredelBanner from "@/assets/images/Dredel_.png";
+import IviaBanner from "@/assets/images/Ivia.png";
+import DuweilBanner from "@/assets/images/Duweil.png";
+import LetlonBanner from "@/assets/images/Letlon.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);
@@ -27,9 +30,9 @@ const cards = [
 
   // Kingdoms
   { name: "Lacrima", img: LacrimaBanner, route: "/kingdoms/lacrima", category: "Kingdoms" },
-  { name: "Duweil", img: AughImg, route: "/kingdoms/duweil", category: "Kingdoms" },
-  { name: "Ivia", img: AughImg, route: "/kingdoms/ivia", category: "Kingdoms" },
-  { name: "Letlon", img: AughImg, route: "/kingdoms/letlon", category: "Kingdoms" },
+  { name: "Duweil", img: DuweilBanner, route: "/kingdoms/duweil", category: "Kingdoms" },
+  { name: "Ivia", img: IviaBanner, route: "/kingdoms/ivia", category: "Kingdoms" },
+  { name: "Letlon", img: LetlonBanner, route: "/kingdoms/letlon", category: "Kingdoms" },
   { name: "Dredel", img: DredelBanner, route: "/kingdoms/dredel", category: "Kingdoms" },
 
   // NPCs
@@ -199,51 +202,71 @@ body {
 /* ===== CARDS ===== */
 .cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-  justify-items: center; /* center cards */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.8rem;
+  margin-top: 1.5rem;
 }
 
 .card {
   position: relative;
-  height: 180px;
+  height: 200px;
   width: 100%;
-  max-width: 220px;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+
+  background: #1a1a1a;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
+  transform: scale(1);
+  transition: transform 0.35s ease;
 }
 
+/* Gradient Overlay */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.85) 0%,
+      rgba(0,0,0,0.35) 40%,
+      rgba(0,0,0,0) 70%
+  );
+}
+
+/* Card title */
 .card-name {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  padding: 0.4rem 0;
-  background: rgba(0,0,0,0.55);
-  color: #ffffff;
-  font-weight: 600;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+
+  z-index: 2;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.02em;
 }
 
+/* Hover animation */
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.7);
 }
 
-/* ===== FADE TRANSITION ===== */
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.4s;
-}
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
+.card:hover img {
+  transform: scale(1.08);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -264,7 +287,11 @@ body {
   }
 
   .card {
-    height: 260px;
+    height: 240px;
+  }
+
+  .collection-title{
+    margin-left:0.8rem;
   }
 
   .page-title {
@@ -279,6 +306,10 @@ body {
 
   .page-title {
     font-size: 1.8rem;
+  }
+
+  .collection-title{
+    margin-left:0.8rem;
   }
 }
 </style>

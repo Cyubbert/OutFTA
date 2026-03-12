@@ -59,10 +59,16 @@
         Lacrima also has a special Elemental Banking System, where magical elementals deliver deposits to people wherever they are.
       </p>
 
-      <h2>Commonly used Languages</h2>
+      <h2>Languages</h2>
 
       <p>
         Elvish, Abyssal, Dragonic, Common
+      </p>
+
+      <h2>Inhabitants</h2>
+
+      <p>
+        Elves, Humans, Tiefling, Dragonborn
       </p>
 
       <h2>Known History</h2>

@@ -12,14 +12,14 @@
   <header class="page-header">
     <img
         class="page-cover-image"
-        src="/src/assets/images/Map.png"
+        src="/src/assets/images/Letlon.png"
         alt="Norrun Cover"
     />
   </header>
 
 
   <main class="container">
-    <h1>Dredel</h1>
+    <h1>Letlon</h1>
 
     <section class="section">
       <h2>Ruler</h2>
@@ -51,7 +51,7 @@
         In such an unforgiving terrain, the people of Dredel have developed a deep respect for the land, its dangers and the skills necessary to thrive within it.
       </p>
 
-      <h2>Commonly used Languages</h2>
+      <h2>Languages</h2>
 
       <p>
         Dragonic, Dwarvish, Gnomish, Orkish, Goliath, Undercommon, Common
@@ -71,9 +71,9 @@
     </section>
 
     <img
-        src="/src/assets/images/DredelMap.png"
+        src="/src/assets/images/Letlon_Map.png"
         class="map-again"
-        alt="Map of Dredel"
+        alt="Map of Letlon"
     />
   </main>
 </template>

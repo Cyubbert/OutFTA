@@ -12,14 +12,14 @@
   <header class="page-header">
     <img
         class="page-cover-image"
-        src="/src/assets/images/Map.png"
-        alt="Norrun Cover"
+        src="/src/assets/images/Duweil.png"
+        alt="Duweil Cover"
     />
   </header>
 
 
   <main class="container">
-    <h1>Dredel</h1>
+    <h1>Duweil</h1>
 
     <section class="section">
       <h2>Ruler</h2>
@@ -51,10 +51,16 @@
         In such an unforgiving terrain, the people of Dredel have developed a deep respect for the land, its dangers and the skills necessary to thrive within it.
       </p>
 
-      <h2>Commonly used Languages</h2>
+      <h2>Languages</h2>
 
       <p>
         Dragonic, Dwarvish, Gnomish, Orkish, Goliath, Undercommon, Common
+      </p>
+
+      <h2>Inhabitants</h2>
+
+      <p>
+        Sea Elves, Sirens, Triton, Vedalken, Human, Aaracokra, Water Genasi, Tortle, Loxodon
       </p>
 
       <h2>Belief</h2>
@@ -71,9 +77,9 @@
     </section>
 
     <img
-        src="/src/assets/images/DredelMap.png"
+        src="/src/assets/images/DuweilMap.png"
         class="map-again"
-        alt="Map of Dredel"
+        alt="Map of Duweil"
     />
   </main>
 </template>

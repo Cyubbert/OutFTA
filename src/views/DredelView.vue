@@ -51,10 +51,16 @@
         In such an unforgiving terrain, the people of Dredel have developed a deep respect for the land, its dangers and the skills necessary to thrive within it.
       </p>
 
-      <h2>Commonly used Languages</h2>
+      <h2>Languages</h2>
 
       <p>
         Dragonic, Dwarvish, Gnomish, Orkish, Goliath, Undercommon, Common
+      </p>
+
+      <h2>Inhabitants</h2>
+
+      <p>
+        Dwarves, Gnomes, Halflings, Goliath, Dragonborn, Aarakocra, Orcs, Genasi
       </p>
 
       <h2>Belief</h2>
