@@ -25,36 +25,39 @@
       <h2>Ruler</h2>
 
       <p>
-        Aiden Hugh VII rules Dredel not from a single seat of power but by traveling constantly between its major settlements, administering the kingdom from wherever he happens to be.
-        His symbol, a hammer crossed with a climbing pick, represents the unity between craftsmanship and survival, values central to Dredel’s identity.
-        Rejecting the concept of a centralized capital, Aiden believes that “Dredel itself is our capital, the peaks our throne, the stone our walls” reflecting his conviction that no single city could adequately govern such a rugged and fragmented kingdom.
+        Duweil is ruled by Queen Venus Snow VI, a clever and careful leader who keeps the powerful merchant guilds under control.
+        While the Trade Guild Council holds a lot of influence over the kingdom’s economy and trade, the queen remains the highest authority.
+        Queen Snow maintains stability through strong alliances, secret intelligence networks and carefully negotiated treaties with other nations.
+        Her rule focuses on protecting Duweil’s trade routes and keeping the wealthy merchant powers balanced.
       </p>
 
       <h2>Landscape</h2>
 
       <p>
-        Dredel is defined entirely by its mountains, whose extreme and varied terrain shapes the kingdom’s identity.
-        Towering peaks, frozen northern expanses, deep ravines, volcanic crests and labyrinthine tunnels dominate the landscape.
-        The Spine Peaks form the central ridge, rising as the tallest mountains in Norrun, while the Northern Frostlands are perpetually snow covered and nearly uninhabitable, home only to beasts adapted to the cold.
-        Beneath the mountains lie the Crag Tunnels, an immense network of subterranean passageways dug by dwarves and gnomes, serving as vital roads when surface travel is impossible.
-        Rift Valleys, created by ancient earthshaking activity, are deep chasms where settlements cling to ledges, occupy caves, or are connected by rope bridges.
-        Travel across Dredel is hazardous, caravans depend on mules, giant goats, or specially trained insectoid mountain beasts capable of navigating cliffs.
+        Duweil is a kingdom made up of twelve large islands and many smaller ones spread across the Deep Dark Ocean.
+        The sea around the islands is unusually deep and dark, filled with trenches and glowing coral reefs.
+        Because of this darkness, the people of Duweil rely on bioluminescent plants, magically glowing stones, trained deep sea creatures and long lantern bridges hanging over the water to light their cities and harbors.
+        The islands themselves are very different from each other.
+        Some are covered in thick jungles, others are volcanic and some cities are carved directly into cliffs.
+        Many buildings mix stone architecture with coral and sea materials, giving Duweil’s settlements a unique coastal style.
+        The capital city, Fooch, is the largest trading port and the center of the kingdom’s power.
       </p>
 
       <h2>Culture</h2>
 
       <p>
-        Dredel’s culture is shaped by isolation and adaptation to its harsh environment.
-        Communities are spread across cliffs, caves and tunnels, emphasizing self reliance, endurance and creativity.
-        The kingdom places great value on craftsmanship and survival, which are intertwined symbolically and practically, as seen in the ruler’s emblem.
-        Trade and travel require specialized knowledge and resilient beasts, reinforcing a culture where cooperation and ingenuity are essential for daily life.
-        In such an unforgiving terrain, the people of Dredel have developed a deep respect for the land, its dangers and the skills necessary to thrive within it.
+        Life in Duweil is built around trade and the sea.
+        Because the kingdom sits between several continents, it has become the center of global trade and many kingdoms depend on its merchant fleets for rare goods.
+        Enormous ports and floating markets connect the islands and ships from many cultures arrive every day.
+        Merchant guilds are extremely powerful in Duweil, often competing with each other for control of trade routes and valuable goods.
+        These rivalries sometimes lead to sabotage or spying between guilds.
+        Pirates are also a constant threat on the sea, with some crews rumored to have magical powers or ties to sea monsters.
       </p>
 
       <h2>Languages</h2>
 
       <p>
-        Dragonic, Dwarvish, Gnomish, Orkish, Goliath, Undercommon, Common
+        Primordial, Sylvan, Common, Elvish, Loxodon, Abyssal, Auran, Aquan
       </p>
 
       <h2>Inhabitants</h2>
@@ -66,10 +69,9 @@
       <h2>Belief</h2>
 
       <p>
-        The people in Dredel continue to worship Radoon, likely making Dredel the only place where he is still revered as a god.
-        Citizens look to Radoon as a symbol of strength, companionship and endurance.
-        Qualities essential for surviving the dangerous mountains and remote settlements.
-        His worship reflects the kingdom’s broader cultural values, emphasizing resilience, cooperation and the ability to thrive in even the most unforgiving terrain.
+        Most people in Duweil worship The Great Tide Mother. She is seen as the goddess of the sea’s cycles, travel and fortune in trade.
+        Sailors, merchants and explorers pray to her for safe journeys and successful deals.
+        Her followers believe that the tides represent the rise and fall of luck, reminding them that fortune can always change like the ocean.
       </p>
 
 
