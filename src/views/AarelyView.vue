@@ -21,6 +21,7 @@
 
     <section class="section">
       <p>
+        HELP ME, GET ME OUT OF GUARDIANS HEIGHT, ITS BEEN 7 DAYS, THERE IS NO FOOD LEFT, THE INFECTED ARE-
         Aarely is a slim man standing about 183 cm tall.
         He has gray blonde hair and pale, almost white eyes that give him a distant and calm appearance.
         His hair is tied into a long braid that rests down his back.
