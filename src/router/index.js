@@ -11,6 +11,7 @@ import DuweilView from "@/views/DuweilView.vue";
 import IviaView from "@/views/IviaView.vue";
 import LetlonView from "@/views/LetlonView.vue";
 import AarelyView from "@/views/AarelyView.vue";
+import VirexView from "@/views/VirexView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -62,20 +63,29 @@ const router = createRouter({
       name: "duweil",
       component: DuweilView
     },
+
     {
       path: "/kingdoms/ivia",
       name: "ivia",
       component: IviaView
     },
+
     {
       path: "/kingdoms/letlon",
       name: "letlon",
       component: LetlonView
     },
+
     {
       path: "/npcs/aarely",
       name: "aarely",
       component: AarelyView
+    },
+
+    {
+      path: "/npcs/virex",
+      name: "virex",
+      component: VirexView
     }
 
   ]
