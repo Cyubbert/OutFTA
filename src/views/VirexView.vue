@@ -21,19 +21,26 @@
 
     <section class="section">
       <p>
-        Efficient, distrustful, polite but threatening.
-        Virex Halden, Commander Halden or Sir Halden is a 185cm tall Elf.
-        He has long black straight hair that is neatly positioned on his back.
-        He has a rather slim face and what stands out the most is a scar that goes across his left eye.
-        One of his eyes is milky white and the other one a piercing grey.
-        He wears heavy armor with the Lacrimian Royal Family Crest on it.
+        Virex Halden, often called Commander Halden or Sir Halden, is known for being efficient, distrustful and polite in a way that still feels threatening.
+        He stands about 185 cm tall and carries himself with strict discipline.
       </p>
 
       <p>
-        He comes from a Noble Family in Lacrima.
-        After the Galanodels retracted from their duty as the personal Guards of the Royal Family, the Halden Family took over, now mainly serving as Bodyguards for the Royal Family.
-        Virex Halden is the 3rd Son of the Halden Family.
-        He gave up his postion as the heir and worked hard to earn a position outside the Castle and to serve the Royal family well.
+        He is an elf with long, straight black hair that falls neatly down his back.
+        His face is slim and sharp, but the most noticeable feature is the scar running across his left eye.
+        Because of this injury, one of his eyes has turned milky white, while the other remains a cold, piercing grey.
+        Virex usually wears heavy armor marked with the Lacrimian Royal Family crest, showing his loyalty to the crown.
+      </p>
+
+      <p>
+        He comes from the Halden family, a noble house in Lacrima.
+        Long ago, the Galanodel family served as the personal guards of the royal family.
+        When they stepped down from this duty, the Halden family took their place, becoming the main protectors of the Lacrima royal household.
+      </p>
+
+      <p>
+        Rather than becoming another close aide to the Lacrimian royal family, he gave up his position as an heir.
+        Instead, he chose to rise through the ranks through discipline and service, eventually earning the rank of Commander.
       </p>
 
 

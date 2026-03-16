@@ -12,7 +12,7 @@
     <img
         class="page-cover-image"
         src="/src/assets/images/AarelyBanner.png"
-        alt="Sune Cover"
+        alt="Aarely Cover"
     />
   </header>
 

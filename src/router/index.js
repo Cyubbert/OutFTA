@@ -12,6 +12,7 @@ import IviaView from "@/views/IviaView.vue";
 import LetlonView from "@/views/LetlonView.vue";
 import AarelyView from "@/views/AarelyView.vue";
 import VirexView from "@/views/VirexView.vue";
+import AasmiasView from "@/views/AasmiasView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -86,7 +87,15 @@ const router = createRouter({
       path: "/npcs/virex",
       name: "virex",
       component: VirexView
-    }
+    },
+
+    {
+      path: "/npcs/aasmias",
+      name: "aasmias",
+      component: AasmiasView
+    },
+
+
 
   ]
 });

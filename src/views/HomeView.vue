@@ -13,16 +13,16 @@ import DuweilBanner from "@/assets/images/Duweil.png";
 import LetlonBanner from "@/assets/images/Letlon.png";
 import AarelyBanner from "@/assets/images/AarelyBanner.png";
 import VirexBanner from "@/assets/images/VirexBanner.png";
+import AasmiasBanner from "@/assets/images/Aasmias_Banner.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);
 
-// Tabs
 const tabs = ["World & Deities", "Kingdoms", "NPCs"];
 const activeTab = ref("World & Deities");
 
-// Card data
 const cards = [
+
   // World & Deities
   { name: "Norrun", img: MapImg, route: "/world/norrun", category: "World & Deities" },
   { name: "Talona", img: TalonaImg, route: "/world/talona", category: "World & Deities" },
@@ -38,7 +38,7 @@ const cards = [
   { name: "Dredel", img: DredelBanner, route: "/kingdoms/dredel", category: "Kingdoms" },
 
   // NPCs
-  { name: "Aasmias Wiltfen Galanodel", img: AughImg, route: "/npcs/aasmias", category: "NPCs" },
+  { name: "Aasmias Wiltfen Galanodel", img: AasmiasBanner, route: "/npcs/aasmias", category: "NPCs" },
   { name: "Aarely", img: AarelyBanner, route: "/npcs/aarely", category: "NPCs" },
   { name: "Selene Witword", img: AughImg, route: "/npcs/selene", category: "NPCs" },
   { name: "Virex Halden", img: VirexBanner, route: "/npcs/virex", category: "NPCs" },
@@ -139,11 +139,9 @@ body {
   gap: 1rem;
   justify-content: center;
   margin-bottom: 1.5rem;
-
-  /* Scrollable on small screens */
   overflow-x: auto;
   padding-bottom: 0.5rem;
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
   scrollbar-color: #90caf9 transparent;
 }
 
@@ -161,7 +159,7 @@ body {
 }
 
 .tabs button {
-  flex: 0 0 auto; /* Prevent shrinking */
+  flex: 0 0 auto;
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 6px;
@@ -169,7 +167,7 @@ body {
   color: #fff;
   cursor: pointer;
   transition: background 0.2s;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap;
 }
 
 .tabs button.active {
@@ -182,7 +180,6 @@ body {
   color: #fff;
 }
 
-/* ===== COLUMNS ===== */
 .column-list {
   display: flex;
   gap: 2rem;
@@ -193,7 +190,7 @@ body {
 }
 
 .column-large {
-  width: 100%; /* full width to align cards */
+  width: 100%;
 }
 
 .collection-title {
@@ -201,7 +198,7 @@ body {
   color: #ffffff;
 }
 
-/* ===== CARDS ===== */
+
 .cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -232,7 +229,7 @@ body {
   transition: transform 0.35s ease;
 }
 
-/* Gradient Overlay */
+
 .card::after {
   content: "";
   position: absolute;
@@ -246,7 +243,7 @@ body {
   );
 }
 
-/* Card title */
+
 .card-name {
   position: absolute;
   bottom: 14px;
@@ -261,7 +258,7 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* Hover animation */
+
 .card:hover {
   transform: translateY(-6px);
   box-shadow: 0 10px 24px rgba(0,0,0,0.7);
@@ -271,7 +268,7 @@ body {
   transform: scale(1.08);
 }
 
-/* ===== RESPONSIVE ===== */
+
 @media (max-width: 1024px) {
   .column-list {
     flex-direction: column;

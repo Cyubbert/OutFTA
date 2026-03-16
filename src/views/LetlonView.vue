@@ -84,7 +84,7 @@ npm
       </p>
 
 
-      <h2>Message to Eddie</h2>
+      <h2>Message to Leaf and Eddie</h2>
 
       <p>Do not overthink the information given on the website :)</p>
 
