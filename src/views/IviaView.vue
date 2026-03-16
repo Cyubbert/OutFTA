@@ -25,30 +25,35 @@
       <h2>Ruler</h2>
 
       <p>
-        Aiden Hugh VII rules Dredel not from a single seat of power but by traveling constantly between its major settlements, administering the kingdom from wherever he happens to be.
-        His symbol, a hammer crossed with a climbing pick, represents the unity between craftsmanship and survival, values central to Dredel’s identity.
-        Rejecting the concept of a centralized capital, Aiden believes that “Dredel itself is our capital, the peaks our throne, the stone our walls” reflecting his conviction that no single city could adequately govern such a rugged and fragmented kingdom.
+        The ruler of Ivia died three years ago under unclear circumstances, leaving the kingdom without a clear heir.
+        Since then, two powerful claimants have risen, each reaching the throne.
+        Both have gathered supporters among nobles, military leaders and city states.
+        Because neither side has fully won, the kingdom remains divided and tense.
+        <br><br>
+        The capital city, Yoasthood, has become the center of this struggle.
+        Alliances shift often and nobles, merchants and adventurers quietly choose sides.
+        Rumors, secret deals and political games are common as each claimant tries to gain control.
       </p>
 
       <h2>Landscape</h2>
 
       <p>
-        Dredel is defined entirely by its mountains, whose extreme and varied terrain shapes the kingdom’s identity.
-        Towering peaks, frozen northern expanses, deep ravines, volcanic crests and labyrinthine tunnels dominate the landscape.
-        The Spine Peaks form the central ridge, rising as the tallest mountains in Norrun, while the Northern Frostlands are perpetually snow covered and nearly uninhabitable, home only to beasts adapted to the cold.
-        Beneath the mountains lie the Crag Tunnels, an immense network of subterranean passageways dug by dwarves and gnomes, serving as vital roads when surface travel is impossible.
-        Rift Valleys, created by ancient earthshaking activity, are deep chasms where settlements cling to ledges, occupy caves, or are connected by rope bridges.
-        Travel across Dredel is hazardous, caravans depend on mules, giant goats, or specially trained insectoid mountain beasts capable of navigating cliffs.
+        Ivia is the most isolated kingdom in Norrun, made up of wide deserts and golden savannahs.
+        Life is centered around scattered oasis settlements, which provide water, farming land and places for trade caravans to rest.
+        Some regions are fertile near the oases, while the deeper deserts are harsh and dangerous.
+        Nomadic tribes travel across the sands and savannahs, living far from the cities.
+        The climate is extremely hot, with burning sunlight during the day and cooler nights.
+        Water is one of the most scarce resources in the kingdom.
+        The capital, Yoasthood, is a large oasis city filled with tall sandstone buildings, canals that carry precious water through the streets and massive markets full of spices, cloth, and rare goods.
       </p>
 
       <h2>Culture</h2>
 
       <p>
-        Dredel’s culture is shaped by isolation and adaptation to its harsh environment.
-        Communities are spread across cliffs, caves and tunnels, emphasizing self reliance, endurance and creativity.
-        The kingdom places great value on craftsmanship and survival, which are intertwined symbolically and practically, as seen in the ruler’s emblem.
-        Trade and travel require specialized knowledge and resilient beasts, reinforcing a culture where cooperation and ingenuity are essential for daily life.
-        In such an unforgiving terrain, the people of Dredel have developed a deep respect for the land, its dangers and the skills necessary to thrive within it.
+        One of Ivia’s most famous traditions is called The Spine Tale.
+        In Ivian culture, tattoos are not viewd as a decoration but a record of a person’s life.
+        These tattoos are called Istoriya Nochnick, meaning “spine tales.”
+        They are placed along the spine and read from the top down like a living story.
       </p>
 
       <h2>Languages</h2>
@@ -60,16 +65,15 @@
       <h2>Inhabitants</h2>
 
       <p>
-        Tieflings, Humans, Vedalken, Aasimar
+        Tieflings, Humans, Vedalken, Aasimar, Genasi
       </p>
 
       <h2>Belief</h2>
 
       <p>
-        The people in Dredel continue to worship Radoon, likely making Dredel the only place where he is still revered as a god.
-        Citizens look to Radoon as a symbol of strength, companionship and endurance.
-        Qualities essential for surviving the dangerous mountains and remote settlements.
-        His worship reflects the kingdom’s broader cultural values, emphasizing resilience, cooperation and the ability to thrive in even the most unforgiving terrain.
+        Many people in Ivia follow Liira, often worshipped through desert spirits, sun gods and ancestral guardians.
+        These beliefs are tied closely to the land and the survival of the people.
+        Temples are not only places of worship but also centers of learning, where magic, healing and spiritual guidance are taught.
       </p>
 
 
