@@ -4,10 +4,6 @@
 
 <template>
 
-  <nav class="home-nav">
-    <router-link to="/" class="home-button">Home</router-link>
-  </nav>
-
 
   <header class="page-header">
     <img

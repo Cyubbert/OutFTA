@@ -1,111 +1,27 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useWorldStore } from "../stores/worldStore";
-import MapImg from "@/assets/images/Map.png";
-import TalonaImg from "@/assets/images/2.png";
-import LiiraImg from "@/assets/images/Liira.png";
-import SuneImg from "@/assets/images/Illustration.png";
 import AughImg from "@/assets/images/AUGH.png";
-import LacrimaBanner from "@/assets/images/LacrimaBanner.png";
-import DredelBanner from "@/assets/images/Dredel_.png";
-import IviaBanner from "@/assets/images/Ivia.png";
-import DuweilBanner from "@/assets/images/Duweil.png";
-import LetlonBanner from "@/assets/images/Letlon.png";
-import AarelyBanner from "@/assets/images/AarelyBanner.png";
-import VirexBanner from "@/assets/images/VirexBanner.png";
-import AasmiasBanner from "@/assets/images/Aasmias_Banner.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);
-
-const tabs = ["World & Deities", "Kingdoms", "NPCs"];
-const activeTab = ref("World & Deities");
-
-const cards = [
-
-  // World & Deities
-  { name: "Norrun", img: MapImg, route: "/world/norrun", category: "World & Deities" },
-  { name: "Talona", img: TalonaImg, route: "/world/talona", category: "World & Deities" },
-  { name: "Liira", img: LiiraImg, route: "/world/liira", category: "World & Deities" },
-  { name: "Sune", img: SuneImg, route: "/world/sune", category: "World & Deities" },
-
-
-  // Kingdoms
-  { name: "Lacrima", img: LacrimaBanner, route: "/kingdoms/lacrima", category: "Kingdoms" },
-  { name: "Duweil", img: DuweilBanner, route: "/kingdoms/duweil", category: "Kingdoms" },
-  { name: "Ivia", img: IviaBanner, route: "/kingdoms/ivia", category: "Kingdoms" },
-  { name: "Letlon", img: LetlonBanner, route: "/kingdoms/letlon", category: "Kingdoms" },
-  { name: "Dredel", img: DredelBanner, route: "/kingdoms/dredel", category: "Kingdoms" },
-
-  // NPCs
-  { name: "Aasmias Wiltfen Galanodel", img: AasmiasBanner, route: "/npcs/aasmias", category: "NPCs" },
-  { name: "Aarely", img: AarelyBanner, route: "/npcs/aarely", category: "NPCs" },
-  { name: "Selene Witword", img: AughImg, route: "/npcs/selene", category: "NPCs" },
-  { name: "Virex Halden", img: VirexBanner, route: "/npcs/virex", category: "NPCs" },
-  { name: "Moltyn Zeghal", img: AughImg, route: "/npcs/moltyn", category: "NPCs" },
-  { name: "Naelith", img: AughImg, route: "/npcs/naelith", category: "NPCs" },
-];
-
-const filteredCards = computed(() =>
-    cards.filter(card => card.category === activeTab.value)
-);
 </script>
-
 
 <template>
   <article class="page sans">
-
     <header>
-      <img
-          class="page-cover-image"
-          src="/src/assets/images/AUGH.png"
-          alt="Cover image"
-      />
-
+      <img class="page-cover-image" :src="AughImg" alt="Cover image" />
       <h1 class="page-title">Out for the Ancients</h1>
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <button
-            v-for="tab in tabs"
-            :key="tab"
-            @click="activeTab = tab"
-            :class="{ active: activeTab === tab }"
-        >
-          {{ tab }}
-        </button>
-      </div>
     </header>
-
-    <div class="page-body">
-      <div class="column-list">
-        <div class="column column-large">
-          <section class="collection-content">
-            <h3 class="collection-title">{{ activeTab }}</h3>
-
-            <!-- Fade transition for cards -->
-            <transition-group name="fade" tag="div" class="cards-container">
-              <router-link
-                  v-for="card in filteredCards"
-                  :key="card.name"
-                  :to="card.route"
-                  class="card"
-              >
-                <img :src="card.img" :alt="card.name" />
-                <div class="card-name">{{ card.name }}</div>
-              </router-link>
-            </transition-group>
-
-          </section>
-        </div>
-      </div>
-    </div>
-
   </article>
 </template>
 
 
+
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Iosevka+Charon:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -113,7 +29,7 @@ const filteredCards = computed(() =>
 body {
   margin: 2em auto;
   max-width: 900px;
-  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Jost', ui-sans-serif, system-ui, sans-serif; /* Jost als Basis */
   line-height: 1.6;
   color: #e0e0e0;
   background-color: #121212;
@@ -132,6 +48,8 @@ body {
   margin: 1rem 0 2rem 0;
   color: #ffffff;
   text-align: center;
+  font-family: 'Iosevka Charon', monospace;
+  letter-spacing: 0.04em;
 }
 
 .tabs {
@@ -168,6 +86,9 @@ body {
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
 }
 
 .tabs button.active {
@@ -196,6 +117,9 @@ body {
 .collection-title {
   margin-bottom: 0.5rem;
   color: #ffffff;
+  font-family: 'Iosevka Charon', monospace;
+  font-weight: 400;
+  letter-spacing: 0.06em;
 }
 
 
@@ -249,13 +173,12 @@ body {
   bottom: 14px;
   left: 16px;
   right: 16px;
-
   z-index: 2;
-
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 500;
   color: white;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  font-family: 'Jost', sans-serif;
 }
 
 
