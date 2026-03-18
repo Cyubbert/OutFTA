@@ -57,31 +57,31 @@ const router = createRouter({
         },
 
         {
-            path: "/kingdoms/dredel",
+            path: "/kingdom/dredel",
             name: "dredel",
             component: DredelView
         },
 
         {
-            path: "/kingdoms/lacrima",
+            path: "/kingdom/lacrima",
             name: "lacrima",
             component: LacrimaView
         },
 
         {
-            path: "/kingdoms/duweil",
+            path: "/kingdom/duweil",
             name: "duweil",
             component: DuweilView
         },
 
         {
-            path: "/kingdoms/ivia",
+            path: "/kingdom/ivia",
             name: "ivia",
             component: IviaView
         },
 
         {
-            path: "/kingdoms/letlon",
+            path: "/kingdom/letlon",
             name: "letlon",
             component: LetlonView
         },
