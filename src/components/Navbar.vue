@@ -30,7 +30,7 @@ function close() {
 
       <!-- Logo / Title -->
       <router-link to="/" class="navbar-logo" @click="close">
-        <span class="logo-rune">⚔</span>
+        <span class="logo-rune"></span>
         <span class="logo-text">Out for the Ancients</span>
       </router-link>
 
@@ -134,10 +134,12 @@ function close() {
   top: 0;
   z-index: 100;
   width: 100%;
-  background: rgba(18, 18, 18, 0.85);
+  background: rgba(18, 18, 18, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(144, 202, 249, 0.08);
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .navbar-inner {
@@ -246,8 +248,9 @@ function close() {
 
 .burger span {
   display: block;
+  width: 22px;
   height: 1.5px;
-  background: #888;
+  background: #bbb;
   border-radius: 2px;
   transition: transform 0.25s, opacity 0.2s, background 0.2s;
   transform-origin: center;
@@ -328,7 +331,7 @@ function close() {
   }
 
   .logo-text {
-    font-size: 0.72rem;
+    font-size: 1rem;
   }
 }
 </style>
