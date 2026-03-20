@@ -11,7 +11,8 @@ const links = [
   {label: 'Kingdoms', to: '/kingdom'},
   {label: 'NPCs', to: '/npcs'},
   {label: 'Sessions', to: '/sessions'},
-  {label: 'Fight', to: '/fight'},
+  // {label: 'Fight', to: '/fight'},
+  // {label: 'Charactersheet', to: '/character'},
 ]
 
 function isActive(to) {

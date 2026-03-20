@@ -32,6 +32,12 @@ const router = createRouter({
         { path: '/npcs',
             component: () => import('@/views/NpcsView.vue') },
 
+        // { path: '/character',
+        //     component: () => import('@/views/CharacterView.vue') },
+        //
+        // { path: '/character/:id',
+        //     component: () => import('@/views/Charactersheet.vue') },
+
         {
             path: "/world/norrun",
             name: "norrun",
