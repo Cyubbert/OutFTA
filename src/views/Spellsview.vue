@@ -85,6 +85,24 @@ d4                                Damage Type
 
     higherLevels: "At Higher Levels: This spells's damage increases by 2d4 when you reach 5th Level (4d4), 9th level (6d4), and 11th level (8d4).",
     tags: ["damage", "elemental"],
+  },
+  {
+    id: 3,
+    name: "Incendiary Charge",
+    level: "Cantrip",
+    school: "Evocation",
+    castingTime: "1 action",
+    range: "Touch",
+    components: "S,M",
+    materials: "a tiny nonmagical object that weighs less than 300g and is worth less than 1 gp",
+    duration: "1 minute",
+    concentration: false,
+    description: `You infuse the object used to cast this spell with explosive energy which makes it pulsate faintly with light. When you do so, you may throw the infused object up to 60 feet as part of the same action. If you don't, until the spell ends, you or another creature can throw it the same distance as an action. The object explodes o impact and the spell ends. The spell ends early on any object still affected by it if you cast it again or if you dismiss it as an action. When the spell ends, if the object wasn't thrown it explodes
+
+When the object explodes, the explosion fills a 5 foot cube centered on it. Any creature within this cube must succeed on a Dexterity saving throw or take 1d8 fire damage. Any flammable objects within that cube that aren't.b being worn or carried catch fire. An Object infused by this spell is destroyed completely after exploding, only ash remains.`,
+
+    higherLevels: "At Higher Levels: The infused object's damage increases by 1d8 when it explodes when you reach 5th level(2d8), 11th level (3d8), and 17th level (4d8).",
+    tags: ["damage", "explosive"],
   }
 ])
 
