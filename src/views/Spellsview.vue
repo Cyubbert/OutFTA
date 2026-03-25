@@ -4,7 +4,7 @@ import {ref, computed} from 'vue'
 const spells = ref([
   {
     id: 1,
-    name: "Summon Arthropod",
+    name: "Conjure Bug",
     level: "Cantrip",
     school: "Conjuration",
     castingTime: "1 action",
@@ -38,6 +38,53 @@ const spells = ref([
         {name: "Bite", desc: "Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1 poison damage."},
       ]
     }
+  },
+  {
+    id: 2,
+    name: "Control Smoke",
+    level: "Cantrip",
+    school: "Transmutation",
+    castingTime: "1 action",
+    range: "60 feet",
+    components: "S, M",
+    materials: "a pinch of ash, dirt or sand",
+    duration: "Instantaneous or 1 hour",
+    concentration: false,
+    description: `You choose nonmagical smoke that you can see within range and that fits within a 5 foot cube. You affect it in one of the following ways:
+
+- You make the smoke disappear
+- You make the smoke expand 5 feet in one direction that is not down
+- You change the smoke's color
+- You create shapes within the 5 foot cube, these shapes can be incredibly detailed and beautiful, but are always clearly made of smoke.`,
+
+    higherLevels: "If you cast this spell multiple times, you can have up to three of its non instantaneous effects active at a time, and you can dismiss such an effect as an action.",
+    tags: ["summoning", "smoke"],
+  },
+  {
+    id: 3,
+    name: "Elemental Burst",
+    level: "Cantrip",
+    school: "Evocation",
+    castingTime: "1 action",
+    range: "90 feet",
+    components: "V,S",
+    materials: "none",
+    duration: "Instantaneous",
+    concentration: false,
+    description: `You hurl a burst of elemental energy at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 2d4 damage. Choose one of the d4s. The number rolled on that die determines the damage type as shown below.
+
+d4                                Damage Type
+
+1                                           Cold
+
+2                                           Fire
+
+3                                           Lightning
+
+4                                          Thunder`,
+
+    higherLevels: "At Higher Levels: This spells's damage increases by 2d4 when you reach 5th Level (4d4), 9th level (6d4), and 11th level (8d4).",
+    tags: ["damage", "elemental"],
   }
 ])
 
