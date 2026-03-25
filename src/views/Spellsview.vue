@@ -87,7 +87,7 @@ d4                                Damage Type
     tags: ["damage", "elemental"],
   },
   {
-    id: 3,
+    id: 4,
     name: "Incendiary Charge",
     level: "Cantrip",
     school: "Evocation",
@@ -103,6 +103,65 @@ When the object explodes, the explosion fills a 5 foot cube centered on it. Any 
 
     higherLevels: "At Higher Levels: The infused object's damage increases by 1d8 when it explodes when you reach 5th level(2d8), 11th level (3d8), and 17th level (4d8).",
     tags: ["damage", "explosive"],
+  },
+  {
+    id: 5,
+    name: "Magic Leaf",
+    level: "Cantrip",
+    school: "Transmutation",
+    castingTime: "1 bonus action",
+    range: "Touch",
+    components: "V,S",
+    materials: "none",
+    duration: "1 minute",
+    concentration: false,
+    description: `You touch one to three leaves and imbue them with magic, causing them to become as sharp as knives. You or someone else can make a melee or ranged spell attack with on of the leaves by wielding it like a dagger or throwing it. If thrown, it has a range of 45 feet. If someone else attacks with the leaf, that attacker adds your spellcasting ability modifier, not the attacker's, to the attack roll. On a hit, the target takes piercing damage equal to 1d6 . your spellcasting ability modifier. Hit or miss, the spell then ends on the leaf.
+
+If you cast this spell again, the spell ends early on any leaves still affected by it.`,
+
+    higherLevels: "At Higher Levels: The number of leaves you can imbue with magic increases by 1 when you reach 5th level(4), 11th level (5) and 17th level (6).",
+    tags: ["damage", "leaf daggers"],
+  },
+  {
+    id: 6,
+    name: "Minor Appearance Modification",
+    level: "Cantrip",
+    school: "Illusion",
+    castingTime: "1 action",
+    range: "Self",
+    components: "V,S,M",
+    materials: "makeup",
+    duration: "1 hour",
+    concentration: false,
+    description: `You create a small illusory change in your appearance. You may:
+
+- Change the size or colour of your eyes.
+- Change the shape, width or length of your nose (no more than 10cm)
+- Change the colour of length of your hair (no more than 10cm)
+- Change the colour or length of your fingernails (no more than 10cm)
+- Create a small tattoo or scar anywhere on your body (it can't occupy a space larger than 10cm^2)
+- Remove a spot, scar or mark (no larger than 10 cm^2)
+
+If you cast this spell multiple times, you can have up to two of its effects active at a time and you can dismiss such an effect as an action.`,
+
+    higherLevels: "/",
+    tags: ["appearance"],
+  },
+  {
+    id: 7,
+    name: "Punishing Blade",
+    level: "Cantrip",
+    school: "Evocation",
+    castingTime: "1 action",
+    range: "Self",
+    components: "S,M",
+    materials: "a melee weapon worth at least 1 sp",
+    duration: "1 round",
+    concentration: false,
+    description: `You brandish the weapon used in the spell's casting and make a melee attack with it against one creature within range of that weapon. On a hit, the target suffers the weapon attack's normal effects and then becomes sheathed on radiant energy until the start of your next turn. If the target deals damage to a creature other than you before then, the target takes 1d6 radiant damage and the spell ends.`,
+
+    higherLevels: "At Higher Levels: At 5th level the melee attack deals an extra 1d6 radiant damage to the target on a hit and the damage the target takes for dealing damage to another creature increases to 2d6. Both damage rolls increase by 1d6 at 11th level ( 2d6 and 3d6) and again at 17th level (3d6 and 4d6).",
+    tags: ["weapon","radiant damage"],
   }
 ])
 
