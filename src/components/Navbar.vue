@@ -11,6 +11,7 @@ const links = [
   {label: 'Kingdoms', to: '/kingdom'},
   {label: 'NPCs', to: '/npcs'},
   {label: 'Sessions', to: '/sessions'},
+  {label: 'Spells', to: '/spells'},
   // {label: 'Fight', to: '/fight'},
   // {label: 'Charactersheet', to: '/character'},
 ]

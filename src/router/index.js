@@ -32,6 +32,9 @@ const router = createRouter({
         { path: '/npcs',
             component: () => import('@/views/NpcsView.vue') },
 
+        { path: '/spells',
+            component: () => import('@/views/Spellsview.vue') },
+
         // { path: '/character',
         //     component: () => import('@/views/CharacterView.vue') },
         //
