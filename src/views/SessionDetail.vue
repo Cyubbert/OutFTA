@@ -18,7 +18,11 @@ const next = computed(() => sessions.find(s => s.number === session.value?.numbe
     </header>
 
     <div class="page-body">
-      <p class="summary">{{ session.summary }}</p>
+      <p
+          v-for="(para, i) in session.summary.split('\n\n').filter(p => p.trim())"
+          :key="i"
+          class="summary-para"
+      >{{ para.trim() }}</p>
 
       <div class="tags-row" v-if="session.npcs?.length">
         <span class="tag-label">NPCs:</span>
@@ -117,4 +121,15 @@ const next = computed(() => sessions.find(s => s.number === session.value?.numbe
 .nav-btn.center {
   flex: 0 0 auto;
 }
+
+.summary-para {
+  line-height: 1.8;
+  color: #ccc;
+  margin: 0 0 1rem;
+}
+
+.summary-para:last-child {
+  margin-bottom: 0;
+}
+
 </style>
