@@ -13,8 +13,17 @@ const next = computed(() => sessions.find(s => s.number === session.value?.numbe
 <template>
   <article class="page sans" v-if="session">
     <header>
-      <h1 class="page-title">{{ session.title }}</h1>
-      <p class="session-meta">Session {{ session.number }} · {{ session.date }}</p>
+      <div class="session-banner" v-if="session.img">
+        <img :src="session.img" :alt="session.title" class="banner-img" />
+        <div class="banner-overlay">
+          <p class="session-meta">Session {{ session.number }} · {{ session.date }}</p>
+          <h1 class="page-title">{{ session.title }}</h1>
+        </div>
+      </div>
+      <template v-else>
+        <h1 class="page-title">{{ session.title }}</h1>
+        <p class="session-meta">Session {{ session.number }} · {{ session.date }}</p>
+      </template>
     </header>
 
     <div class="page-body">
@@ -50,6 +59,43 @@ const next = computed(() => sessions.find(s => s.number === session.value?.numbe
 </template>
 
 <style scoped>
+
+.session-banner {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem 1.8rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+}
+
+.banner-overlay .page-title {
+  margin: 0;
+  text-align: left;
+  font-size: 1.8rem;
+}
+
+.banner-overlay .session-meta {
+  text-align: left;
+  margin-bottom: 0.4rem;
+}
 
 .session-meta {
   text-align: center;
