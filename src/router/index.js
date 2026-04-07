@@ -14,6 +14,7 @@ import AarelyView from "@/views/AarelyView.vue";
 import VirexView from "@/views/VirexView.vue";
 import AasmiasView from "@/views/AasmiasView.vue";
 import InitiativeView from "../views/InitiativeView.vue";
+import MoltynView from "@/views/MoltynView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -111,6 +112,11 @@ const router = createRouter({
             path: "/npcs/aasmias",
             name: "aasmias",
             component: AasmiasView
+        },
+        {
+            path: "/npcs/moltyn",
+            name: "moltyn",
+            component: MoltynView
         },
 
         // {

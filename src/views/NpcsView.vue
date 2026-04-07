@@ -4,12 +4,14 @@ import Aasmias from "@/assets/images/Aasmias_Banner.png";
 import Arrely from "@/assets/images/AarelyBanner.png";
 import Virex from "@/assets/images/VirexBanner.png";
 import AughImg from "@/assets/images/AUGH.png";
+import Moltyn from "/images/Moltyn.png";
 
 
 const cards = [
   { name: "Aasmias Wiltfen Galanodel", img: Aasmias,    route: "/npcs/aasmias" },
   { name: "Aarely", img: Arrely,    route: "/npcs/aarely" },
   { name: "Virex Halden", img: Virex,    route: "/npcs/virex" },
+  { name: "Moltyn Zeghal", img: Moltyn, route: "/npcs/moltyn" },
 
 ]
 </script>
