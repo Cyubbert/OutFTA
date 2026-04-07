@@ -36,6 +36,7 @@ body {
   line-height: 1.6;
   color: #e0e0e0;
   background-color: #121212;
+  padding: 0 1rem;
 }
 
 .page-cover-image {
@@ -210,6 +211,8 @@ body {
   .cards-container {
     grid-template-columns: 1fr;
   }
+
+
 
   .card {
     height: 240px;
