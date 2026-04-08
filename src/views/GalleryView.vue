@@ -1,5 +1,6 @@
 <script setup>
-import {ref, computed} from 'vue'
+
+import {ref, computed, onMounted, onUnmounted} from 'vue'
 
 const artworks = ref([
   {
@@ -99,7 +100,7 @@ const artworks = ref([
     id: 14,
     title: "First Wanted posters",
     artist: "James",
-    img: "/images/firstwanted.png",
+    img: "/images/firstwanted.jpg",
     description: ""
   },
   {
@@ -176,7 +177,7 @@ const artworks = ref([
     id: 25,
     title: "Goofy Virex",
     artist: "James",
-    img: "/images/goofyVIrex.png",
+    img: "/images/goofyVirex.png",
     description: ""
   },
   {
@@ -365,7 +366,7 @@ const artworks = ref([
     id: 52,
     title: "Headscarf Marvers",
     artist: "James",
-    img: "/images/MarvScarf.png",
+    img: "/images/IvianMarv.png",
     description: ""
   },
   {
@@ -407,7 +408,7 @@ const artworks = ref([
     id: 58,
     title: "Quinlan",
     artist: "Eddie",
-    img: "/images/QuinlanGr.png",
+    img: "/images/QuinGr.png",
     description: ""
   },
   {
@@ -503,8 +504,8 @@ const filtered = computed(() =>
     )
 )
 
-function openLightbox(artwork) {
-  lightbox.value = artwork
+function openLightbox(art) {
+  lightbox.value = art
   document.body.style.overflow = 'hidden'
 }
 
@@ -515,30 +516,30 @@ function closeLightbox() {
 
 function prev() {
   const idx = filtered.value.findIndex(a => a.id === lightbox.value.id)
-  const newIdx = (idx - 1 + filtered.value.length) % filtered.value.length
-  lightbox.value = filtered.value[newIdx]
+  lightbox.value = filtered.value[(idx - 1 + filtered.value.length) % filtered.value.length]
 }
 
 function next() {
   const idx = filtered.value.findIndex(a => a.id === lightbox.value.id)
-  const newIdx = (idx + 1) % filtered.value.length
-  lightbox.value = filtered.value[newIdx]
+  lightbox.value = filtered.value[(idx + 1) % filtered.value.length]
 }
 
-function onKeydown(e) {
+function onKey(e) {
   if (!lightbox.value) return
   if (e.key === 'Escape') closeLightbox()
   if (e.key === 'ArrowLeft') prev()
   if (e.key === 'ArrowRight') next()
 }
+
+onMounted(() => window.addEventListener('keydown', onKey))
+onUnmounted(() => window.removeEventListener('keydown', onKey))
 </script>
 
 <template>
-  <article class="page sans" @keydown="onKeydown" tabindex="0">
+  <article class="page sans">
     <header>
       <h1 class="page-title">Gallery</h1>
-      <p class="page-subtitle">Art made by Players</p>
-
+      <p class="page-subtitle">Art by the Players</p>
       <div class="artist-filters">
         <button
             v-for="artist in artists"
@@ -552,23 +553,24 @@ function onKeydown(e) {
     </header>
 
     <div class="page-body">
+      <p class="count-label">{{ filtered.length }} work{{ filtered.length !== 1 ? 's' : '' }}</p>
+
       <div v-if="!filtered.length" class="empty-state">No artworks found.</div>
 
-      <!-- Masonry grid via CSS columns -->
-      <div class="masonry">
+      <transition-group name="fade" tag="div" class="gallery-grid">
         <div
             v-for="art in filtered"
             :key="art.id"
-            class="masonry-item"
+            class="gallery-item"
             @click="openLightbox(art)"
         >
-          <img :src="art.img" :alt="art.title" class="masonry-img"/>
-          <div class="masonry-overlay">
+          <img :src="art.img" :alt="art.title" class="gallery-img"/>
+          <div class="gallery-overlay">
             <span class="art-title">{{ art.title }}</span>
             <span class="art-artist">by {{ art.artist }}</span>
           </div>
         </div>
-      </div>
+      </transition-group>
     </div>
 
     <!-- Lightbox -->
@@ -577,7 +579,6 @@ function onKeydown(e) {
         <button class="lb-close" @click="closeLightbox">✕</button>
         <button class="lb-nav lb-prev" @click="prev" v-if="filtered.length > 1">‹</button>
         <button class="lb-nav lb-next" @click="next" v-if="filtered.length > 1">›</button>
-
         <div class="lb-content">
           <img :src="lightbox.img" :alt="lightbox.title" class="lb-img"/>
           <div class="lb-info">
@@ -602,12 +603,12 @@ function onKeydown(e) {
 }
 
 .page-title {
+  font-family: 'Iosevka Charon', monospace;
   font-size: 2.5rem;
   font-weight: 700;
-  margin: 1rem 0 0.25rem;
   color: #fff;
   text-align: center;
-  font-family: 'Iosevka Charon', monospace;
+  margin: 1rem 0 0.25rem;
   letter-spacing: 0.04em;
 }
 
@@ -629,7 +630,7 @@ function onKeydown(e) {
 }
 
 .artist-btn {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   padding: 4px 12px;
   border-radius: 6px;
   background: #1a1a1a;
@@ -638,7 +639,6 @@ function onKeydown(e) {
   cursor: pointer;
   transition: all 0.15s;
   font-family: 'Jost', sans-serif;
-  letter-spacing: 0.05em;
 }
 
 .artist-btn:hover {
@@ -650,7 +650,15 @@ function onKeydown(e) {
   background: #90caf9;
   border-color: #90caf9;
   color: #121212;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+.count-label {
+  font-size: 0.7rem;
+  color: #333;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
 }
 
 .empty-state {
@@ -660,74 +668,76 @@ function onKeydown(e) {
   padding: 3rem 0;
 }
 
-.masonry {
-  column-count: 3;
-  column-gap: 12px;
+/* ── Grid ── */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
 }
 
-.masonry-item {
-  break-inside: avoid;
+.gallery-item {
   position: relative;
-  margin-bottom: 12px;
-  border-radius: 10px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  cursor: pointer;
+  border-radius: 8px;
   background: #1a1a1a;
+  cursor: pointer;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
   transition: transform 0.25s, box-shadow 0.25s;
 }
 
-.masonry-item:hover {
+.gallery-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.7);
 }
 
-.masonry-img {
+.gallery-img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
   transition: transform 0.35s;
 }
 
-.masonry-item:hover .masonry-img {
-  transform: scale(1.04);
+.gallery-item:hover .gallery-img {
+  transform: scale(1.07);
 }
 
-.masonry-overlay {
+.gallery-overlay {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.7rem 0.85rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.3) 60%, transparent 100%);
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  justify-content: flex-end;
+  padding: 0.8rem 0.9rem;
   opacity: 0;
   transition: opacity 0.2s;
 }
 
-.masonry-item:hover .masonry-overlay {
+.gallery-item:hover .gallery-overlay {
   opacity: 1;
 }
 
 .art-title {
-  font-size: 0.88rem;
+  font-family: 'Iosevka Charon', monospace;
+  font-size: 0.9rem;
   font-weight: 600;
   color: #fff;
-  font-family: 'Iosevka Charon', monospace;
 }
 
 .art-artist {
   font-size: 0.7rem;
   color: #90caf9;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
 }
 
+/* ── Lightbox ── */
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.92);
+  background: rgba(0, 0, 0, 0.93);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -748,15 +758,15 @@ function onKeydown(e) {
   max-width: 90vw;
   max-height: 80vh;
   object-fit: contain;
-  border-radius: 8px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.9);
 }
 
 .lb-info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .lb-title {
@@ -776,10 +786,10 @@ function onKeydown(e) {
   position: absolute;
   top: 1.2rem;
   right: 1.4rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #aaa;
-  border-radius: 6px;
+  border-radius: 5px;
   width: 36px;
   height: 36px;
   font-size: 0.9rem;
@@ -788,7 +798,7 @@ function onKeydown(e) {
 }
 
 .lb-close:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.14);
   color: #fff;
 }
 
@@ -796,20 +806,20 @@ function onKeydown(e) {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #aaa;
-  border-radius: 8px;
+  border-radius: 6px;
   width: 44px;
   height: 60px;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   cursor: pointer;
   transition: all 0.15s;
   line-height: 1;
 }
 
 .lb-nav:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.14);
   color: #fff;
 }
 
@@ -829,19 +839,27 @@ function onKeydown(e) {
   opacity: 0;
 }
 
-@media (max-width: 700px) {
-  .masonry {
-    column-count: 2;
-  }
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
 }
 
-@media (max-width: 400px) {
-  .masonry {
-    column-count: 1;
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+@media (max-width: 600px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .lb-nav {
     display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
