@@ -119,6 +119,7 @@ const router = createRouter({
             component: MoltynView
         },
 
+
         // {
         //     path: "/fight",
         //     name: "fight",
@@ -131,6 +132,10 @@ const router = createRouter({
 
         {path: '/sessions/:id',
             component: () => import('@/views/SessionDetail.vue')
+        },
+
+        { path: '/gallery',
+            component: () => import('@/views/GalleryView.vue')
         },
 
 

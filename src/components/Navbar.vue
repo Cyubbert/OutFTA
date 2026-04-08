@@ -12,6 +12,7 @@ const links = [
   {label: 'NPCs', to: '/npcs'},
   {label: 'Sessions', to: '/sessions'},
   {label: 'Spells', to: '/spells'},
+  {label: 'Gallery', to: '/gallery'},
   // {label: 'Fight', to: '/fight'},
   // {label: 'Charactersheet', to: '/character'},
 ]
