@@ -55,7 +55,7 @@ const artworks = ref([
     id: 8,
     title: "Marvers Chibi",
     artist: "James",
-    img: "/images/marvChibi.png",
+    img: "/images/marvChibi.jpg",
     description: ""
   },
 
@@ -63,7 +63,7 @@ const artworks = ref([
     id: 9,
     title: "Ray Chibi",
     artist: "James",
-    img: "/images/rayChibi.png",
+    img: "/images/rayChibi.jpg",
     description: ""
   },
 
@@ -71,7 +71,7 @@ const artworks = ref([
     id: 10,
     title: "Waesstan Chibi",
     artist: "James",
-    img: "/images/waessChibi.png",
+    img: "/images/waessChibi.jpg",
     description: ""
   },
   {
