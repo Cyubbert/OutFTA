@@ -1,8 +1,7 @@
 <script setup>
-
 import {ref, computed, onMounted, onUnmounted} from 'vue'
 
-const artworks = ref([
+const SFW_ARTWORKS = [
   {
     id: 1,
     title: "Ray Reference",
@@ -110,13 +109,7 @@ const artworks = ref([
     img: "/images/marvback.png",
     description: ""
   },
-  {
-    id: 16,
-    title: "Waesstan Roped",
-    artist: "Fynn",
-    img: "/images/waesstanrope.png",
-    description: ""
-  },
+
   {
     id: 17,
     title: "Marvers Carrying the Gang",
@@ -124,13 +117,7 @@ const artworks = ref([
     img: "/images/MarvHolding.png",
     description: ""
   },
-  {
-    id: 18,
-    title: "Salt and Pepper Marvers",
-    artist: "James",
-    img: "/images/oldmanMarv.png",
-    description: ""
-  },
+
   {
     id: 19,
     title: "Session Meme",
@@ -252,9 +239,9 @@ const artworks = ref([
   },
   {
     id: 36,
-    title: "Baby and Mom Marv",
+    title: "Doodles",
     artist: "James",
-    img: "/images/BabyMarv.png",
+    img: "/images/Look.png",
     description: ""
   },
   {
@@ -264,13 +251,7 @@ const artworks = ref([
     img: "/images/RayGu.png",
     description: ""
   },
-  {
-    id: 38,
-    title: "Waesstan on Couch",
-    artist: "Eddie",
-    img: "/images/SeduceWaess.png",
-    description: ""
-  },
+
   {
     id: 39,
     title: "Ray and Marvers Hugging",
@@ -313,34 +294,7 @@ const artworks = ref([
     img: "/images/MoryQuin2.png",
     description: ""
   },
-  {
-    id: 45,
-    title: "Lingerine Ray",
-    artist: "James",
-    img: "/images/RayLingerine.png",
-    description: ""
-  },
-  {
-    id: 46,
-    title: "Lingerine Waesstan",
-    artist: "James",
-    img: "/images/WaessLingerine.png",
-    description: ""
-  },
-  {
-    id: 47,
-    title: "Lingerine Marvers",
-    artist: "James",
-    img: "/images/MarvLingerine.png",
-    description: ""
-  },
-  {
-    id: 48,
-    title: "Leather Marvers",
-    artist: "James",
-    img: "/images/LeatherMarv.png",
-    description: ""
-  },
+
   {
     id: 49,
     title: "Pink Marvers",
@@ -348,13 +302,7 @@ const artworks = ref([
     img: "/images/PinkMarv.png",
     description: ""
   },
-  {
-    id: 50,
-    title: "Hearteye Marvers",
-    artist: "James",
-    img: "/images/HeartMarv.png",
-    description: ""
-  },
+
   {
     id: 51,
     title: "Pirate Marvers",
@@ -426,13 +374,6 @@ const artworks = ref([
     description: ""
   },
   {
-    id: 62,
-    title: "Marvers and Astrad",
-    artist: "James",
-    img: "/images/firstnight.png",
-    description: ""
-  },
-  {
     id: 63,
     title: "Marvers and Astrad",
     artist: "James",
@@ -481,28 +422,176 @@ const artworks = ref([
     img: "/images/MarvScarf.png",
     description: ""
   },
+]
+
+const NSFW_ARTWORKS = [
   {
-    id: 69,
+    id: 18,
+    title: "Salt and Pepper Marvers",
+    artist: "James",
+    img: "/images/oldmanMarv.png",
+    description: ""
+  },
+  {
+    id: 16,
+    title: "Waesstan Roped",
+    artist: "Fynn",
+    img: "/images/waesstanrope.png",
+    description: ""
+  },
+  {
+    id: 38,
+    title: "Waesstan on Couch",
+    artist: "Eddie",
+    img: "/images/SeduceWaess.png",
+    description: ""
+  },
+  {
+    id: 45,
+    title: "Lingerine Ray",
+    artist: "James",
+    img: "/images/RayLingerine.png",
+    description: ""
+  },
+  {
+    id: 46,
+    title: "Lingerine Waesstan",
+    artist: "James",
+    img: "/images/WaessLingerine.png",
+    description: ""
+  },
+  {
+    id: 47,
+    title: "Lingerine Marvers",
+    artist: "James",
+    img: "/images/MarvLingerine.png",
+    description: ""
+  },
+  {
+    id: 48,
+    title: "Leather Marvers",
+    artist: "James",
+    img: "/images/LeatherMarv.png",
+    description: ""
+  },
+  {
+    id: 50,
+    title: "Hearteye Marvers",
+    artist: "James",
+    img: "/images/HeartMarv.png",
+    description: ""
+  },
+  {
+    id: 62,
+    title: "Marvers and Astrad",
+    artist: "James",
+    img: "/images/firstnight.png",
+    description: ""
+  },
+  {
+    id: 70,
     title: "Polycule",
     artist: "James",
     img: "/images/PolyCule.png",
     description: ""
   },
-])
+  {
+    id: 71,
+    title: "Miss Halden",
+    artist: "James",
+    img: "/images/Halden.png",
+    description: ""
+  },
+  {
+    id: 72,
+    title: "Wedding Night",
+    artist: "James",
+    img: "/images/EvenMorePoly.png",
+    description: ""
+  },
+  {
+    id: 73,
+    title: "Miss Fortis 1",
+    artist: "James",
+    img: "/images/LadyMarv.png",
+    description: ""
+  },
+  {
+    id: 74,
+    title: "Miss Fortis 2",
+    artist: "James",
+    img: "/images/LadyMarv2.png",
+    description: ""
+  },
+  {
+    id: 75,
+    title: "Miss Fortis 2",
+    artist: "James",
+    img: "/images/LadyMarv3.png",
+    description: ""
+  },
+  {
+    id: 76,
+    title: "Lady Quin",
+    artist: "Eddie",
+    img: "/images/LadyQuin.png",
+    description: ""
+  },
+]
 
+const NSFW_PASSWORD = "pig"
+
+const activeTab = ref('sfw')
 const activeArtist = ref('All')
 const lightbox = ref(null)
+const nsfwUnlocked = ref(false)
+const passwordInput = ref('')
+const passwordError = ref(false)
+const showPasswordModal = ref(false)
+
+const currentArtworks = computed(() =>
+    activeTab.value === 'nsfw' && nsfwUnlocked.value ? NSFW_ARTWORKS : SFW_ARTWORKS
+)
 
 const artists = computed(() => {
-  const a = [...new Set(artworks.value.map(art => art.artist))]
+  const a = [...new Set(currentArtworks.value.map(art => art.artist))]
   return ['All', ...a]
 })
 
 const filtered = computed(() =>
-    artworks.value.filter(a =>
+    currentArtworks.value.filter(a =>
         activeArtist.value === 'All' || a.artist === activeArtist.value
     )
 )
+
+function switchTab(tab) {
+  if (tab === 'nsfw' && !nsfwUnlocked.value) {
+    showPasswordModal.value = true
+    return
+  }
+  activeTab.value = tab
+  activeArtist.value = 'All'
+}
+
+function submitPassword() {
+  if (passwordInput.value === NSFW_PASSWORD) {
+    nsfwUnlocked.value = true
+    showPasswordModal.value = false
+    activeTab.value = 'nsfw'
+    activeArtist.value = 'All'
+    passwordInput.value = ''
+    passwordError.value = false
+  } else {
+    passwordError.value = true
+    passwordInput.value = ''
+  }
+}
+
+function closeModal() {
+  showPasswordModal.value = false
+  passwordInput.value = ''
+  passwordError.value = false
+}
 
 function openLightbox(art) {
   lightbox.value = art
@@ -525,6 +614,14 @@ function next() {
 }
 
 function onKey(e) {
+  if (showPasswordModal.value && e.key === 'Enter') {
+    submitPassword();
+    return
+  }
+  if (showPasswordModal.value && e.key === 'Escape') {
+    closeModal();
+    return
+  }
   if (!lightbox.value) return
   if (e.key === 'Escape') closeLightbox()
   if (e.key === 'ArrowLeft') prev()
@@ -540,6 +637,25 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
     <header>
       <h1 class="page-title">Gallery</h1>
       <p class="page-subtitle">Art by the Players</p>
+
+      <!-- SFW / NSFW tabs -->
+      <div class="gallery-tabs">
+        <button
+            class="gallery-tab"
+            :class="{ active: activeTab === 'sfw' }"
+            @click="switchTab('sfw')"
+        >Art
+        </button>
+        <button
+            class="gallery-tab nsfw-tab"
+            :class="{ active: activeTab === 'nsfw' }"
+            @click="switchTab('nsfw')"
+        >
+          <span v-if="!nsfwUnlocked">🔒 </span>NSFW
+        </button>
+      </div>
+
+      <!-- Artist filter -->
       <div class="artist-filters">
         <button
             v-for="artist in artists"
@@ -554,7 +670,6 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
     <div class="page-body">
       <p class="count-label">{{ filtered.length }} work{{ filtered.length !== 1 ? 's' : '' }}</p>
-
       <div v-if="!filtered.length" class="empty-state">No artworks found.</div>
 
       <transition-group name="fade" tag="div" class="gallery-grid">
@@ -572,6 +687,28 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         </div>
       </transition-group>
     </div>
+
+    <!-- Password modal -->
+    <transition name="lb">
+      <div class="lightbox" v-if="showPasswordModal" @click.self="closeModal">
+        <div class="password-modal">
+          <h2 class="modal-title">NSFW Gallery</h2>
+          <p class="modal-desc">This section contains mature content. Enter the password to continue.</p>
+          <input
+              class="password-input"
+              type="password"
+              v-model="passwordInput"
+              placeholder="Password..."
+              autofocus
+          />
+          <p class="password-error" v-if="passwordError">Wrong password. Try again.</p>
+          <div class="modal-buttons">
+            <button class="modal-btn cancel" @click="closeModal">Cancel</button>
+            <button class="modal-btn confirm" @click="submitPassword">Enter</button>
+          </div>
+        </div>
+      </div>
+    </transition>
 
     <!-- Lightbox -->
     <transition name="lb">
@@ -618,9 +755,56 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   font-size: 0.8rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  margin: 0 0 1.2rem;
+  margin: 0 0 1rem;
 }
 
+/* ── Gallery tabs ── */
+.gallery-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.gallery-tab {
+  padding: 0.5rem 1.4rem;
+  border: none;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+
+.gallery-tab.active {
+  background: #90caf9;
+  color: #121212;
+}
+
+.gallery-tab:hover:not(.active) {
+  background: #444;
+}
+
+.nsfw-tab.active {
+  background: #c46c6c;
+  color: #fff;
+}
+
+.nsfw-tab:not(.active) {
+  color: #c46c6c;
+  border: 1px solid #3a1a1a;
+  background: #1e1010;
+}
+
+.nsfw-tab:hover:not(.active) {
+  background: #2a1212;
+}
+
+/* ── Artist filters ── */
 .artist-filters {
   display: flex;
   flex-wrap: wrap;
@@ -731,6 +915,91 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   color: #90caf9;
   letter-spacing: 0.05em;
   margin-top: 2px;
+}
+
+/* ── Password modal ── */
+.password-modal {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-title {
+  font-family: 'Iosevka Charon', monospace;
+  font-size: 1.3rem;
+  color: #fff;
+  margin: 0;
+}
+
+.modal-desc {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.password-input {
+  background: #121212;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.password-input:focus {
+  border-color: #90caf9;
+}
+
+.password-error {
+  font-size: 0.78rem;
+  color: #ef9a9a;
+  margin: -0.5rem 0 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.modal-btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  border: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.modal-btn.cancel {
+  background: #2a2a2a;
+  color: #888;
+}
+
+.modal-btn.cancel:hover {
+  background: #333;
+  color: #aaa;
+}
+
+.modal-btn.confirm {
+  background: #90caf9;
+  color: #121212;
+}
+
+.modal-btn.confirm:hover {
+  background: #64b5f6;
 }
 
 /* ── Lightbox ── */
