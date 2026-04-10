@@ -418,10 +418,18 @@ const SFW_ARTWORKS = [
   {
     id: 69,
     title: "Marv Scarf",
-    artist: "Fynn",
+    artist: "James",
     img: "/images/MarvScarf.png",
     description: ""
   },
+  {
+    id: 78,
+    title: "Tounge",
+    artist: "James",
+    img: "/images/EpicRay.png",
+    description: ""
+  },
+
 ]
 
 const NSFW_ARTWORKS = [
@@ -535,6 +543,20 @@ const NSFW_ARTWORKS = [
     title: "Lady Quin",
     artist: "Eddie",
     img: "/images/LadyQuin.png",
+    description: ""
+  },
+  {
+    id: 78,
+    title: "Lady Waess",
+    artist: "Eddie",
+    img: "/images/LadyWaess.png",
+    description: ""
+  },
+  {
+    id: 79,
+    title: "Nakey Waess",
+    artist: "Eddie",
+    img: "/images/NakedWaess.png",
     description: ""
   },
 ]
