@@ -151,8 +151,8 @@ function moodColor(mood) {
       <div class="diary-list" v-if="!activeEntry">
         <header class="diary-header">
           <div class="diary-mark">✦</div>
-          <h1 class="diary-title">Journal</h1>
-          <p class="diary-subtitle">A private account</p>
+          <h1 class="diary-title">Morythieven's Journal</h1>
+          <p class="diary-subtitle">Prayer's for my dear Hound</p>
           <div class="header-rule"/>
         </header>
 

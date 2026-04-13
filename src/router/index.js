@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
 
 import HomeView from "../views/HomeView.vue";
 import NorrunView from "../views/NorrunView.vue";
@@ -17,7 +17,7 @@ import InitiativeView from "../views/InitiativeView.vue";
 import MoltynView from "@/views/MoltynView.vue";
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: "/",
