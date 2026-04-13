@@ -26,16 +26,16 @@ const entries = ref([
   {
     id: 1,
     session: 1,
-    title: "First Entry",
+    title: "01 - Arrival in Halivaara",
     date: "2026-04-13",
-    location: "Arrival in Halivaara",
+    location: "Halivaara",
     mood: "neutral",
     images: ["/images/mory_s1.png"],
     body: `˖⁺‧₊˚ O, câine mereu atent, ascultă rugăciunea credincioșilor tăi˚₊‧⁺˖
 
-I have arrived safely in Halivaara. My passage toward Silverkeep was… interrupted by this town, unknown to me until now.
+I have arrived safely in Halivaara. My passage towards Silverkeep was… interrupted by this town, unknown to me until now.
 
-At first glance, Halivaara presents itself as unremarkable, quiet, pleasant. Yet beneath that surface lies a troubling simplicity in its people. They condemned a woman to death with alarming haste, offering her as a scapegoat for the misfortunes that plagues them. Whether she bore any guilt remains uncertain. As the red thread hung, a voice, intrusive, echoed within my mind. It came from her… or through her. The moment carried an eerie familiarity. It recalled something I would rather not name. You may remember, it was the first time we met.
+At first glance, Halivaara presents itself as unremarkable, quiet, pleasant. Yet beneath that surface lies a troubling simplicity in its people. They condemned a woman to death with alarming haste, offering her as a scapegoat for the misfortunes that plagues them. Whether she bore any guilt remains uncertain. As the red thread hung, an intrusive voice echoed within my mind. I believe it came from her… or through her. The moment carried an eerie familiarity. It recalled something I would rather not name. You may remember, it was the first time we met.
 
 Then the sky turned.
 
@@ -43,11 +43,11 @@ Panic took hold when lightning struck the suspended body. Birds fell, lifeless s
 
 I acted while others fled. I cut her down and placed a ward upon her remains. The officer who proclaimed her death was struck by one of the falling birds and collapsed. I took some of his blood, he had no further use for it. When the carcasses began to rupture and spill acid upon the ground, I was forced to take shelter beneath the gallows.
 
-I was not alone there for long. Another outsider joined me, a half elf, by appearance. Frail, observant. He watched me closely but offered little. I chose not to question it. Instead, I ensured his survival and aided what few others remained.
+I was not alone there for long. Another outsider joined me, a half elf, by appearance. Frail, observant. He watched me closely but offered little. I chose not to question it. Instead, I ensured his survival and later aided what few others survivors remained.
 
-When the chaos subsided, I returned. I quickly drank the blood and at last, removed my helmet. Weeks enclosed within it had taken their toll on me.
+When the chaos subsided, I returned. I quickly drank the blood gathered from before and at last, removed my helmet. Weeks enclosed within it had taken their toll on me.
 
-The gallows had collapsed by then. Among the wreckage, I encountered three others: Sir Nathaniel, his companion Miss Penny, who is a fairy and a tiefling named Miss Raya. All of them had heard the same voice. That alone was enough to bind our interests. Sir Nathaniel, in particular, carries himself with purpose. I have chosen, for now, to follow his lead.
+Upon my arrival the gallows had already collapsed. Among the wreckage, I encountered three others: Sir Nathaniel, his companion Miss Penny, who is a fairy and a tiefling named Miss Raya. All of them had heard the same voice. That alone was enough to bind our interests. Sir Nathaniel, in particular, carries himself with purpose. I have chosen, for now, to follow his lead.
 
 We withdrew to a tavern to gather what knowledge we could. An elderly man spoke of the executed woman, newly arrived, living with her father in a fisherman's hut. She had been accused of devotion to Haberen, a deity said to belong to a pantheon of chaos. There are many such entities, it seems. Sir Nathaniel and the frail half elf, Sir Quinlan, offered what explanations they could. Names such as Mortis and Anguis were mentioned with surprising familiarity, as though their influence has grown in recent years.
 
@@ -57,7 +57,7 @@ For now, we have returned to the tavern to rest and prepare. Tomorrow may offer 
 
 I will be sharing a room with Miss Raya and Sir Quinlan.
 
-˖⁺‧₊˚Fie ca misiunea mea să dea roade, întoarcerea mea o vei aștepta˚₊‧⁺˖`,
+˖⁺‧₊˚Fie ca misiunea mea să dea roade, întoarcerea mea o vei aștepta. Rest well, my dear.˚₊‧⁺˖`,
     highlights: ["Arrival in Halivaara", "Divine Intervention", "Meeting a Group"],
   },
 ])
