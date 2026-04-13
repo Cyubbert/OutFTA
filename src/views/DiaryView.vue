@@ -27,7 +27,7 @@ const entries = ref([
     id: 1,
     session: 1,
     title: "01 - Arrival in Halivaara",
-    date: "2026-04-13",
+    date: "2026-03-29",
     location: "Halivaara",
     mood: "neutral",
     images: ["/images/mory_s1.png"],
