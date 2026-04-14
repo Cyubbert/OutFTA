@@ -46,7 +46,7 @@
       <h2>Culture</h2>
 
       <p>
-        One of Ivia’s most famous traditions is called The Spine Tale.
+        One of Ivia’s most famous traditions is called <router-link to="/mory" class="spine-link">The Spine Tale.</router-link>
         In Ivian culture, tattoos are not viewd as a decoration but a record of a person’s life.
         These tattoos are called Istoriya Nochnick, meaning “spine tales.”
         They are placed along the spine and read from the top down like a living story.
@@ -142,5 +142,15 @@ p {
   width: 80%;
   display: block;
   margin: 2rem auto;
+}
+.spine-link {
+  color: #ffffff;
+  text-decoration: none;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.spine-link:hover {
+  color: #ffffff;
 }
 </style>
