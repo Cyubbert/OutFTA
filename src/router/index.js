@@ -15,6 +15,7 @@ import VirexView from "@/views/VirexView.vue";
 import AasmiasView from "@/views/AasmiasView.vue";
 import InitiativeView from "../views/InitiativeView.vue";
 import MoltynView from "@/views/MoltynView.vue";
+import SeleneView from "@/views/SeleneView.vue";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -117,6 +118,11 @@ const router = createRouter({
             path: "/npcs/moltyn",
             name: "moltyn",
             component: MoltynView
+        },
+        {
+            path: "/npcs/selene",
+            name: "selene",
+            component: SeleneView
         },
 
 

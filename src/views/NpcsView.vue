@@ -12,6 +12,7 @@ const cards = [
   { name: "Aarely", img: Arrely,    route: "/npcs/aarely" },
   { name: "Virex Halden", img: Virex,    route: "/npcs/virex" },
   { name: "Moltyn Zeghal", img: Moltyn, route: "/npcs/moltyn" },
+  {name: "Selene Witword", img: "/images/Selene_Banner", route: "/npcs/selene" },
 
 ]
 </script>
