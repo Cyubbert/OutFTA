@@ -5,7 +5,7 @@ import Arrely from "@/assets/images/AarelyBanner.png";
 import Virex from "@/assets/images/VirexBanner.png";
 import AughImg from "@/assets/images/AUGH.png";
 import Moltyn from "/images/Moltyn.png";
-import Selene from "images/Selene_Banner.png";
+import Selene from "/images/Selene_Banner.png";
 
 
 const cards = [
