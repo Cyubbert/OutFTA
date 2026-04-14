@@ -5,6 +5,7 @@ import Arrely from "@/assets/images/AarelyBanner.png";
 import Virex from "@/assets/images/VirexBanner.png";
 import AughImg from "@/assets/images/AUGH.png";
 import Moltyn from "/images/Moltyn.png";
+import Selene from "images/Selene_Banner.png";
 
 
 const cards = [
@@ -12,7 +13,7 @@ const cards = [
   { name: "Aarely", img: Arrely,    route: "/npcs/aarely" },
   { name: "Virex Halden", img: Virex,    route: "/npcs/virex" },
   { name: "Moltyn Zeghal", img: Moltyn, route: "/npcs/moltyn" },
-  {name: "Selene Witword", img: "/images/Selene_Banner", route: "/npcs/selene" },
+  {name: "Selene Witword", img: Selene, route: "/npcs/selene" },
 
 ]
 </script>
