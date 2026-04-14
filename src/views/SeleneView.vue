@@ -19,8 +19,8 @@
     <section class="section">
       <p>
         Selene Witword, a Lacrimian Commander, she stands at around 173 cm with pale pink hair that falls to her shoulders.
-        She is most often seen in heavy pale rose steel armor, her shoulder plates bearing the proud crest of the Witword family.
-        When her helmet is removed, it reveals a round, soft featured face, striking crimson-red eyes and a small mole beneath her right eye.
+        She is most often seen in heavy pale rose steel armor, her chest plate bearing the proud crest of the Witword family.
+        When her helmet is removed, it reveals a round, soft featured face, striking crimson-red eyes and a small mole beneath her left eye.
 
       </p>
 
