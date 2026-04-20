@@ -68,7 +68,6 @@ const filtered = computed(() =>
   overflow: hidden;
 }
 
-/* Bild füllt die ganze Card */
 .session-card img {
   position: absolute;
   inset: 0;
@@ -81,9 +80,9 @@ const filtered = computed(() =>
   transform: scale(1.08);
 }
 
-/* Text-Block unten, mit stärkerem Gradient */
 .session-text {
   position: relative;
+  text-decoration: none;
   z-index: 2;
   padding: 0.75rem 1rem 0.85rem;
   background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
