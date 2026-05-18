@@ -75,11 +75,11 @@ Sir Quinlan, Miss Raya and I withdrew to the room we had agreed to share for the
 
     Sir Quinlan watched me often.
 
-    Eventually, I returned the gesture and exclaimed that I find his gaze amusing. He reminds me greatly of [redacted]. In the way he speaks. The way curiosity overtakes him. The small reactions he fails to conceal. I continue to notice fragments of him within this otherwise unfamiliar man. It is unsettling, though not unpleasant. Stranger still is the sense that Sir Quinlan feels drawn toward me for reasons I cannot understand.
+    Eventually, I returned the gesture and exclaimed that I find his gaze amusing. He reminds me greatly of [redacted]. In the way he speaks. The way curiosity overtakes him. The small reactions he fails to conceal. I continue to notice fragments of him within this otherwise unfamiliar man. It is unsettling, though not unpleasant. Stranger still is the sense that Sir Quinlan feels drawn towards me for reasons I cannot understand.
 
     Our exchange ended only after I jokingly offered him my shield to sleep with.
 
-Sleep itself proved difficult. I have come to prefer exhaustion over the possibility of waking beside another corpse.
+Sleep itself proved difficult. I have come to prefer exhaustion over the possibility of waking besides another corpse.
 
     During the night, a loud crash echoed from below. I descended immediately to investigate. The tavern’s kitchen staff lay injured upon the floor beneath an open window, blood trailing from where his head had struck the counter. When he regained consciousness, confusion clouded him. He insisted he had merely slipped.
 
@@ -109,7 +109,7 @@ Sleep itself proved difficult. I have come to prefer exhaustion over the possibi
 
     Still, we chose to investigate the castle.
 
-    On our way there, guards halted us and searched our belongings. They uncovered the Pendant of Haberen hidden within Sir Quinlan’s pack. The guards attempted to detain him. I volunteered to accompany them, partly to prevent Sir Quinlan from worsening his situation and partly because confinement often grants access to information otherwise hidden. I had no desire to see him vanish the same way the Red Thread did.
+    On our way there, a guard halted us and searched our belongings. They uncovered the Pendant of Haberen hidden within Sir Quinlan’s pack. The guard attempted to detain him. I volunteered to accompany them, partly to prevent Sir Quinlan from worsening his situation and partly because confinement often grants access to information otherwise hidden. I had no desire to see him vanish the same way the Red Thread did.
 
     Before matters could escalate further, Sir Nathaniel used some manner of magic upon the guard. Whatever he did proved effective enough to make the man abandon the matter entirely.
 
