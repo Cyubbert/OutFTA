@@ -60,7 +60,89 @@ I will be sharing a room with Miss Raya and Sir Quinlan.
 ˖⁺‧₊˚Fie ca misiunea mea să dea roade, întoarcerea mea o vei aștepta. Rest well, my dear.˚₊‧⁺˖`,
     highlights: ["Arrival in Halivaara", "Divine Intervention", "Meeting a Group"],
   },
+
+  {
+    id: 2,
+    session: 2,
+    title: "02 - The Ill",
+    date: "2026-05-9",
+    location: "Halivaara",
+    mood: "Hungry",
+    images: ["/images/mory_s2.png"],
+    body: `⁺‧₊˚ O, câine mereu atent, ascultă rugăciunea credincioșilor tăi˚₊‧⁺˖
+
+Sir Quinlan, Miss Raya and I withdrew to the room we had agreed to share for the night. My hunger has continued to worsen. Though I found brief relief earlier, it did little to quiet the thing stirring beneath my skin. I did not dare remove my armor completely. Steel remains easier to trust than myself.
+
+    Sir Quinlan watched me often.
+
+    Eventually, I returned the gesture and exclaimed that I find his gaze amusing. He reminds me greatly of [redacted]. In the way he speaks. The way curiosity overtakes him. The small reactions he fails to conceal. I continue to notice fragments of him within this otherwise unfamiliar man. It is unsettling, though not unpleasant. Stranger still is the sense that Sir Quinlan feels drawn toward me for reasons I cannot understand.
+
+    Our exchange ended only after I jokingly offered him my shield to sleep with.
+
+Sleep itself proved difficult. I have come to prefer exhaustion over the possibility of waking beside another corpse.
+
+    During the night, a loud crash echoed from below. I descended immediately to investigate. The tavern’s kitchen staff lay injured upon the floor beneath an open window, blood trailing from where his head had struck the counter. When he regained consciousness, confusion clouded him. He insisted he had merely slipped.
+
+    Sir Quinlan followed, as he often seems to do. It was he who discovered a fragment of white cloth caught upon the window frame, embroidered with gold stitching.
+
+    We instructed the man to return home and rest for the night before retreating once more to our room. The others returned to sleep eventually. I found little success in it myself, though resting upright proved more tolerable than lying still and listening to my own pulse hunger for another’s.
+
+    When I next opened my eyes, Sir Quinlan was watching me again with careful attention. I chose not to acknowledge it.
+
+    Downstairs, I noticed immediately that the tavern lacked its usual staff. I questioned the waitress regarding her missing colleague and confirmed he was the same man injured the previous evening. I informed her of his condition and requested his address.
+
+    Upon arriving at his home, he refused us entry. He claimed he had contracted "The Ill".
+
+    A curious name for something supposedly so lethal. To reduce a plague to such a vague title feels almost dismissive. Logically speaking, how terrible can it truly be? Throughout my travels I have encountered countless sicknesses and remained untouched by all of them.
+
+    Regardless, the others did not share my confidence.
+
+    We sent Mx Penny to warn the waitress. The news appeared to freeze her where she stood. Sir Nathaniel himself grew uneasy at the possibility he had also become infected. I doubt that he has, though I advised him to use his remaining time wisely should fate prove uncharacteristically cruel.
+
+    From there, our wandering through Halivaara continued.
+
+    At the jeweler’s stand, another merchant informed me where Miss Brynn resided. He also convinced me to purchase a topaz bracelet. It now rests among my belongings.
+
+    Miss Brynn’s home stood empty when we arrived.
+
+    Rotting fish hung from hooks along the kitchen walls. Food scraps had been left to spoil where they sat. The air itself seemed abandoned. Amidst the filth, I discovered a letter addressed to the Red Thread. I shared its contents with the others, though it offered little clarity. By that point, I believe all of us had begun longing for escape from this town.
+
+    Still, we chose to investigate the castle.
+
+    On our way there, guards halted us and searched our belongings. They uncovered the Pendant of Haberen hidden within Sir Quinlan’s pack. The guards attempted to detain him. I volunteered to accompany them, partly to prevent Sir Quinlan from worsening his situation and partly because confinement often grants access to information otherwise hidden. I had no desire to see him vanish the same way the Red Thread did.
+
+    Before matters could escalate further, Sir Nathaniel used some manner of magic upon the guard. Whatever he did proved effective enough to make the man abandon the matter entirely.
+
+    We proceeded to the castle regardless.
+
+    There, I acquired temporary work as a transcriber. The task itself was uneventful, though I did learn several modern expressions currently in use.
+
+    Homie appears to refer to trusted companions.
+    GOAT is an abbreviation meaning Greatest Of All Time. The youth refers to Mortis as "The GOAT", not in a literal sense.
+
+    During my shift I was served food. Out of politeness, I forced myself to eat some of it.
+
+    It was a raspberry tart accompanied with small sliced lemon skin. The first taste carried a sharp sourness that softened quickly into a comfortable sweetness. The pastry beneath was balanced perfectly, neither overly flaky nor dense. For a brief moment, it rested pleasantly upon my tongue before instinct reminded me that such things no longer belong into my stomach.
+
+    I enjoyed it more than I should have. I will deal with it later.
+
+    Shortly before my work concluded, I noticed a yellow serpent with crimson eyes slither silently into the library and disappear into my bag.
+
+    When I departed the castle, Sir Quinlan and Miss Raya waited outside for my return. I gave Sir Quinlan my pay and informed them both that infiltrating the castle further may ultimately prove futile.
+
+    For a short while, I believed I had somehow acquired a new companion. It turns out the serpent already belonged to Miss Raya, or rather had been residing within her bag for some time. It possesses an unusual intelligence for a creature of its kind and appears strangely affectionate.
+
+    We have since returned to the tavern to discuss our next steps.
+
+    Most likely, our departure from Halivaara.
+
+    I miss you greatly, my love.
+
+˖⁺‧₊˚Fie ca misiunea mea să dea roade, întoarcerea mea o vei aștepta˚₊‧⁺˖`,
+    highlights: ["Roaming in Halivaara", "Kitchen worker caught the Ill", "Finding a job"],
+  },
 ])
+
 
 const lightboxImg = ref(null)
 const activeEntry = ref(null)
