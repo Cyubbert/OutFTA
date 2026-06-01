@@ -31,7 +31,7 @@ const entries = ref([
     location: "Halivaara",
     mood: "neutral",
     images: ["/images/mory_s1.png"],
-    body: `˖⁺‧₊˚ O, câine mereu atent, ascultă rugăciunea credincioșilor tăi˚₊‧⁺˖
+    body: `˖⁺‧₊˚ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ˚₊‧⁺˖
 
 I have arrived safely in Halivaara. My passage towards Silverkeep was… interrupted by this town, unknown to me until now.
 
@@ -57,7 +57,7 @@ For now, we have returned to the tavern to rest and prepare. Tomorrow may offer 
 
 I will be sharing a room with Miss Raya and Sir Quinlan.
 
-˖⁺‧₊˚Fie ca misiunea mea să dea roade, întoarcerea mea o vei aștepta. Rest well, my dear.˚₊‧⁺˖`,
+˖⁺‧₊˚ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣ ˚₊‧⁺˖`,
     highlights: ["Arrival in Halivaara", "Divine Intervention", "Meeting a Group"],
   },
 
@@ -69,7 +69,7 @@ I will be sharing a room with Miss Raya and Sir Quinlan.
     location: "Halivaara",
     mood: "Hungry",
     images: ["/images/mory_s2.png"],
-    body: `⁺‧₊˚ O, câine mereu atent, ascultă rugăciunea credincioșilor tăi˚₊‧⁺˖
+    body: `⁺‧₊˚ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ˚₊‧⁺˖
 
 Sir Quinlan, Miss Raya and I withdrew to the room we had agreed to share for the night. My hunger has continued to worsen. Though I found brief relief earlier, it did little to quiet the thing stirring beneath my skin. I did not dare remove my armor completely. Steel remains easier to trust than myself.
 
@@ -138,8 +138,169 @@ Sleep itself proved difficult. I have come to prefer exhaustion over the possibi
 
     I miss you greatly, my love.
 
-˖⁺‧₊˚Fie ca misiunea mea să dea roade, întoarcerea mea o vei aștepta˚₊‧⁺˖`,
+˖⁺‧₊˚ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣ ˚₊‧⁺˖`,
     highlights: ["Roaming in Halivaara", "Kitchen worker caught the Ill", "Finding a job"],
+  },
+
+  {
+    id: 3,
+    session: 3,
+    title: "03 - Knowledge comes with Responsibility",
+    date: "2026-06-01",
+    location: "Halivaara",
+    mood: "melancholy",
+    images: ["/images/mory_s3.png"],
+    body: `˖⁺‧₊˚ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ˚₊‧⁺˖
+
+I am writing this entry in pain.
+
+For the first time in weeks, I removed my armor. The pressure and pain that accompanied it faded almost immediately. Unfortunately, they had been serving a purpose. Without the constant reminders pressed into my flesh, my thoughts began drifting toward less desirable instincts.
+
+The day itself proved far more eventful than I would have preferred.
+
+We met with Sir Nathaniel and Mx Penny at the other tavern and gathered around a table to discuss our next course of action. "The Ill" continues to spread throughout Halivaara at an alarming pace. After much deliberation, we reached the uncomfortable conclusion that we seemed incapable of helping the townspeople. The sensible choice appeared to be leaving.
+
+Fate, however, rarely respects sensible choices.
+
+A nobleman suddenly collapsed to the floor before us, his body trembling violently. I moved to assist him immediately, but my knowledge of first aid accomplished little. Sir Nathaniel cast a spell that appeared to ease the man's suffering, though only briefly. He soon lost consciousness entirely.
+
+Panic spread through the tavern faster than the illness itself. Most fled. I remained.
+
+Upon examining the man more closely, I discovered something deeply concerning. Hidden beneath his collar were bite marks upon his neck, poorly healed and unmistakable.
+
+Several bystanders lingered nearby. One claimed to be a doctor, though he observed the situation from a distance at first. Only after some hesitation did he approach and inject the unconscious nobleman with a strange liquid. When questioned, the masked man explained that the substance was part of his research into a potential cure.
+
+The man wore a plague doctor's mask. He claimed that "the Ill" was airborne.
+
+Those words forced me to revisit memories I would rather leave buried. I remembered my own turning. The fever. The trembling. The loss of control. The nobleman's condition resembled it far more closely than I found comfortable.
+
+Afterwards, I rejoined the others and informed them of what I had discovered.
+
+Naturally, questions followed. A person such as myself is not expected to know so much about a condition no one else seems to understand.
+
+I attempted to explain my observations without revealing more than necessary. In retrospect, I suspect honesty would have served me better. There is a peculiar irony in deception, the harder one works to conceal the truth, the more attention its absence attracts.
+
+Regardless, we agreed to remain in Halivaara for three additional days. If, by then, we had uncovered neither cause nor cure, we would abandon the investigation and continue on to Silverkeep.
+
+I cannot say I objected to the arrangement. This town grows more unsettling with each passing hour.
+
+Sir Nathaniel proposed accompanying me during my temporary employment as a transcriber. He intends to remain unseen through magic, hoping to gather information that might otherwise be hidden from us. I admit the idea has merit.
+
+I suggested that we make use of the vacant flat provided to me through my employment. Once we had settled there for the evening, I set about preparing holy water to distribute among the others. Given the increasing number of unsettling discoveries surrounding "the Ill", caution seemed prudent.
+
+I provided a vial to Qui- Sir Quinlan and another to Miss Raya, explaining their proper use. The remainder of the evening passed quietly. Mx Penny, Sir Quinlan and I spoke briefly about the nature of the undead before eventually retiring for the night.
+
+The only time I dream is when I am with you.
+
+Even so, sleep offered little peace. Vivid visions haunted me throughout the night. [redacted] appeared again and again, memories turning like the pages of an illustrated book. Faces. Places. Moments long since lost.
+
+When I finally opened my eyes, I found Sir Quinlan watching me once more.
+
+By now, I have grown accustomed to the young elf's peculiar habit. However his fascination with me continues to puzzle me. Part of me wonders whether he knows something about [redacted]. They share little resemblance at first glance, yet certain expressions and mannerisms feel strangely familiar.
+
+Perhaps these are merely pathetic fragments of hope buried within me. The desperate wish that there remains some possibility, however small, that he yet lives.
+
+In a bypassing conversation I asked Sir Quinlan who he believed me to be. He offered no name. Instead, he claimed that I reminded him greatly of his former master.
+
+Curiously, my thoughts drifted immediately to my sibling.
+
+We bore a resemblance to one another, though his hair remained consistently white, untouched by the red that stains my own. More importantly, he should have passed from this world long ago. An odd coincidence.
+
+For now, I have chosen not to dwell upon it. We face more pressing concerns.
+
+The following morning, Sir Nathaniel and I proceeded to my place of employment, though only one of us could be seen.
+
+Upon arrival, I was greeted enthusiastically by "the GOAT", I later learned was named Borris. He struck his fist against my gloved hand before performing several additional gestures that brought him considerably closer than I would have preferred. Apparently this is considered a greeting among individuals deemed "cool."
+
+The term, I learned, does not refer to temperature. It is apparently reserved for individuals who are admired by others.
+
+By that definition, you would be considered "cool". Not to the touch, of course, but according to the modern usage of the word.
+
+I will not be demonstrating this sentiment by striking my fist against yours, however. The greeting appears unnecessarily aggressive and only marginally more civilised than a tavern brawl.
+
+I continue to learn a great many things in this town.
+
+While I attended to my duties, Sir Nathaniel searched the library. At one point, I opened a window to allow Mx Penny to retrieve several books he wished removed from the premises. Thus passed much of the day.
+
+Later, while dining in the cafeteria, I gathered information regarding the two priestesses of Mortis. They are reportedly particular about their meals, frequently sending food back untouched. More interestingly, they appear to avoid daylight almost entirely, remaining active only after nightfall.
+
+An observation I find difficult to ignore.
+
+I eventually returned to the Archive and completed the remainder of my work. Sir Nathaniel, meanwhile, succeeded in remaining entirely unnoticed throughout the day. When we reunited with Sir Quinlan and Miss Raya, we exchanged everything we had learned.
+
+The conclusion was difficult to avoid. We are dealing with vampires.
+
+Despite my own condition, I know remarkably little about their kind. Most accounts divide their kind into simple categories. Masters. Spawn. Predators and servants. Yet the more I compare those descriptions to my own condition, the less certain I become of where I belong.
+
+I possess neither the power attributed to a Master nor the frailty commonly associated with a Spawn. Perhaps the circumstances of my turning altered something. Perhaps I simply lack understanding.
+
+My "Master" has been dead for many years. If the stories hold any truth, whatever bond once connected us should have died with him. No other Master should be capable of commanding me now.
+
+The thought ought to be comforting. Instead, I find it strangely isolating.
+
+Regardless of my own circumstances, Mx Penny, Sir Quinlan and I proceeded to inspect the storage buildings. The infected were kept there under quarantine. The dead rested nearby beneath thin sheets, lined up. There is one detail I neglected to record earlier.
+
+Through our investigation, we learned that a Vampire Spawn cannot rise on its own. A burial rite performed by a follower of a deity is required before the transformation can be completed.
+
+An unfortunate irony.
+
+The final rite meant to lay the dead to rest may instead be the very thing that raises them again. As a result, we have settled upon a grim solution. The bodies must be burned. It is not a pleasant task, but it should prevent an army of Spawn from emerging from this tragedy.
+
+The living present a more difficult problem.
+
+There is no known cure for those already infected. The only alternative we have uncovered would require the blood of the Vampire Master. Such blood would not restore them to what they once were. Instead, it would free them from their master's influence and allow them to exist as independent vampires.
+
+Much like myself.
+
+Obtaining such blood would be dangerous enough on its own. Distributing it presents an entirely different concern. Even if we succeeded, I remain unconvinced that it would be an act of mercy.
+Most people imagine immortality as a gift. They fail to consider the hunger. The endless craving. The constant restraint. The knowledge that one careless moment may cost another their life.
+
+Some would master it. Many would not.
+
+To condemn a person to such an existence without their informed consent feels monstrous. They would survive, certainly. But survival and living are not the same thing. If those are truly the choices before us, then I find death the kinder fate.
+
+I should know.
+
+Then something even stranger occurred. A hound. Large, unsettling and surprisingly obedient. To me, specifically.
+
+At first, I believed it wished to show me something. Perhaps it was leading me toward its owner. Perhaps it had witnessed something important. I followed it for a time, searching for some purpose behind its behavior. I found none. Every trail ended in disappointment. Every assumption proved incorrect.
+
+When I eventually attempted to leave, the animal began to howl. One possibility still remained. Given recent events, I considered whether the creature might be something other than a hound. One of those individuals gifted by nature with the ability to assume an animal's form.
+
+To test the theory, I took a sample of its blood. The hound was understandably displeased by this decision and kept its distance afterwards. The taste told me all I needed to know.
+
+It had been quite some time since I last tasted animal blood, yet the distinction remained unmistakable. There is nothing quite like the blood of a humanoid.
+
+Animal blood is dull by comparison. Thick, metallic and strangely hollow when compared to its sweeter counterpart. It quiets the hunger, certainly, but only in the same way stale bread quiets starvation.
+
+Adequate and Forgettable.
+
+It was merely a dog. An ordinary animal searching for someone it had lost. Someone who, for reasons I cannot explain, it seemed to mistake for me. I could not help but think of Sir Quinlan.
+
+The hound followed me with the same certainty he displays whenever he insists that I remind him of his former master. A curious comparison. One I understand no better now than I did when he first made it.
+
+Then I decided to return. I have already troubled Sir Nathaniel enough.
+
+The hound's blood, while unsatisfying, was sufficient to dull the hunger. Feeling reasonably confident in my self control, I removed my armor before returning to the flat. My intention was to enter quietly and avoid disturbing the others.
+
+I found Sir Quinlan still awake, standing by the window and smoking. His reaction upon seeing me without my armor was immediate. The young elf stared. Not at me. At my chest.
+
+I do not believe he realised quite how obvious he was being. Every time his gaze wandered elsewhere, it inevitably found its way back again moments later. The exercise became rather amusing to watch. I considered pointing it out.
+
+Ultimately, I decided against it. Watching him attempt to pretend otherwise was considerably more entertaining. Perhaps he had simply never seen the marks left by the armor before. They are not particularly pleasant to look upon.
+
+Whatever the reason, he was polite enough not to comment on them. Instead, he informed me that my efforts at stealth had been wasted. Sir Nathaniel had apparently instructed him to wake him upon my return.
+
+Sir Quinlan did exactly that. Sir Nathaniel rose from his bed, thanked Sir Quinlan for waking him, directed a vulgar remark in my direction and promptly returned to sleep. I must admit, he is an interesting man.
+
+I am preparing to rest as well. Unfortunately, the hunger has already begun making its presence known once more. Until I can put my armor back on, I will need to exercise additional caution.
+
+Rest well, my dear.
+
+I love you.
+
+˖⁺‧₊˚ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣  Rest well, my dear.˚₊‧⁺˖`,
+    highlights: ["Vampires", "Strange Hound"],
   },
 ])
 
