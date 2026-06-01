@@ -31,7 +31,7 @@ const entries = ref([
     location: "Halivaara",
     mood: "neutral",
     images: ["/images/mory_s1.png"],
-    body: `˖⁺‧₊˚ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ˚₊‧⁺˖
+    body: `˖ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ
 
 I have arrived safely in Halivaara. My passage towards Silverkeep was… interrupted by this town, unknown to me until now.
 
@@ -57,7 +57,7 @@ For now, we have returned to the tavern to rest and prepare. Tomorrow may offer 
 
 I will be sharing a room with Miss Raya and Sir Quinlan.
 
-˖⁺‧₊˚ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣ ˚₊‧⁺˖`,
+ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣ `,
     highlights: ["Arrival in Halivaara", "Divine Intervention", "Meeting a Group"],
   },
 
@@ -69,7 +69,7 @@ I will be sharing a room with Miss Raya and Sir Quinlan.
     location: "Halivaara",
     mood: "Hungry",
     images: ["/images/mory_s2.png"],
-    body: `⁺‧₊˚ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ˚₊‧⁺˖
+    body: `⁺ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ
 
 Sir Quinlan, Miss Raya and I withdrew to the room we had agreed to share for the night. My hunger has continued to worsen. Though I found brief relief earlier, it did little to quiet the thing stirring beneath my skin. I did not dare remove my armor completely. Steel remains easier to trust than myself.
 
@@ -138,7 +138,7 @@ Sleep itself proved difficult. I have come to prefer exhaustion over the possibi
 
     I miss you greatly, my love.
 
-˖⁺‧₊˚ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣ ˚₊‧⁺˖`,
+ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣`,
     highlights: ["Roaming in Halivaara", "Kitchen worker caught the Ill", "Finding a job"],
   },
 
@@ -150,7 +150,7 @@ Sleep itself proved difficult. I have come to prefer exhaustion over the possibi
     location: "Halivaara",
     mood: "melancholy",
     images: ["/images/mory_s3.png"],
-    body: `˖⁺‧₊˚ ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ˚₊‧⁺˖
+    body: `˖ᒷ⍊ᒷ∷ ∴ᔑℸ ̣ ᓵ⍑⎓⚍ꖎ ↸𝙹⊣, ꖎ╎ᓭℸ ̣ ᒷリ ℸ ̣ 𝙹 ℸ ̣ ⍑ᒷ !¡∷ᔑ||ᒷ∷ 𝙹⎓ ||𝙹⚍∷ ⎓ᔑ╎ℸ ̣ ⍑⎓⚍ꖎ
 
 I am writing this entry in pain.
 
@@ -299,7 +299,7 @@ Rest well, my dear.
 
 I love you.
 
-˖⁺‧₊˚ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣  Rest well, my dear.˚₊‧⁺˖`,
+ᒲᔑ|| ᒲ|| ᒲ╎ᓭᓭ𝙹リ ʖᒷᔑ∷ ⎓∷⚍╎ℸ ̣ ᓭ, ᒲ|| ∷ᒷℸ ̣ ⚍∷リ ||𝙹⚍ ᓭ⍑ᔑꖎꖎ ᔑ∴ᔑ╎ℸ ̣`,
     highlights: ["Vampires", "Strange Hound"],
   },
 ])
