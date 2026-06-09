@@ -475,7 +475,7 @@ const SFW_ARTWORKS = [
     id: 87,
     title: "Waesstan Masquerade",
     artist: "Eddie",
-    img: "/images/RayMask.png",
+    img: "/images/WaessMask.png",
     description: ""
   },
   {
