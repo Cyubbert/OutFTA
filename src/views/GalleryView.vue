@@ -429,6 +429,91 @@ const SFW_ARTWORKS = [
     img: "/images/EpicRay.png",
     description: ""
   },
+  {
+    id: 80,
+    title: "Waesstan's List",
+    artist: "Eddie",
+    img: "/images/hitlist.png",
+    description: ""
+  },
+  {
+    id: 82,
+    title: "Marver's new Friend",
+    artist: "James",
+    img: "/images/marvhug.jpg",
+    description: ""
+  },
+  {
+    id: 83,
+    title: "Marvers Masquerade",
+    artist: "Eddie",
+    img: "/images/marvMask.png",
+    description: ""
+  },
+  {
+    id: 84,
+    title: "Ray Card",
+    artist: "Eddie",
+    img: "/images/raycard2.png",
+    description: ""
+  },
+  {
+    id: 85,
+    title: "Ray Masquerade",
+    artist: "Fynn",
+    img: "/images/RayMask.png",
+    description: ""
+  },
+  {
+    id: 86,
+    title: "Selene",
+    artist: "Eddie",
+    img: "/images/selene.png",
+    description: ""
+  },
+  {
+    id: 87,
+    title: "Waesstan Masquerade",
+    artist: "Eddie",
+    img: "/images/RayMask.png",
+    description: ""
+  },
+  {
+    id: 88,
+    title: "WaessRex",
+    artist: "Eddie",
+    img: "/images/WaessRex.png",
+    description: ""
+  },
+  {
+    id: 89,
+    title: "Quinlan waiting",
+    artist: "Eddie",
+    img: "/images/Quinlan.png",
+    description: ""
+  },
+  {
+    id: 90,
+    title: "Mory's Hunger",
+    artist: "Fynn",
+    img: "/images/MoryApple.png",
+    description: ""
+  },
+  {
+    id: 91,
+    title: "He came to get it",
+    artist: "James",
+    img: "/images/Marv_sword_mask.png",
+    description: ""
+  },
+  {
+    id: 95,
+    title: "Wanted Pontus",
+    artist: "Felix",
+    img: "/images/WantedPoster_Pontus.png",
+    description: ""
+  }
+
 
 ]
 
@@ -559,6 +644,36 @@ const NSFW_ARTWORKS = [
     img: "/images/NakedWaess.png",
     description: ""
   },
+
+  {
+    id: 81,
+    title: "lover",
+    artist: "James",
+    img: "/images/lover.png",
+    description: ""
+  },
+
+  {
+    id: 92,
+    title: "Fem Mory",
+    artist: "Fynn",
+    img: "/images/sexy_Mory.png",
+    description: ""
+  },
+  {
+    id: 93,
+    title: "Waesstan's Greeting from Fooch",
+    artist: "Eddie",
+    img: "/images/waess_fooch.png",
+    description: ""
+  },
+  {
+    id: 95,
+    title: "Pontus",
+    artist: "Felix",
+    img: "/images/cove_rthemupPontus.png",
+    description: ""
+  }
 ]
 
 const NSFW_PASSWORD = "pig"
