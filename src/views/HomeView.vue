@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import { useWorldStore } from "../stores/worldStore";
-import AughImg from "@/assets/images/AUGH.png";
+const AughImg = "/images/AUGH.png";
 
 const store = useWorldStore();
 onMounted(store.fetchWorld);

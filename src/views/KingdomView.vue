@@ -1,20 +1,13 @@
 <script setup>
-import { computed } from "vue";
-import Lacrima from "@/assets/images/LacrimaBanner.png";
-import Dredel from "@/assets/images/Dredel_.png";
-import Duweil from "@/assets/images/Duweil.png";
-import Ivia from "@/assets/images/Ivia.png";
-import Letlon from "@/assets/images/Letlon.png";
-import AughImg from "@/assets/images/AUGH.png";
-
-
 const cards = [
-  { name: "Lacrima", img: Lacrima,    route: "/kingdom/lacrima" },
-  { name: "Dredel", img: Dredel, route: "/kingdom/dredel" },
-  { name: "Duweil",  img: Duweil,  route: "/kingdom/duweil"  },
-  { name: "Ivia",   img: Ivia,   route: "/kingdom/ivia"   },
-  { name: "Letlon",   img: Letlon,   route: "/kingdom/letlon" }
+  { name: "Lacrima", img: "/images/LacrimaBanner.png", route: "/kingdom/lacrima" },
+  { name: "Dredel", img: "/images/Dredel_.png", route: "/kingdom/dredel" },
+  { name: "Duweil", img: "/images/Duweil.png", route: "/kingdom/duweil" },
+  { name: "Ivia", img: "/images/Ivia.png", route: "/kingdom/ivia" },
+  { name: "Letlon", img: "/images/Letlon.png", route: "/kingdom/letlon" },
 ]
+
+const AughImg = "/images/AUGH.png"
 </script>
 
 <template>

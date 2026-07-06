@@ -1,8 +1,7 @@
 <script setup>
 import {ref, computed} from 'vue'
 import sessions from '@/data/sessions.json'
-import Map from "@/assets/images/Map.png"
-import AughImg from "@/assets/images/AUGH.png";
+const AughImg = "/images/AUGH.png";
 
 const search = ref('')
 const filtered = computed(() =>

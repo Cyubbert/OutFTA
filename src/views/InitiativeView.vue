@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from "vue";
-import AughImg from "@/assets/images/AUGH.png";
+const AughImg = "/images/AUGH.png";
 
 const round = ref(1);
 const currentIndex = ref(0);

@@ -1,21 +1,13 @@
 <script setup>
-import { computed } from "vue";
-import Aasmias from "@/assets/images/Aasmias_Banner.png";
-import Arrely from "@/assets/images/AarelyBanner.png";
-import Virex from "@/assets/images/VirexBanner.png";
-import AughImg from "@/assets/images/AUGH.png";
-import Moltyn from "/images/Moltyn.png";
-import Selene from "/images/Selene_Banner.png";
-
-
 const cards = [
-  { name: "Aasmias Wiltfen Galanodel", img: Aasmias,    route: "/npcs/aasmias" },
-  { name: "Aarely", img: Arrely,    route: "/npcs/aarely" },
-  { name: "Virex Halden", img: Virex,    route: "/npcs/virex" },
-  { name: "Moltyn Zeghal", img: Moltyn, route: "/npcs/moltyn" },
-  {name: "Selene Witword", img: Selene, route: "/npcs/selene" },
-
+  { name: "Aasmias Wiltfen Galanodel", img: "/images/Aasmias_Banner.png", route: "/npcs/aasmias" },
+  { name: "Aarely", img: "/images/AarelyBanner.png", route: "/npcs/aarely" },
+  { name: "Virex Halden", img: "/images/VirexBanner.png", route: "/npcs/virex" },
+  { name: "Moltyn Zeghal", img: "/images/Moltyn.png", route: "/npcs/moltyn" },
+  { name: "Selene Witword", img: "/images/Selene_Banner.png", route: "/npcs/selene" },
 ]
+
+const AughImg = "/images/AUGH.png"
 </script>
 
 <template>

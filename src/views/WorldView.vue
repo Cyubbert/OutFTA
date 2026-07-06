@@ -1,17 +1,12 @@
 <script setup>
-import { computed } from "vue";
-import MapImg from "@/assets/images/Map.png";
-import TalonaImg from "@/assets/images/2.png";
-import LiiraImg from "@/assets/images/Liira.png";
-import SuneImg from "@/assets/images/Illustration.png";
-import AughImg from "@/assets/images/AUGH.png";
-
 const cards = [
-  { name: "Norrun", img: MapImg,    route: "/world/norrun" },
-  { name: "Talona", img: TalonaImg, route: "/world/talona" },
-  { name: "Liira",  img: LiiraImg,  route: "/world/liira"  },
-  { name: "Sune",   img: SuneImg,   route: "/world/sune"   },
+  { name: "Norrun", img: "/images/Map.png", route: "/world/norrun" },
+  { name: "Talona", img: "/images/2.png", route: "/world/talona" },
+  { name: "Liira", img: "/images/Liira.png", route: "/world/liira" },
+  { name: "Sune", img: "/images/Illustration.png", route: "/world/sune" },
 ]
+
+const AughImg = "/images/AUGH.png"
 </script>
 
 <template>
