@@ -1,15 +1,29 @@
 <script setup>
-import {ref, computed} from 'vue'
-import sessions from '@/data/sessions.json'
-const AughImg = "/images/AUGH.png";
+import {ref, computed, onMounted} from 'vue'
+import { supabase } from '@/lib/supabase.js'
+const AughImg = supabase.storage.from('images').getPublicUrl('AUGH.webp').data.publicUrl;
+
+const sessions = ref([])
+const loading = ref(true)
+const error = ref(null)
 
 const search = ref('')
 const filtered = computed(() =>
-    sessions
+    sessions.value
         .filter(s => s.title.toLowerCase().includes(search.value.toLowerCase()) || String(s.number).includes(search.value.trim())
         )
         .sort((a, b) => b.number - a.number)
 )
+
+onMounted(async () => {
+  const { data, error: err } = await supabase
+      .from('sessions')
+      .select('id, number, title, cover_image, date')
+
+  if (err) error.value = err
+  else sessions.value = data.map(s => ({ ...s, img: s.cover_image }))
+  loading.value = false
+})
 </script>
 
 <template>
@@ -21,7 +35,9 @@ const filtered = computed(() =>
     </header>
 
     <div class="page-body">
-      <section class="collection-content">
+      <p v-if="loading" class="page-loading">Loading…</p>
+      <p v-else-if="error" class="page-error">Couldn't load sessions.</p>
+      <section v-else class="collection-content">
         <transition-group name="fade" tag="div" class="cards-container">
           <router-link
               v-for="s in filtered"

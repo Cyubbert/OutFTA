@@ -13,6 +13,8 @@ dist
 dist-ssr
 coverage
 *.local
+.env
+scripts/compressed-images
 
 # Editor directories and files
 .vscode/*

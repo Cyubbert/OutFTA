@@ -1,8 +1,12 @@
 <script setup>
 import InfoPage from '@/components/InfoPage.vue'
-import { lacrima } from '@/data/kingdoms.js'
+import { usePageData } from '@/composables/usePageData.js'
+
+const { data, loading, error } = usePageData('lacrima')
 </script>
 
 <template>
-  <InfoPage v-bind="lacrima" />
+  <p v-if="loading" class="page-loading">Loading…</p>
+  <p v-else-if="error" class="page-error">Couldn't load this page.</p>
+  <InfoPage v-else v-bind="data" />
 </template>

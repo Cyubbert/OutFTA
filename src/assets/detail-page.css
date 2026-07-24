@@ -35,6 +35,15 @@
   margin: 2rem auto;
 }
 
+.page-loading,
+.page-error {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  text-align: center;
+  color: #888;
+}
+
 .spine-link {
   color: #ffffff;
   text-decoration: none;

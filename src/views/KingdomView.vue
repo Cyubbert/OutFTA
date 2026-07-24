@@ -1,24 +1,22 @@
 <script setup>
-const cards = [
-  { name: "Lacrima", img: "/images/LacrimaBanner.png", route: "/kingdom/lacrima" },
-  { name: "Dredel", img: "/images/Dredel_.png", route: "/kingdom/dredel" },
-  { name: "Duweil", img: "/images/Duweil.png", route: "/kingdom/duweil" },
-  { name: "Ivia", img: "/images/Ivia.png", route: "/kingdom/ivia" },
-  { name: "Letlon", img: "/images/Letlon.png", route: "/kingdom/letlon" },
-]
+import { usePagesByCategory } from '@/composables/usePagesByCategory.js'
+import { supabase } from '@/lib/supabase.js'
 
-const AughImg = "/images/AUGH.png"
+const { cards, loading, error } = usePagesByCategory('kingdom', ['lacrima', 'dredel', 'duweil', 'ivia', 'letlon'])
+const AughImg = supabase.storage.from('images').getPublicUrl('AUGH.webp').data.publicUrl
 </script>
 
 <template>
   <article class="page sans">
     <header>
       <img class="page-cover-image" :src="AughImg" alt="Cover image" />
-      <h1 class="page-title">World & Deities</h1>
+      <h1 class="page-title">Kingdom's</h1>
     </header>
     <div class="page-body">
       <section class="collection-content">
-        <transition-group name="fade" tag="div" class="cards-container">
+        <p v-if="loading" class="page-loading">Loading…</p>
+        <p v-else-if="error" class="page-error">Couldn't load this page.</p>
+        <transition-group v-else name="fade" tag="div" class="cards-container">
           <router-link
               v-for="card in cards"
               :key="card.name"

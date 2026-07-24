@@ -1,12 +1,9 @@
 <script setup>
-const cards = [
-  { name: "Norrun", img: "/images/Map.png", route: "/world/norrun" },
-  { name: "Talona", img: "/images/2.png", route: "/world/talona" },
-  { name: "Liira", img: "/images/Liira.png", route: "/world/liira" },
-  { name: "Sune", img: "/images/Illustration.png", route: "/world/sune" },
-]
+import { usePagesByCategory } from '@/composables/usePagesByCategory.js'
+import { supabase } from '@/lib/supabase.js'
 
-const AughImg = "/images/AUGH.png"
+const { cards, loading, error } = usePagesByCategory('world', ['norrun', 'talona', 'liira', 'sune'])
+const AughImg = supabase.storage.from('images').getPublicUrl('AUGH.webp').data.publicUrl
 </script>
 
 <template>
@@ -17,7 +14,9 @@ const AughImg = "/images/AUGH.png"
     </header>
     <div class="page-body">
       <section class="collection-content">
-        <transition-group name="fade" tag="div" class="cards-container">
+        <p v-if="loading" class="page-loading">Loading…</p>
+        <p v-else-if="error" class="page-error">Couldn't load this page.</p>
+        <transition-group v-else name="fade" tag="div" class="cards-container">
           <router-link
               v-for="card in cards"
               :key="card.name"

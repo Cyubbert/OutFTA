@@ -1,8 +1,12 @@
 <script setup>
 import InfoPage from '@/components/InfoPage.vue'
-import { talona } from '@/data/worldEntities.js'
+import { usePageData } from '@/composables/usePageData.js'
+
+const { data, loading, error } = usePageData('talona')
 </script>
 
 <template>
-  <InfoPage v-bind="talona" />
+  <p v-if="loading" class="page-loading">Loading…</p>
+  <p v-else-if="error" class="page-error">Couldn't load this page.</p>
+  <InfoPage v-else v-bind="data" />
 </template>

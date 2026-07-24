@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
-const AughImg = "/images/AUGH.png";
+import { supabase } from "@/lib/supabase.js";
+const AughImg = supabase.storage.from("images").getPublicUrl("AUGH.webp").data.publicUrl;
 
 const round = ref(1);
 const currentIndex = ref(0);

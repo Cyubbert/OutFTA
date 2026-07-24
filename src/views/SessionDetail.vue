@@ -1,17 +1,32 @@
 <script setup>
-import {computed} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import sessions from '@/data/sessions.json'
+import {ref, computed, onMounted} from 'vue'
+import {useRoute} from 'vue-router'
+import { supabase } from '@/lib/supabase.js'
 
 const route = useRoute()
-const router = useRouter()
-const session = computed(() => sessions.find(s => s.id === route.params.id))
-const prev = computed(() => sessions.find(s => s.number === session.value?.number - 1))
-const next = computed(() => sessions.find(s => s.number === session.value?.number + 1))
+const sessions = ref([])
+const loading = ref(true)
+const error = ref(null)
+
+const session = computed(() => sessions.value.find(s => s.id === route.params.id))
+const prev = computed(() => sessions.value.find(s => s.number === session.value?.number - 1))
+const next = computed(() => sessions.value.find(s => s.number === session.value?.number + 1))
+
+onMounted(async () => {
+  const { data, error: err } = await supabase
+      .from('sessions')
+      .select('id, number, title, cover_image, date, summary, highlights, npcs, locations')
+
+  if (err) error.value = err
+  else sessions.value = data.map(s => ({ ...s, img: s.cover_image }))
+  loading.value = false
+})
 </script>
 
 <template>
-  <article class="page sans" v-if="session">
+  <p v-if="loading" class="page-loading">Loading…</p>
+  <p v-else-if="error" class="page-error">Couldn't load this session.</p>
+  <article class="page sans" v-else-if="session">
     <header>
       <div class="session-banner" v-if="session.img">
         <img :src="session.img" :alt="session.title" class="banner-img" />

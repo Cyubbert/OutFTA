@@ -1,680 +1,11 @@
 <script setup>
 import {ref, computed, onMounted, onUnmounted} from 'vue'
+import { supabase } from '@/lib/supabase.js'
 
-const SFW_ARTWORKS = [
-  {
-    id: 1,
-    title: "Ray Reference",
-    artist: "Fynn",
-    img: "/images/RayRef.png",
-    description: ""
-  },
-  {
-    id: 2,
-    title: "Waesstan Reference",
-    artist: "Eddie",
-    img: "/images/WaessRef.jpg",
-    description: ""
-  },
-  {
-    id: 3,
-    title: "Marvers Reference",
-    artist: "James",
-    img: "/images/MarvRef.png",
-    description: ""
-  },
-  {
-    id: 4,
-    title: "Campaign Poster",
-    artist: "James",
-    img: "/images/AncientsPoster.png",
-    description: ""
-  },
-  {
-    id: 5,
-    title: "Tied up Ray",
-    artist: "James",
-    img: "/images/RayStool.jpg",
-    description: ""
-  },
-  {
-    id: 6,
-    title: "Fullbody Marvers",
-    artist: "James",
-    img: "/images/marversfullbody.png",
-    description: ""
-  },
-  {
-    id: 7,
-    title: "Height difference",
-    artist: "James",
-    img: "/images/HeightDiff.jpg",
-    description: ""
-  },
-  {
-    id: 8,
-    title: "Marvers Chibi",
-    artist: "James",
-    img: "/images/marvChibi.jpg",
-    description: ""
-  },
-
-  {
-    id: 9,
-    title: "Ray Chibi",
-    artist: "James",
-    img: "/images/rayChibi.jpg",
-    description: ""
-  },
-
-  {
-    id: 10,
-    title: "Waesstan Chibi",
-    artist: "James",
-    img: "/images/waessChibi.jpg",
-    description: ""
-  },
-  {
-    id: 11,
-    title: "DM Creature",
-    artist: "Fynn",
-    img: "/images/dmCreature.png",
-    description: ""
-  },
-  {
-    id: 12,
-    title: "Armor Reference",
-    artist: "James",
-    img: "/images/marvArmor.png",
-    description: ""
-  },
-  {
-    id: 13,
-    title: "Waesstan Reference 2",
-    artist: "Eddie",
-    img: "/images/waessref2.png",
-    description: ""
-  },
-  {
-    id: 14,
-    title: "First Wanted posters",
-    artist: "James",
-    img: "/images/firstwanted.jpg",
-    description: ""
-  },
-  {
-    id: 15,
-    title: "Marvers Back",
-    artist: "James",
-    img: "/images/marvback.png",
-    description: ""
-  },
-
-  {
-    id: 17,
-    title: "Marvers Carrying the Gang",
-    artist: "James",
-    img: "/images/MarvHolding.png",
-    description: ""
-  },
-
-  {
-    id: 19,
-    title: "Session Meme",
-    artist: "James",
-    img: "/images/lastsesh.png",
-    description: ""
-  },
-  {
-    id: 20,
-    title: "Aarely Headshot",
-    artist: "Fynn",
-    img: "/images/AarelyHeadshot.png",
-    description: ""
-  },
-  {
-    id: 21,
-    title: "Ray and Waesstan",
-    artist: "Eddie",
-    img: "/images/RayWaess.png",
-    description: ""
-  },
-  {
-    id: 22,
-    title: "Aarely",
-    artist: "Eddie",
-    img: "/images/Aarelybody.png",
-    description: ""
-  },
-  {
-    id: 23,
-    title: "Waesstan and Aarely Dancing",
-    artist: "Fynn",
-    img: "/images/WaessAarely.png",
-    description: ""
-  },
-  {
-    id: 24,
-    title: "Commander Virex Halden",
-    artist: "James",
-    img: "/images/Virex1.png",
-    description: ""
-  },
-  {
-    id: 25,
-    title: "Goofy Virex",
-    artist: "James",
-    img: "/images/goofyVirex.png",
-    description: ""
-  },
-  {
-    id: 26,
-    title: "Virex Headshot",
-    artist: "Eddie",
-    img: "/images/VirexHead.png",
-    description: ""
-  },
-  {
-    id: 27,
-    title: "Marvers PhotoCard",
-    artist: "James",
-    img: "/images/MarvCard.png",
-    description: ""
-  },
-  {
-    id: 28,
-    title: "Ray PhotoCard",
-    artist: "James",
-    img: "/images/RayCard.png",
-    description: ""
-  },
-  {
-    id: 29,
-    title: "Waesstan PhotoCard",
-    artist: "James",
-    img: "/images/WaessCard.png",
-    description: ""
-  },
-  {
-    id: 30,
-    title: "Mouse PhotoCard",
-    artist: "James",
-    img: "/images/MouseCard.png",
-    description: ""
-  },
-  {
-    id: 31,
-    title: "Aarely PhotoCard",
-    artist: "James",
-    img: "/images/AarelyCard.png",
-    description: ""
-  },
-  {
-    id: 32,
-    title: "Virex PhotoCard",
-    artist: "James",
-    img: "/images/VirexCard.png",
-    description: ""
-  },
-  {
-    id: 33,
-    title: "Angel",
-    artist: "James",
-    img: "/images/MarvAngel.png",
-    description: ""
-  },
-  {
-    id: 34,
-    title: "Baby and Mom Marv",
-    artist: "James",
-    img: "/images/BabyMarv.png",
-    description: ""
-  },
-  {
-    id: 35,
-    title: "Baby and Mom Marv",
-    artist: "James",
-    img: "/images/BabyMarv2.png",
-    description: ""
-  },
-  {
-    id: 36,
-    title: "Doodles",
-    artist: "James",
-    img: "/images/Look.png",
-    description: ""
-  },
-  {
-    id: 37,
-    title: "Ray Present",
-    artist: "Fynn",
-    img: "/images/RayGu.png",
-    description: ""
-  },
-
-  {
-    id: 39,
-    title: "Ray and Marvers Hugging",
-    artist: "James",
-    img: "/images/RayMarvHug.png",
-    description: ""
-  },
-  {
-    id: 40,
-    title: "New Wantedposter",
-    artist: "James",
-    img: "/images/datedwanted.png",
-    description: ""
-  },
-  {
-    id: 41,
-    title: "Ray and his Horses",
-    artist: "James",
-    img: "/images/RayHorse.png",
-    description: ""
-  },
-  {
-    id: 42,
-    title: "PJs",
-    artist: "James",
-    img: "/images/sleepy.png",
-    description: ""
-  },
-  {
-    id: 43,
-    title: "Mory and Quinlan",
-    artist: "Eddie",
-    img: "/images/MoryQuin.png",
-    description: ""
-  },
-  {
-    id: 44,
-    title: "Mory and Quinlan",
-    artist: "Fynn",
-    img: "/images/MoryQuin2.png",
-    description: ""
-  },
-
-  {
-    id: 49,
-    title: "Pink Marvers",
-    artist: "James",
-    img: "/images/PinkMarv.png",
-    description: ""
-  },
-
-  {
-    id: 51,
-    title: "Pirate Marvers",
-    artist: "James",
-    img: "/images/PirateMarv.png",
-    description: ""
-  },
-  {
-    id: 52,
-    title: "Headscarf Marvers",
-    artist: "James",
-    img: "/images/IvianMarv.png",
-    description: ""
-  },
-  {
-    id: 53,
-    title: "Quinlan Book",
-    artist: "Eddie",
-    img: "/images/QuinBook.png",
-    description: ""
-  },
-  {
-    id: 54,
-    title: "Marvers Ring",
-    artist: "James",
-    img: "/images/MarvRings.png",
-    description: ""
-  },
-  {
-    id: 55,
-    title: "Waesstan and Quinlan",
-    artist: "Eddie",
-    img: "/images/WaessQuin.png",
-    description: ""
-  },
-  {
-    id: 56,
-    title: "Steve",
-    artist: "James",
-    img: "/images/MarvHorse.png",
-    description: ""
-  },
-  {
-    id: 57,
-    title: "Mory",
-    artist: "Eddie",
-    img: "/images/MoryGr.png",
-    description: ""
-  },
-  {
-    id: 58,
-    title: "Quinlan",
-    artist: "Eddie",
-    img: "/images/QuinGr.png",
-    description: ""
-  },
-  {
-    id: 59,
-    title: "Marvers and Astrad",
-    artist: "James",
-    img: "/images/soft.png",
-    description: ""
-  },
-  {
-    id: 60,
-    title: "Marvers and Astrad",
-    artist: "James",
-    img: "/images/anothertime.png",
-    description: ""
-  },
-  {
-    id: 63,
-    title: "Marvers and Astrad",
-    artist: "James",
-    img: "/images/absence.png",
-    description: ""
-  },
-  {
-    id: 64,
-    title: "Marvers and Astrad",
-    artist: "James",
-    img: "/images/dreams.png",
-    description: ""
-  },
-  {
-    id: 65,
-    title: "The Gang",
-    artist: "Fynn",
-    img: "/images/Gang.png",
-    description: ""
-  },
-  {
-    id: 66,
-    title: "Prison Marvers",
-    artist: "James",
-    img: "/images/PrisonMarv.png",
-    description: ""
-  },
-  {
-    id: 67,
-    title: "Drunk",
-    artist: "Eddie",
-    img: "/images/Drunk.png",
-    description: ""
-  },
-  {
-    id: 68,
-    title: "Hand Kiss",
-    artist: "Eddie",
-    img: "/images/HandKiss.png",
-    description: ""
-  },
-  {
-    id: 69,
-    title: "Marv Scarf",
-    artist: "James",
-    img: "/images/MarvScarf.png",
-    description: ""
-  },
-  {
-    id: 78,
-    title: "Tounge",
-    artist: "James",
-    img: "/images/EpicRay.png",
-    description: ""
-  },
-  {
-    id: 80,
-    title: "Waesstan's List",
-    artist: "Eddie",
-    img: "/images/hitlist.png",
-    description: ""
-  },
-  {
-    id: 82,
-    title: "Marver's new Friend",
-    artist: "James",
-    img: "/images/marvhug.jpg",
-    description: ""
-  },
-  {
-    id: 83,
-    title: "Marvers Masquerade",
-    artist: "Eddie",
-    img: "/images/marvMask.png",
-    description: ""
-  },
-  {
-    id: 84,
-    title: "Ray Card",
-    artist: "Eddie",
-    img: "/images/raycard2.png",
-    description: ""
-  },
-  {
-    id: 85,
-    title: "Ray Masquerade",
-    artist: "Fynn",
-    img: "/images/RayMask.png",
-    description: ""
-  },
-  {
-    id: 86,
-    title: "Selene",
-    artist: "Eddie",
-    img: "/images/selene.png",
-    description: ""
-  },
-  {
-    id: 87,
-    title: "Waesstan Masquerade",
-    artist: "Eddie",
-    img: "/images/WaessMask.png",
-    description: ""
-  },
-  {
-    id: 88,
-    title: "WaessRex",
-    artist: "Eddie",
-    img: "/images/WaessRex.png",
-    description: ""
-  },
-  {
-    id: 89,
-    title: "Quinlan waiting",
-    artist: "Eddie",
-    img: "/images/Quinlan.png",
-    description: ""
-  },
-  {
-    id: 90,
-    title: "Mory's Hunger",
-    artist: "Fynn",
-    img: "/images/MoryApple.png",
-    description: ""
-  },
-  {
-    id: 91,
-    title: "He came to get it",
-    artist: "James",
-    img: "/images/Marv_sword_mask.png",
-    description: ""
-  },
-  {
-    id: 95,
-    title: "Wanted Pontus",
-    artist: "Felix",
-    img: "/images/WantedPoster_Pontus.png",
-    description: ""
-  }
-
-
-]
-
-const NSFW_ARTWORKS = [
-  {
-    id: 18,
-    title: "Salt and Pepper Marvers",
-    artist: "James",
-    img: "/images/oldmanMarv.png",
-    description: ""
-  },
-  {
-    id: 16,
-    title: "Waesstan Roped",
-    artist: "Fynn",
-    img: "/images/waesstanrope.png",
-    description: ""
-  },
-  {
-    id: 38,
-    title: "Waesstan on Couch",
-    artist: "Eddie",
-    img: "/images/SeduceWaess.png",
-    description: ""
-  },
-  {
-    id: 45,
-    title: "Lingerine Ray",
-    artist: "James",
-    img: "/images/RayLingerine.png",
-    description: ""
-  },
-  {
-    id: 46,
-    title: "Lingerine Waesstan",
-    artist: "James",
-    img: "/images/WaessLingerine.png",
-    description: ""
-  },
-  {
-    id: 47,
-    title: "Lingerine Marvers",
-    artist: "James",
-    img: "/images/MarvLingerine.png",
-    description: ""
-  },
-  {
-    id: 48,
-    title: "Leather Marvers",
-    artist: "James",
-    img: "/images/LeatherMarv.png",
-    description: ""
-  },
-  {
-    id: 50,
-    title: "Hearteye Marvers",
-    artist: "James",
-    img: "/images/HeartMarv.png",
-    description: ""
-  },
-  {
-    id: 62,
-    title: "Marvers and Astrad",
-    artist: "James",
-    img: "/images/firstnight.png",
-    description: ""
-  },
-  {
-    id: 70,
-    title: "Polycule",
-    artist: "James",
-    img: "/images/PolyCule.png",
-    description: ""
-  },
-  {
-    id: 71,
-    title: "Miss Halden",
-    artist: "James",
-    img: "/images/Halden.png",
-    description: ""
-  },
-  {
-    id: 72,
-    title: "Wedding Night",
-    artist: "James",
-    img: "/images/EvenMorePoly.png",
-    description: ""
-  },
-  {
-    id: 73,
-    title: "Miss Fortis 1",
-    artist: "James",
-    img: "/images/LadyMarv.png",
-    description: ""
-  },
-  {
-    id: 74,
-    title: "Miss Fortis 2",
-    artist: "James",
-    img: "/images/LadyMarv2.png",
-    description: ""
-  },
-  {
-    id: 75,
-    title: "Miss Fortis 2",
-    artist: "James",
-    img: "/images/LadyMarv3.png",
-    description: ""
-  },
-  {
-    id: 76,
-    title: "Lady Quin",
-    artist: "Eddie",
-    img: "/images/LadyQuin.png",
-    description: ""
-  },
-  {
-    id: 78,
-    title: "Lady Waess",
-    artist: "Eddie",
-    img: "/images/LadyWaess.png",
-    description: ""
-  },
-  {
-    id: 79,
-    title: "Nakey Waess",
-    artist: "Eddie",
-    img: "/images/NakedWaess.png",
-    description: ""
-  },
-
-  {
-    id: 81,
-    title: "lover",
-    artist: "James",
-    img: "/images/lover.png",
-    description: ""
-  },
-
-  {
-    id: 92,
-    title: "Fem Mory",
-    artist: "Fynn",
-    img: "/images/sexy_Mory.png",
-    description: ""
-  },
-  {
-    id: 93,
-    title: "Waesstan's Greeting from Fooch",
-    artist: "Eddie",
-    img: "/images/waess_fooch.png",
-    description: ""
-  },
-  {
-    id: 95,
-    title: "Pontus",
-    artist: "Felix",
-    img: "/images/cove_rthemupPontus.png",
-    description: ""
-  }
-]
+const galleryLoading = ref(true)
+const galleryError = ref(null)
+const SFW_ARTWORKS = ref([])
+const NSFW_ARTWORKS = ref([])
 
 const NSFW_PASSWORD = "pig"
 
@@ -687,7 +18,7 @@ const passwordError = ref(false)
 const showPasswordModal = ref(false)
 
 const currentArtworks = computed(() =>
-    activeTab.value === 'nsfw' && nsfwUnlocked.value ? NSFW_ARTWORKS : SFW_ARTWORKS
+    activeTab.value === 'nsfw' && nsfwUnlocked.value ? NSFW_ARTWORKS.value : SFW_ARTWORKS.value
 )
 
 const artists = computed(() => {
@@ -765,7 +96,32 @@ function onKey(e) {
   if (e.key === 'ArrowRight') next()
 }
 
-onMounted(() => window.addEventListener('keydown', onKey))
+async function loadGallery() {
+  const { data, error } = await supabase
+      .from('gallery_images')
+      .select('id, title, artist, image_path, description, is_nsfw')
+      .order('sort_order', { ascending: true })
+
+  if (error) {
+    galleryError.value = error
+  } else {
+    const toArt = (row) => ({
+      id: row.id,
+      title: row.title,
+      artist: row.artist,
+      img: row.image_path,
+      description: row.description,
+    })
+    SFW_ARTWORKS.value = data.filter((row) => !row.is_nsfw).map(toArt)
+    NSFW_ARTWORKS.value = data.filter((row) => row.is_nsfw).map(toArt)
+  }
+  galleryLoading.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('keydown', onKey)
+  loadGallery()
+})
 onUnmounted(() => window.removeEventListener('keydown', onKey))
 </script>
 
@@ -806,23 +162,27 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
     </header>
 
     <div class="page-body">
-      <p class="count-label">{{ filtered.length }} work{{ filtered.length !== 1 ? 's' : '' }}</p>
-      <div v-if="!filtered.length" class="empty-state">No artworks found.</div>
+      <p v-if="galleryLoading" class="empty-state">Loading…</p>
+      <p v-else-if="galleryError" class="empty-state">Couldn't load the gallery.</p>
+      <template v-else>
+        <p class="count-label">{{ filtered.length }} work{{ filtered.length !== 1 ? 's' : '' }}</p>
+        <div v-if="!filtered.length" class="empty-state">No artworks found.</div>
 
-      <transition-group name="fade" tag="div" class="gallery-grid">
-        <div
-            v-for="art in filtered"
-            :key="art.id"
-            class="gallery-item"
-            @click="openLightbox(art)"
-        >
-          <img :src="art.img" :alt="art.title" class="gallery-img"/>
-          <div class="gallery-overlay">
-            <span class="art-title">{{ art.title }}</span>
-            <span class="art-artist">by {{ art.artist }}</span>
+        <transition-group name="fade" tag="div" class="gallery-grid">
+          <div
+              v-for="art in filtered"
+              :key="art.id"
+              class="gallery-item"
+              @click="openLightbox(art)"
+          >
+            <img :src="art.img" :alt="art.title" class="gallery-img"/>
+            <div class="gallery-overlay">
+              <span class="art-title">{{ art.title }}</span>
+              <span class="art-artist">by {{ art.artist }}</span>
+            </div>
           </div>
-        </div>
-      </transition-group>
+        </transition-group>
+      </template>
     </div>
 
     <!-- Password modal -->
