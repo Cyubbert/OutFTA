@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from "vue";
-import { useWorldStore } from "../stores/worldStore";
+import { useWorldStore } from "../../stores/worldStore.js";
 import { supabase } from "@/lib/supabase.js";
 const AughImg = supabase.storage.from("images").getPublicUrl("AUGH.webp").data.publicUrl;
 

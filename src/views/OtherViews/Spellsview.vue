@@ -1,6 +1,5 @@
 <script setup>
-import {ref, computed, watch} from 'vue'
-import {useOpen5e} from "@/composables/useOpen5e.js"
+import {ref, computed} from 'vue'
 
 const spells = ref([
   {
@@ -184,18 +183,6 @@ If you move more than 60 feet away from the target, the spell ends.`,
   },
 ])
 
-// ── Open5e SRD lookup ──
-const {results: srdResults, loading: srdLoading, error: srdError, searchSpells} = useOpen5e()
-const srdQuery = ref('')
-const srdOpen = ref(null)
-
-let debounceTimer
-watch(srdQuery, val => {
-  clearTimeout(debounceTimer)
-  debounceTimer = setTimeout(() => searchSpells(val), 400)
-})
-
-// ── Homebrew filters ──
 const search = ref('')
 const activeSchool = ref('All')
 const openSpells = ref(new Set())
@@ -276,92 +263,6 @@ const abilityKeys = ['str', 'dex', 'con', 'int', 'wis', 'cha']
 
     <div class="page-body">
 
-      <!-- ══ SRD Lookup ══ -->
-      <div class="srd-section">
-        <h3 class="collection-title">SRD Spell Lookup</h3>
-        <input
-            v-model="srdQuery"
-            class="search-input"
-            placeholder="Search official spells e.g. Fireball..."
-        />
-        <div v-if="srdLoading" class="srd-loading">Searching...</div>
-        <div v-if="srdError" class="srd-error">{{ srdError }}</div>
-
-        <transition-group name="fade" tag="div" class="spell-list">
-          <div v-for="spell in srdResults" :key="spell.slug" class="spell-card">
-            <button
-                class="spell-header"
-                :class="{ open: srdOpen === spell.slug }"
-                :style="{ borderLeftColor: schoolColor(spell.school) }"
-                @click="srdOpen = srdOpen === spell.slug ? null : spell.slug"
-            >
-              <div class="spell-header-left">
-                <span class="spell-name">{{ spell.name }}</span>
-                <div class="spell-pills">
-                  <span class="pill school-pill"
-                        :style="{ color: schoolColor(spell.school), background: schoolColor(spell.school) + '18' }">
-                    {{ spell.school }}
-                  </span>
-                  <span class="pill level-pill">
-                    {{ spell.level_int === 0 ? 'Cantrip' : `Level ${spell.level_int}` }}
-                  </span>
-                  <span class="pill conc-pill" v-if="spell.concentration === 'yes'">Concentration</span>
-                </div>
-              </div>
-              <div class="spell-header-right">
-                <span class="spell-meta-row">
-                  <span class="meta-item">{{ spell.casting_time }}</span>
-                  <span class="meta-dot">·</span>
-                  <span class="meta-item">{{ spell.range }}</span>
-                  <span class="meta-dot">·</span>
-                  <span class="meta-item">{{ spell.duration }}</span>
-                </span>
-                <span class="chevron" :class="{ rotated: srdOpen === spell.slug }">›</span>
-              </div>
-            </button>
-
-            <transition name="expand">
-              <div class="spell-body" v-if="srdOpen === spell.slug">
-                <div class="cast-grid">
-                  <div class="cast-box">
-                    <span class="cast-label">Casting Time</span>
-                    <span class="cast-val">{{ spell.casting_time }}</span>
-                  </div>
-                  <div class="cast-box">
-                    <span class="cast-label">Range</span>
-                    <span class="cast-val">{{ spell.range }}</span>
-                  </div>
-                  <div class="cast-box">
-                    <span class="cast-label">Components</span>
-                    <span class="cast-val">{{ spell.components }}</span>
-                    <span class="cast-material" v-if="spell.material">{{ spell.material }}</span>
-                  </div>
-                  <div class="cast-box">
-                    <span class="cast-label">Duration</span>
-                    <span class="cast-val">{{ spell.duration }}</span>
-                  </div>
-                </div>
-                <div class="spell-desc">
-                  <p
-                      v-for="(para, i) in spell.desc.split('\n\n').filter(p => p.trim())"
-                      :key="i"
-                      class="desc-para"
-                  >{{ para.trim() }}</p>
-                </div>
-                <div class="higher-levels" v-if="spell.higher_level">
-                  <span class="hl-label">At Higher Levels. </span>{{ spell.higher_level }}
-                </div>
-                <div class="tag-row">
-                  <span class="tag" v-if="spell.dnd_class">{{ spell.dnd_class }}</span>
-                  <span class="tag" v-if="spell.ritual === 'yes'">Ritual</span>
-                </div>
-              </div>
-            </transition>
-          </div>
-        </transition-group>
-      </div>
-
-      <!-- ══ Homebrew Spells ══ -->
       <div>
         <h3 class="collection-title">Homebrew Spells</h3>
         <div v-if="!filtered.length" class="empty-state">No spells found.</div>
@@ -575,29 +476,12 @@ const abilityKeys = ['str', 'dex', 'con', 'int', 'wis', 'cha']
   border-color: #555;
 }
 
-.srd-section {
-  margin-bottom: 2.5rem;
-}
-
 .collection-title {
   margin-bottom: 0.75rem;
   color: #ffffff;
   font-family: 'Iosevka Charon', monospace;
   font-weight: 400;
   letter-spacing: 0.06em;
-}
-
-.srd-loading {
-  font-size: 0.85rem;
-  color: #555;
-  font-style: italic;
-  padding: 0.5rem 0;
-}
-
-.srd-error {
-  font-size: 0.85rem;
-  color: #ef9a9a;
-  padding: 0.5rem 0;
 }
 
 .spell-list {

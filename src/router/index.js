@@ -1,21 +1,4 @@
-import {createRouter, createWebHashHistory, createWebHistory} from "vue-router";
-
-import HomeView from "../views/HomeView.vue";
-import NorrunView from "../views/NorrunView.vue";
-import SuneView from "../views/SuneView.vue";
-import LiiraView from "@/views/LiiraView.vue";
-import TalonaView from "@/views/TalonaView.vue";
-import DredelView from "@/views/DredelView.vue";
-import LacrimaView from "@/views/LacrimaView.vue";
-import DuweilView from "@/views/DuweilView.vue";
-import IviaView from "@/views/IviaView.vue";
-import LetlonView from "@/views/LetlonView.vue";
-import AarelyView from "@/views/AarelyView.vue";
-import VirexView from "@/views/VirexView.vue";
-import AasmiasView from "@/views/AasmiasView.vue";
-import InitiativeView from "../views/InitiativeView.vue";
-import MoltynView from "@/views/MoltynView.vue";
-import SeleneView from "@/views/SeleneView.vue";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -23,128 +6,133 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: HomeView
+            component: () => import("@/views/OtherViews/HomeView.vue")
         },
-        { path: '/world',
-            component: () => import('@/views/WorldView.vue') },
 
-        { path: '/kingdom',
-            component: () => import('@/views/KingdomView.vue') },
+        // ── World ──
 
-        { path: '/npcs',
-            component: () => import('@/views/NpcsView.vue') },
-
-        { path: '/spells',
-            component: () => import('@/views/Spellsview.vue') },
-
-        // { path: '/character',
-        //     component: () => import('@/views/CharacterView.vue') },
-        //
-        // { path: '/character/:id',
-        //     component: () => import('@/views/Charactersheet.vue') },
-
+        {
+            path: "/world",
+            name: "world",
+            component: () => import("@/views/WorldViews/WorldView.vue")
+        },
         {
             path: "/world/norrun",
             name: "norrun",
-            component: NorrunView
+            component: () => import("@/views/WorldViews/NorrunView.vue")
         },
-
         {
             path: "/world/liira",
             name: "liira",
-            component: LiiraView
+            component: () => import("@/views/DeityViews/LiiraView.vue")
         },
-
         {
             path: "/world/sune",
             name: "sune",
-            component: SuneView
+            component: () => import("@/views/DeityViews/SuneView.vue")
         },
-
         {
             path: "/world/talona",
             name: "talona",
-            component: TalonaView
+            component: () => import("@/views/DeityViews/TalonaView.vue")
         },
 
+        // ── Kingdom ──
+
+        {
+            path: "/kingdom",
+            name: "kingdom",
+            component: () => import("@/views/WorldViews/KingdomView.vue")
+        },
         {
             path: "/kingdom/dredel",
             name: "dredel",
-            component: DredelView
+            component: () => import("@/views/WorldViews/DredelView.vue")
         },
-
         {
             path: "/kingdom/lacrima",
             name: "lacrima",
-            component: LacrimaView
+            component: () => import("@/views/WorldViews/LacrimaView.vue")
         },
-
         {
             path: "/kingdom/duweil",
             name: "duweil",
-            component: DuweilView
+            component: () => import("@/views/WorldViews/DuweilView.vue")
         },
-
         {
             path: "/kingdom/ivia",
             name: "ivia",
-            component: IviaView
+            component: () => import("@/views/WorldViews/IviaView.vue")
         },
-
         {
             path: "/kingdom/letlon",
             name: "letlon",
-            component: LetlonView
+            component: () => import("@/views/WorldViews/LetlonView.vue")
         },
 
+        // ── NPCs ──
+
+        {
+            path: "/npcs",
+            name: "npcs",
+            component: () => import("@/views/NPCViews/NpcsView.vue")
+        },
         {
             path: "/npcs/aarely",
             name: "aarely",
-            component: AarelyView
+            component: () => import("@/views/NPCViews/AarelyView.vue")
         },
-
         {
             path: "/npcs/virex",
             name: "virex",
-            component: VirexView
+            component: () => import("@/views/NPCViews/VirexView.vue")
         },
-
         {
             path: "/npcs/aasmias",
             name: "aasmias",
-            component: AasmiasView
+            component: () => import("@/views/NPCViews/AasmiasView.vue")
         },
         {
             path: "/npcs/moltyn",
             name: "moltyn",
-            component: MoltynView
+            component: () => import("@/views/NPCViews/MoltynView.vue")
         },
         {
             path: "/npcs/selene",
             name: "selene",
-            component: SeleneView
+            component: () => import("@/views/NPCViews/SeleneView.vue")
         },
 
+        // ── Sessions ──
 
-        // {
-        //     path: "/fight",
-        //     name: "fight",
-        //     component: InitiativeView
-        // },
-
-        {path: '/sessions',
-            component: () => import('@/views/SessionsView.vue')
+        {
+            path: "/sessions",
+            name: "sessions",
+            component: () => import("@/views/SessionViews/SessionsView.vue")
+        },
+        {
+            path: "/sessions/:id",
+            name: "session-detail",
+            component: () => import("@/views/SessionViews/SessionDetail.vue")
         },
 
-        {path: '/sessions/:id',
-            component: () => import('@/views/SessionDetail.vue')
-        },
+        // ── Other ──
 
-        { path: '/gallery',
-            component: () => import('@/views/GalleryView.vue')
+        {
+            path: "/spells",
+            name: "spells",
+            component: () => import("@/views/OtherViews/Spellsview.vue")
         },
-
-        { path: '/mory', component: () => import('@/views/DiaryView.vue') }
+        {
+            path: "/gallery",
+            name: "gallery",
+            component: () => import("@/views/OtherViews/GalleryView.vue")
+        },
+        {
+            path: "/mory",
+            name: "mory",
+            component: () => import("@/views/MoryViews/DiaryView.vue")
+        }
 
     ]
 });
