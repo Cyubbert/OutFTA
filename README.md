@@ -72,7 +72,6 @@ npm run build
 > Adjust the commands above if your project uses Vue CLI instead of Vite (`npm run serve` for dev) or a different package manager.
 
 ## Deployment
-
 The site is deployed via GitHub Pages, built from the `main` branch.
 
 ## Contact
