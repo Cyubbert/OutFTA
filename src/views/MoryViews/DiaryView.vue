@@ -2,6 +2,12 @@
 import {ref, computed} from 'vue'
 import {onMounted, onUnmounted} from 'vue'
 import { supabase } from '@/lib/supabase.js'
+import { useAuth } from '@/composables/useAuth'
+import AdminEntryFrom from '@/components/AdminEntryFrom.vue'
+
+const { isAdmin } = useAuth()
+const editing = ref(null)
+const creating = ref(false)
 
 onMounted(() => {
   document.body.style.backgroundColor = '#f5f0e8'
@@ -68,6 +74,41 @@ onMounted(async () => {
   else entries.value = data
   entriesLoading.value = false
 })
+
+function startEdit(entry) {
+  editing.value = entry
+}
+
+function startCreate() {
+  creating.value = true
+}
+
+function closeModal() {
+  editing.value = null
+  creating.value = false
+}
+
+function onSaved(record) {
+  if (editing.value) {
+    const idx = entries.value.findIndex(e => e.id === editing.value.id)
+    if (idx !== -1) entries.value[idx] = { ...entries.value[idx], ...record }
+  } else {
+    entries.value.push(record)
+  }
+  closeModal()
+}
+
+async function deleteEntry(entry) {
+  if (!confirm(`Delete "${entry.title}"? This can't be undone.`)) return
+
+  const { error } = await supabase.from('diary_entries').delete().eq('id', entry.id)
+  if (error) {
+    alert(error.message)
+    return
+  }
+  entries.value = entries.value.filter(e => e.id !== entry.id)
+  if (activeEntry.value?.id === entry.id) activeEntry.value = null
+}
 </script>
 
 <template>
@@ -136,6 +177,11 @@ onMounted(async () => {
         <p v-else-if="entriesError" class="diary-status">Couldn't load the journal.</p>
 
         <div v-else class="entries">
+          <button v-if="isAdmin" class="entry-card create-entry-card" @click="startCreate">
+            <span class="create-plus">+</span>
+            <span class="create-label">New journal entry</span>
+          </button>
+
           <div
               v-for="entry in sorted"
               :key="entry.id"
@@ -158,10 +204,21 @@ onMounted(async () => {
               <p class="entry-preview">{{ entry.body.replace(/\n/g, ' ').slice(0, 120).trim() }}…</p>
               <div class="entry-read">read →</div>
             </div>
+
+            <div v-if="isAdmin" class="admin-actions">
+              <button class="admin-btn" title="Edit" @click.stop="startEdit(entry)">✎</button>
+              <button class="admin-btn delete" title="Delete" @click.stop="deleteEntry(entry)">✕</button>
+            </div>
           </div>
         </div>
       </div>
     </transition>
+
+    <div v-if="editing || creating" class="modal-backdrop" @click.self="closeModal">
+      <div class="modal-panel">
+        <AdminEntryFrom :edit-entry="editing" @saved="onSaved" @cancel="closeModal" />
+      </div>
+    </div>
 
     <transition name="lb">
       <div class="lb-backdrop" v-if="lightboxImg" @click="lightboxImg = null">
@@ -243,6 +300,7 @@ onMounted(async () => {
 }
 
 .entry-card {
+  position: relative;
   display: flex;
   gap: 1.5rem;
   padding: 1.8rem 1.2rem;
@@ -261,6 +319,33 @@ onMounted(async () => {
 
 .entry-card:hover .entry-read {
   color: #c0392b;
+}
+
+.create-entry-card {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: rgba(192, 57, 43, 0.03);
+  border: 1px dashed rgba(192, 57, 43, 0.3);
+  color: #c0392b;
+  font-family: 'EB Garamond', serif;
+}
+
+.create-entry-card:hover {
+  background: rgba(192, 57, 43, 0.07);
+  border-color: #c0392b;
+}
+
+.create-entry-card .create-plus {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.create-entry-card .create-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .entry-left {
@@ -606,5 +691,64 @@ onMounted(async () => {
   .entry-card {
     gap: 1rem;
   }
+}
+
+.admin-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+}
+
+.admin-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid rgba(26, 16, 8, 0.15);
+  background: rgba(245, 240, 232, 0.85);
+  color: #5a3828;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.admin-btn.delete:hover {
+  border-color: #8b0000;
+  color: #8b0000;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 5, 0, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  overflow-y: auto;
+}
+
+.modal-panel {
+  background: #181818;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 540px;
+  color: #e0e0e0;
+  font-family: 'Jost', ui-sans-serif, system-ui, sans-serif;
+}
+
+.modal-panel :deep(h3) {
+  color: #fff;
 }
 </style>

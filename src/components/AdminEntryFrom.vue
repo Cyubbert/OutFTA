@@ -1,6 +1,6 @@
 <template>
   <form class="entry-form" @submit.prevent="handleSubmit">
-    <h3>New diary entry</h3>
+    <h3>{{ editEntry ? 'Edit diary entry' : 'New diary entry' }}</h3>
 
     <label>Session #</label>
     <input v-model.number="form.session" type="number" min="1" required />
@@ -26,9 +26,12 @@
     <label>Highlights (one per line)</label>
     <textarea v-model="highlightsInput" rows="3"></textarea>
 
-    <button type="submit" :disabled="submitting">
-      {{ submitting ? 'Saving…' : 'Save entry' }}
-    </button>
+    <div class="form-actions">
+      <button type="submit" :disabled="submitting">
+        {{ submitting ? 'Saving…' : (editEntry ? 'Update entry' : 'Save entry') }}
+      </button>
+      <button v-if="editEntry" type="button" class="cancel-btn" @click="$emit('cancel')">Cancel</button>
+    </div>
 
     <p v-if="successMsg" class="success">{{ successMsg }}</p>
     <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
@@ -39,17 +42,22 @@
 import { ref, reactive } from 'vue'
 import { supabase } from '@/lib/supabase'
 
+const props = defineProps({
+  editEntry: { type: Object, default: null }
+})
+const emit = defineEmits(['saved', 'cancel'])
+
 const form = reactive({
-  session: null,
-  title: '',
-  date: '',
-  location: '',
-  mood: '',
-  body: ''
+  session: props.editEntry?.session ?? null,
+  title: props.editEntry?.title ?? '',
+  date: props.editEntry?.date ?? '',
+  location: props.editEntry?.location ?? '',
+  mood: props.editEntry?.mood ?? '',
+  body: props.editEntry?.body ?? ''
 })
 
-const imageUrlInput = ref('')
-const highlightsInput = ref('')
+const imageUrlInput = ref(props.editEntry?.images?.[0] ?? '')
+const highlightsInput = ref((props.editEntry?.highlights ?? []).join('\n'))
 const submitting = ref(false)
 const successMsg = ref('')
 const errorMsg = ref('')
@@ -68,7 +76,7 @@ async function handleSubmit() {
       .map(h => h.trim())
       .filter(Boolean)
 
-  const { error } = await supabase.from('diary_entries').insert({
+  const payload = {
     session: form.session,
     title: form.title,
     date: form.date,
@@ -77,7 +85,23 @@ async function handleSubmit() {
     body: form.body,
     images,
     highlights
-  })
+  }
+
+  if (props.editEntry) {
+    const { error } = await supabase.from('diary_entries').update(payload).eq('id', props.editEntry.id)
+
+    submitting.value = false
+
+    if (error) {
+      errorMsg.value = error.message
+      return
+    }
+
+    emit('saved', { id: props.editEntry.id, ...payload })
+    return
+  }
+
+  const { data, error } = await supabase.from('diary_entries').insert(payload).select().single()
 
   submitting.value = false
 
@@ -87,6 +111,7 @@ async function handleSubmit() {
   }
 
   successMsg.value = 'Entry saved.'
+  emit('saved', data)
   form.session = null
   form.title = ''
   form.date = ''
@@ -108,6 +133,15 @@ async function handleSubmit() {
 label {
   font-size: 0.85rem;
   margin-top: 0.5rem;
+}
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.cancel-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #888;
 }
 .success {
   color: #4caf50;

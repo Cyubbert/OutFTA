@@ -1,6 +1,6 @@
 <template>
   <form class="entry-form" @submit.prevent="handleSubmit">
-    <h3>New session recap</h3>
+    <h3>{{ editSession ? 'Edit session recap' : 'New session recap' }}</h3>
 
     <label>Session #</label>
     <input v-model.number="form.number" type="number" min="1" required />
@@ -26,9 +26,12 @@
     <label>Locations (comma-separated)</label>
     <input v-model="locationsInput" />
 
-    <button type="submit" :disabled="submitting">
-      {{ submitting ? 'Saving…' : 'Save recap' }}
-    </button>
+    <div class="form-actions">
+      <button type="submit" :disabled="submitting">
+        {{ submitting ? 'Saving…' : (editSession ? 'Update recap' : 'Save recap') }}
+      </button>
+      <button v-if="editSession" type="button" class="cancel-btn" @click="$emit('cancel')">Cancel</button>
+    </div>
 
     <p v-if="successMsg" class="success">{{ successMsg }}</p>
     <p v-if="errorMsg" class="error">{{ errorMsg }}</p>
@@ -39,17 +42,22 @@
 import { ref, reactive } from 'vue'
 import { supabase } from '@/lib/supabase'
 
+const props = defineProps({
+  editSession: { type: Object, default: null }
+})
+const emit = defineEmits(['saved', 'cancel'])
+
 const form = reactive({
-  number: null,
-  title: '',
-  date: '',
-  cover_image: '',
-  summary: ''
+  number: props.editSession?.number ?? null,
+  title: props.editSession?.title ?? '',
+  date: props.editSession?.date ?? '',
+  cover_image: props.editSession?.cover_image ?? '',
+  summary: props.editSession?.summary ?? ''
 })
 
-const highlightsInput = ref('')
-const npcsInput = ref('')
-const locationsInput = ref('')
+const highlightsInput = ref((props.editSession?.highlights ?? []).join('\n'))
+const npcsInput = ref((props.editSession?.npcs ?? []).join(', '))
+const locationsInput = ref((props.editSession?.locations ?? []).join(', '))
 const submitting = ref(false)
 const successMsg = ref('')
 const errorMsg = ref('')
@@ -71,10 +79,7 @@ async function handleSubmit() {
       .map(h => h.trim())
       .filter(Boolean)
 
-  const id = `s${String(form.number).padStart(2, '0')}`
-
-  const { error } = await supabase.from('sessions').insert({
-    id,
+  const payload = {
     number: form.number,
     title: form.title,
     date: form.date,
@@ -83,7 +88,25 @@ async function handleSubmit() {
     highlights,
     npcs: splitList(npcsInput.value),
     locations: splitList(locationsInput.value)
-  })
+  }
+
+  if (props.editSession) {
+    const { error } = await supabase.from('sessions').update(payload).eq('id', props.editSession.id)
+
+    submitting.value = false
+
+    if (error) {
+      errorMsg.value = error.message
+      return
+    }
+
+    emit('saved', { id: props.editSession.id, ...payload })
+    return
+  }
+
+  const id = `s${String(form.number).padStart(2, '0')}`
+
+  const { error } = await supabase.from('sessions').insert({ id, ...payload })
 
   submitting.value = false
 
@@ -93,6 +116,7 @@ async function handleSubmit() {
   }
 
   successMsg.value = 'Session recap saved.'
+  emit('saved', { id, ...payload })
   form.number = null
   form.title = ''
   form.date = ''
@@ -114,6 +138,15 @@ async function handleSubmit() {
 label {
   font-size: 0.85rem;
   margin-top: 0.5rem;
+}
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.cancel-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #888;
 }
 .success {
   color: #4caf50;

@@ -1,11 +1,18 @@
 <script setup>
 import {ref, computed, onMounted} from 'vue'
 import { supabase } from '@/lib/supabase.js'
+import { useAuth } from '@/composables/useAuth'
+import SessionEntryForm from '@/components/SessionEntryForm.vue'
+
 const AughImg = supabase.storage.from('images').getPublicUrl('AUGH.webp').data.publicUrl;
+
+const { isAdmin } = useAuth()
 
 const sessions = ref([])
 const loading = ref(true)
 const error = ref(null)
+const editing = ref(null)
+const creating = ref(false)
 
 const search = ref('')
 const filtered = computed(() =>
@@ -18,12 +25,46 @@ const filtered = computed(() =>
 onMounted(async () => {
   const { data, error: err } = await supabase
       .from('sessions')
-      .select('id, number, title, cover_image, date')
+      .select('id, number, title, cover_image, date, summary, highlights, npcs, locations')
 
   if (err) error.value = err
   else sessions.value = data.map(s => ({ ...s, img: s.cover_image }))
   loading.value = false
 })
+
+function startEdit(s) {
+  editing.value = s
+}
+
+function startCreate() {
+  creating.value = true
+}
+
+function closeModal() {
+  editing.value = null
+  creating.value = false
+}
+
+function onSaved(record) {
+  if (editing.value) {
+    const idx = sessions.value.findIndex(s => s.id === editing.value.id)
+    if (idx !== -1) sessions.value[idx] = { ...sessions.value[idx], ...record, img: record.cover_image }
+  } else {
+    sessions.value.push({ ...record, img: record.cover_image })
+  }
+  closeModal()
+}
+
+async function deleteSession(s) {
+  if (!confirm(`Delete "${s.title}"? This can't be undone.`)) return
+
+  const { error: err } = await supabase.from('sessions').delete().eq('id', s.id)
+  if (err) {
+    alert(err.message)
+    return
+  }
+  sessions.value = sessions.value.filter(x => x.id !== s.id)
+}
 </script>
 
 <template>
@@ -39,6 +80,16 @@ onMounted(async () => {
       <p v-else-if="error" class="page-error">Couldn't load sessions.</p>
       <section v-else class="collection-content">
         <transition-group name="fade" tag="div" class="cards-container">
+          <button
+              v-if="isAdmin"
+              key="create-card"
+              class="card create-card"
+              @click="startCreate"
+          >
+            <span class="create-plus">+</span>
+            <span class="create-label">New session recap</span>
+          </button>
+
           <router-link
               v-for="s in filtered"
               :key="s.id"
@@ -51,9 +102,20 @@ onMounted(async () => {
               <div class="card-name">{{ s.title }}</div>
               <div class="session-date">{{ s.date }}</div>
             </div>
+
+            <div v-if="isAdmin" class="admin-actions">
+              <button class="admin-btn" title="Edit" @click.stop.prevent="startEdit(s)">✎</button>
+              <button class="admin-btn delete" title="Delete" @click.stop.prevent="deleteSession(s)">✕</button>
+            </div>
           </router-link>
         </transition-group>
       </section>
+    </div>
+
+    <div v-if="editing || creating" class="modal-backdrop" @click.self="closeModal">
+      <div class="modal-panel">
+        <SessionEntryForm :edit-session="editing" @saved="onSaved" @cancel="closeModal" />
+      </div>
     </div>
   </article>
 </template>
@@ -132,5 +194,88 @@ onMounted(async () => {
   color: rgba(255,255,255,0.5);
   margin-top: 2px;
   letter-spacing: 0.05em;
+}
+
+.admin-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+}
+
+.admin-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(18,18,18,0.75);
+  backdrop-filter: blur(4px);
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.admin-btn:hover {
+  border-color: #90caf9;
+  color: #90caf9;
+}
+
+.admin-btn.delete:hover {
+  border-color: #e05252;
+  color: #e05252;
+}
+
+.create-card {
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(144, 202, 249, 0.04);
+  border: 1px dashed rgba(144, 202, 249, 0.3);
+  color: #90caf9;
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.create-card:hover {
+  background: rgba(144, 202, 249, 0.08);
+  border-color: #90caf9;
+}
+
+.create-plus {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.create-label {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  overflow-y: auto;
+}
+
+.modal-panel {
+  background: #181818;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 540px;
 }
 </style>
