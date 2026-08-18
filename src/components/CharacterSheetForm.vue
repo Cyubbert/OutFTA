@@ -31,8 +31,14 @@
       </div>
     </div>
 
-    <label>Portrait image URL</label>
-    <input v-model="form.image" placeholder="https://…" />
+    <label>Portrait</label>
+    <div class="portrait-picker" @click="triggerImagePick">
+      <img v-if="form.image" :src="form.image" class="portrait-preview" alt="Portrait" />
+      <span v-else class="portrait-placeholder">+ Add picture</span>
+      <div v-if="form.image || uploadingImage" class="portrait-overlay" :class="{ visible: uploadingImage }">{{ uploadingImage ? 'Uploading…' : 'Change' }}</div>
+    </div>
+    <input ref="imageInputEl" type="file" accept="image/*" class="hidden-input" @change="onImageChange" />
+    <p v-if="imageError" class="error">{{ imageError }}</p>
 
     <div class="row">
       <div>
@@ -142,12 +148,44 @@ const featuresInput = ref((props.editSheet?.features ?? []).join('\n'))
 const submitting = ref(false)
 const errorMsg = ref('')
 
+const imageInputEl = ref(null)
+const uploadingImage = ref(false)
+const imageError = ref('')
+
 function splitLines(value) {
   return value.split('\n').map(v => v.trim()).filter(Boolean)
 }
 
 function splitCommas(value) {
   return value.split(',').map(v => v.trim()).filter(Boolean)
+}
+
+function triggerImagePick() {
+  imageInputEl.value?.click()
+}
+
+async function onImageChange(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+
+  uploadingImage.value = true
+  imageError.value = ''
+
+  const ext = file.name.split('.').pop()
+  const path = `character-sheets/${user.value.id}/${Date.now()}.${ext}`
+
+  const { error: uploadError } = await supabase.storage.from('images').upload(path, file)
+
+  uploadingImage.value = false
+  e.target.value = ''
+
+  if (uploadError) {
+    imageError.value = uploadError.message
+    return
+  }
+
+  const { data: pub } = supabase.storage.from('images').getPublicUrl(path)
+  form.image = pub.publicUrl
 }
 
 async function handleSubmit() {
@@ -247,6 +285,56 @@ label {
   font-size: 0.8rem;
   margin-top: 0;
 }
+.portrait-picker {
+  position: relative;
+  width: 100%;
+  max-width: 220px;
+  height: 140px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #1a1a1a;
+  border: 1px dashed rgba(144, 202, 249, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portrait-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.portrait-placeholder {
+  color: #90caf9;
+  font-size: 0.85rem;
+}
+
+.portrait-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.portrait-picker:hover .portrait-overlay,
+.portrait-overlay.visible {
+  opacity: 1;
+}
+
+.hidden-input {
+  display: none;
+}
+
 .form-actions {
   display: flex;
   gap: 0.5rem;

@@ -4,19 +4,26 @@ import { supabase } from '@/lib/supabase'
 const user = ref(null)
 const isAdmin = ref(false)
 const loading = ref(true)
+const profile = ref({ username: '', avatar_url: '', banner_url: '' })
 
 async function checkAdminStatus(userId) {
     if (!userId) {
         isAdmin.value = false
+        profile.value = { username: '', avatar_url: '', banner_url: '' }
         return
     }
     const { data, error } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, username, avatar_url, banner_url')
         .eq('id', userId)
         .single()
 
     isAdmin.value = !error && data?.role === 'admin'
+    profile.value = {
+        username: data?.username || '',
+        avatar_url: data?.avatar_url || '',
+        banner_url: data?.banner_url || ''
+    }
 }
 
 async function signIn(email, password) {
@@ -39,6 +46,7 @@ async function signOut() {
     await supabase.auth.signOut()
     user.value = null
     isAdmin.value = false
+    profile.value = { username: '', avatar_url: '', banner_url: '' }
 }
 
 export function useAuth() {
@@ -54,9 +62,10 @@ export function useAuth() {
                 await checkAdminStatus(user.value.id)
             } else {
                 isAdmin.value = false
+                profile.value = { username: '', avatar_url: '', banner_url: '' }
             }
         })
     })
 
-    return { user, isAdmin, loading, signIn, signUp, signOut }
+    return { user, isAdmin, loading, profile, signIn, signUp, signOut }
 }
