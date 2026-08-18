@@ -169,7 +169,7 @@ async function deleteEntry(entry) {
         <header class="diary-header">
           <div class="diary-mark">✦</div>
           <h1 class="diary-title">Morythieven's Journal</h1>
-          <p class="diary-subtitle">Prayer's for my dear Hound</p>
+          <p class="diary-subtitle">Prayer's for my dear</p>
           <div class="header-rule"/>
         </header>
 
