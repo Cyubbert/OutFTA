@@ -75,7 +75,10 @@ onMounted(async () => {
 .search-input:focus { border-color: #90caf9; }
 
 .session-card {
+  position: relative;
   height: 160px;
+  width: 100%;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;

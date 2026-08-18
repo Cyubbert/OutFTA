@@ -1,9 +1,11 @@
 <script setup>
-import {ref, computed} from 'vue'
+import {ref} from 'vue'
 import {useRoute} from 'vue-router'
+import {useAuth} from '@/composables/useAuth'
 
 const route = useRoute()
 const menuOpen = ref(false)
+const {user, signOut} = useAuth()
 
 const links = [
   {label: 'Home', to: '/'},
@@ -51,6 +53,15 @@ function close() {
         </li>
       </ul>
 
+      <!-- Auth -->
+      <div class="navbar-auth">
+        <template v-if="user">
+          <span class="auth-email">{{ user.email }}</span>
+          <button class="auth-signout" @click="signOut">Sign out</button>
+        </template>
+        <router-link v-else to="/login" class="auth-login" @click="close">Login</router-link>
+      </div>
+
       <!-- Mobile burger -->
       <button
           class="burger"
@@ -74,6 +85,13 @@ function close() {
           >
             {{ link.label }}
           </router-link>
+        </li>
+        <li class="mobile-auth">
+          <template v-if="user">
+            <span class="auth-email">{{ user.email }}</span>
+            <button class="auth-signout" @click="signOut(); close()">Sign out</button>
+          </template>
+          <router-link v-else to="/login" class="mobile-link" @click="close">Login</router-link>
         </li>
       </ul>
     </transition>
@@ -235,6 +253,61 @@ function close() {
   opacity: 0.8;
 }
 
+/* ── Auth ── */
+.navbar-auth {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.auth-login {
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: 'Iosevka Charon', regular;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.auth-login:hover {
+  color: #90caf9;
+  border-color: #90caf9;
+}
+
+.auth-email {
+  font-size: 0.8rem;
+  color: #888;
+  white-space: nowrap;
+}
+
+.auth-signout {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #888;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.auth-signout:hover {
+  color: #90caf9;
+  border-color: #90caf9;
+}
+
+.mobile-auth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.5rem;
+}
+
 /* ── Burger (mobile) ── */
 .burger {
   display: none;
@@ -326,6 +399,10 @@ function close() {
 /* ── Responsive ── */
 @media (max-width: 680px) {
   .navbar-links {
+    display: none;
+  }
+
+  .navbar-auth {
     display: none;
   }
 
