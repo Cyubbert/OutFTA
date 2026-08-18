@@ -56,6 +56,7 @@ function close() {
       <!-- Auth -->
       <div class="navbar-auth">
         <template v-if="user">
+          <router-link to="/profile" class="auth-profile" @click="close">Profile</router-link>
           <span class="auth-email">{{ user.email }}</span>
           <button class="auth-signout" @click="signOut">Sign out</button>
         </template>
@@ -85,6 +86,9 @@ function close() {
           >
             {{ link.label }}
           </router-link>
+        </li>
+        <li v-if="user">
+          <router-link to="/profile" class="mobile-link" :class="{ active: isActive('/profile') }" @click="close">Profile</router-link>
         </li>
         <li class="mobile-auth">
           <template v-if="user">
@@ -276,6 +280,22 @@ function close() {
 .auth-login:hover {
   color: #90caf9;
   border-color: #90caf9;
+}
+
+.auth-profile {
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-family: 'Iosevka Charon', regular;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  color: #888;
+  transition: color 0.2s, background 0.2s;
+}
+
+.auth-profile:hover {
+  color: #e0e0e0;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .auth-email {
