@@ -246,6 +246,7 @@ async function deleteSession(s) {
 .create-card:hover {
   background: rgba(144, 202, 249, 0.08);
   border-color: #90caf9;
+  transform: none;
 }
 
 .create-plus {

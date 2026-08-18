@@ -1,11 +1,13 @@
 <script setup>
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 import {useRoute} from 'vue-router'
 import {useAuth} from '@/composables/useAuth'
 
 const route = useRoute()
 const menuOpen = ref(false)
-const {user, signOut} = useAuth()
+const {user, profile, signOut} = useAuth()
+
+const avatarInitial = computed(() => (profile.value.username || user.value?.email || '?')[0]?.toUpperCase())
 
 const links = [
   {label: 'Home', to: '/'},
@@ -56,8 +58,10 @@ function close() {
       <!-- Auth -->
       <div class="navbar-auth">
         <template v-if="user">
-          <router-link to="/profile" class="auth-profile" @click="close">Profile</router-link>
-          <span class="auth-email">{{ user.email }}</span>
+          <router-link to="/profile" class="auth-avatar-link" :title="profile.username || user.email" @click="close">
+            <img v-if="profile.avatar_url" :src="profile.avatar_url" class="auth-avatar-img" alt="Profile" />
+            <span v-else class="auth-avatar-placeholder">{{ avatarInitial }}</span>
+          </router-link>
           <button class="auth-signout" @click="signOut">Sign out</button>
         </template>
         <router-link v-else to="/login" class="auth-login" @click="close">Login</router-link>
@@ -282,20 +286,38 @@ function close() {
   border-color: #90caf9;
 }
 
-.auth-profile {
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-family: 'Iosevka Charon', regular;
-  font-size: 0.9rem;
-  letter-spacing: 0.06em;
-  color: #888;
-  transition: color 0.2s, background 0.2s;
+.auth-avatar-link {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: border-color 0.2s;
 }
 
-.auth-profile:hover {
-  color: #e0e0e0;
-  background: rgba(255, 255, 255, 0.04);
+.auth-avatar-link:hover {
+  border-color: #90caf9;
+}
+
+.auth-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.auth-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+  color: #90caf9;
+  font-family: 'Iosevka Charon', monospace;
+  font-size: 0.9rem;
 }
 
 .auth-email {
