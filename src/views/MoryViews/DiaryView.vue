@@ -42,20 +42,30 @@ const sorted = computed(() =>
     [...entries.value].sort((a, b) => b.session - a.session)
 )
 
-const TW_RE = /^\[tw(?::\s*(.*?))?\]\s*([\s\S]*?)\s*\[\/tw\]$/i
+function splitParas(text) {
+  return text.split('\n\n').map(p => p.trim()).filter(Boolean)
+}
 
 const paragraphs = computed(() => {
   if (!activeEntry.value) return []
-  return activeEntry.value.body
-      .split('\n\n')
-      .map(p => p.trim())
-      .filter(Boolean)
-      .map(p => {
-        const match = p.match(TW_RE)
-        return match
-            ? { sensitive: true, label: match[1]?.trim() || null, text: match[2].trim() }
-            : { sensitive: false, text: p }
-      })
+  const body = activeEntry.value.body
+  const blocks = []
+  let lastIndex = 0
+  let match
+
+  const twBlockRe = /\[tw(?::\s*([^\]]*))?]([\s\S]*?)\[\/tw]/gi
+  while ((match = twBlockRe.exec(body))) {
+    for (const p of splitParas(body.slice(lastIndex, match.index))) {
+      blocks.push({ sensitive: false, text: p })
+    }
+    blocks.push({ sensitive: true, label: match[1]?.trim() || null, paragraphs: splitParas(match[2]) })
+    lastIndex = twBlockRe.lastIndex
+  }
+  for (const p of splitParas(body.slice(lastIndex))) {
+    blocks.push({ sensitive: false, text: p })
+  }
+
+  return blocks
 })
 
 function toggleReveal(i) {
@@ -167,19 +177,20 @@ async function deleteEntry(entry) {
         </div>
 
         <div class="detail-body">
-          <template v-for="(para, i) in paragraphs" :key="i">
-            <div v-if="para.sensitive && !revealed.has(i)" class="tw-block">
+          <template v-for="(block, i) in paragraphs" :key="i">
+            <div v-if="block.sensitive && !revealed.has(i)" class="tw-block">
               <div class="tw-icon">⚠</div>
               <div class="tw-copy">
-                <div class="tw-title">Trigger warning<span v-if="para.label"> — {{ para.label }}</span></div>
+                <div class="tw-title">Trigger warning<span v-if="block.label"> — {{ block.label }}</span></div>
                 <div class="tw-sub">This part of the entry contains sensitive content.</div>
               </div>
               <button class="tw-btn" @click="toggleReveal(i)">Show anyway</button>
             </div>
-            <p v-else class="detail-para" :class="{ 'tw-open': para.sensitive }">
-              {{ para.text }}
-              <button v-if="para.sensitive" class="tw-hide-btn" @click="toggleReveal(i)">Hide</button>
-            </p>
+            <template v-else-if="block.sensitive">
+              <p v-for="(p, j) in block.paragraphs" :key="j" class="detail-para tw-open">{{ p }}</p>
+              <button class="tw-hide-btn" @click="toggleReveal(i)">Hide</button>
+            </template>
+            <p v-else class="detail-para">{{ block.text }}</p>
           </template>
         </div>
 
