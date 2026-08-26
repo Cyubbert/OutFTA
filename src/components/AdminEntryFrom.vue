@@ -22,6 +22,7 @@
 
     <label>Body</label>
     <textarea v-model="form.body" rows="10" required></textarea>
+    <p class="hint">Wrap a sensitive paragraph in <code>[tw:label] text [/tw]</code> (label optional) to hide it behind a trigger-warning button.</p>
 
     <label>Highlights (one per line)</label>
     <textarea v-model="highlightsInput" rows="3"></textarea>
@@ -148,5 +149,15 @@ label {
 }
 .error {
   color: #e05252;
+}
+.hint {
+  font-size: 0.75rem;
+  color: #888;
+  margin: -0.25rem 0 0;
+}
+.hint code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1px 4px;
+  border-radius: 3px;
 }
 </style>
