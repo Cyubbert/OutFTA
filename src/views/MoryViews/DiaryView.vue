@@ -36,13 +36,37 @@ const entriesError = ref(null)
 
 const lightboxImg = ref(null)
 const activeEntry = ref(null)
+const revealed = ref(new Set())
 
 const sorted = computed(() =>
     [...entries.value].sort((a, b) => b.session - a.session)
 )
 
+const TW_RE = /^\[tw(?::\s*(.*?))?\]\s*([\s\S]*?)\s*\[\/tw\]$/i
+
+const paragraphs = computed(() => {
+  if (!activeEntry.value) return []
+  return activeEntry.value.body
+      .split('\n\n')
+      .map(p => p.trim())
+      .filter(Boolean)
+      .map(p => {
+        const match = p.match(TW_RE)
+        return match
+            ? { sensitive: true, label: match[1]?.trim() || null, text: match[2].trim() }
+            : { sensitive: false, text: p }
+      })
+})
+
+function toggleReveal(i) {
+  const next = new Set(revealed.value)
+  next.has(i) ? next.delete(i) : next.add(i)
+  revealed.value = next
+}
+
 function open(entry) {
   activeEntry.value = entry
+  revealed.value = new Set()
   window.scrollTo({top: 0, behavior: 'smooth'})
 }
 
@@ -143,11 +167,20 @@ async function deleteEntry(entry) {
         </div>
 
         <div class="detail-body">
-          <p
-              v-for="(para, i) in activeEntry.body.split('\n\n').filter(p => p.trim())"
-              :key="i"
-              class="detail-para"
-          >{{ para.trim() }}</p>
+          <template v-for="(para, i) in paragraphs" :key="i">
+            <div v-if="para.sensitive && !revealed.has(i)" class="tw-block">
+              <div class="tw-icon">⚠</div>
+              <div class="tw-copy">
+                <div class="tw-title">Trigger warning<span v-if="para.label"> — {{ para.label }}</span></div>
+                <div class="tw-sub">This part of the entry contains sensitive content.</div>
+              </div>
+              <button class="tw-btn" @click="toggleReveal(i)">Show anyway</button>
+            </div>
+            <p v-else class="detail-para" :class="{ 'tw-open': para.sensitive }">
+              {{ para.text }}
+              <button v-if="para.sensitive" class="tw-hide-btn" @click="toggleReveal(i)">Hide</button>
+            </p>
+          </template>
         </div>
 
         <div class="detail-highlights" v-if="activeEntry.highlights?.length">
@@ -558,6 +591,84 @@ async function deleteEntry(entry) {
   float: left;
   line-height: 0.85;
   margin: 0.1rem 0.15rem 0 0;
+  color: #c0392b;
+}
+
+.tw-block {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  margin: 0 0 1.1rem;
+  border: 1px dashed rgba(192, 57, 43, 0.4);
+  border-radius: 4px;
+  background: rgba(192, 57, 43, 0.05);
+}
+
+.tw-icon {
+  font-size: 1.3rem;
+  color: #c0392b;
+  flex-shrink: 0;
+}
+
+.tw-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.tw-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: #8b0000;
+}
+
+.tw-sub {
+  font-size: 0.78rem;
+  color: #9a8878;
+  margin-top: 2px;
+}
+
+.tw-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid rgba(192, 57, 43, 0.4);
+  color: #c0392b;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.9rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tw-btn:hover {
+  background: rgba(192, 57, 43, 0.1);
+}
+
+.detail-para.tw-open {
+  padding: 0.8rem 1rem;
+  border-left: 2px solid rgba(192, 57, 43, 0.4);
+  background: rgba(192, 57, 43, 0.03);
+}
+
+.tw-hide-btn {
+  display: block;
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 0;
+}
+
+.tw-hide-btn:hover {
   color: #c0392b;
 }
 

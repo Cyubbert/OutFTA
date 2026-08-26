@@ -38,7 +38,7 @@
             <button class="edit-btn" title="Edit username" @click="startEditUsername">✎</button>
           </div>
           <p class="profile-email">{{ user.email }}</p>
-          <p v-if="usernameMsg" class="username-msg">{{ usernameMsg }}</p>
+          <p v-if="usernameMsg" class="username-msg" :class="{ error: usernameError }">{{ usernameMsg }}</p>
           <p v-if="avatarError" class="error">{{ avatarError }}</p>
         </div>
 
@@ -149,6 +149,7 @@ const usernameInput = ref('')
 const editingUsername = ref(false)
 const savingUsername = ref(false)
 const usernameMsg = ref('')
+const usernameError = ref(false)
 
 const avatarInputEl = ref(null)
 const uploadingAvatar = ref(false)
@@ -204,17 +205,21 @@ watch(user, async (u) => {
 
 function startEditUsername() {
   usernameMsg.value = ''
+  usernameError.value = false
   editingUsername.value = true
 }
 
 function cancelEditUsername() {
   usernameInput.value = profile.value.username
+  usernameMsg.value = ''
+  usernameError.value = false
   editingUsername.value = false
 }
 
 async function saveUsername() {
   savingUsername.value = true
   usernameMsg.value = ''
+  usernameError.value = false
 
   const { error } = await supabase
       .from('profiles')
@@ -224,7 +229,10 @@ async function saveUsername() {
   savingUsername.value = false
 
   if (error) {
-    usernameMsg.value = error.message
+    usernameError.value = true
+    usernameMsg.value = error.code === '23505'
+        ? 'That username is already taken.'
+        : error.message
     return
   }
 
