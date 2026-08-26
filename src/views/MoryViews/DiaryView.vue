@@ -46,6 +46,15 @@ function splitParas(text) {
   return text.split('\n\n').map(p => p.trim()).filter(Boolean)
 }
 
+function previewText(body) {
+  return body
+      .replace(/\[tw(?::[^\]]*)?]([\s\S]*?)\[\/tw]/gi, '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/\n/g, ' ')
+      .slice(0, 120)
+      .trim()
+}
+
 const paragraphs = computed(() => {
   if (!activeEntry.value) return []
   const body = activeEntry.value.body
@@ -187,10 +196,10 @@ async function deleteEntry(entry) {
               <button class="tw-btn" @click="toggleReveal(i)">Show anyway</button>
             </div>
             <template v-else-if="block.sensitive">
-              <p v-for="(p, j) in block.paragraphs" :key="j" class="detail-para tw-open">{{ p }}</p>
+              <p v-for="(p, j) in block.paragraphs" :key="j" class="detail-para tw-open" v-html="p"></p>
               <button class="tw-hide-btn" @click="toggleReveal(i)">Hide</button>
             </template>
-            <p v-else class="detail-para">{{ block.text }}</p>
+            <p v-else class="detail-para" v-html="block.text"></p>
           </template>
         </div>
 
@@ -245,7 +254,7 @@ async function deleteEntry(entry) {
                   }}</span>
               </div>
               <h2 class="entry-title">{{ entry.title }}</h2>
-              <p class="entry-preview">{{ entry.body.replace(/\n/g, ' ').slice(0, 120).trim() }}…</p>
+              <p class="entry-preview">{{ previewText(entry.body) }}…</p>
               <div class="entry-read">read →</div>
             </div>
 

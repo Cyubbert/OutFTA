@@ -22,7 +22,8 @@
 
     <label>Body</label>
     <textarea v-model="form.body" rows="10" required></textarea>
-    <p class="hint">Wrap a sensitive paragraph in <code>[tw:label] text [/tw]</code> (label optional) to hide it behind a trigger-warning button.</p>
+    <p class="hint">Wrap sensitive text (one or more paragraphs) in <code>[tw:label] ... [/tw]</code> (label optional) to hide it behind a trigger-warning button.</p>
+    <p class="hint">HTML tags render directly, e.g. <code>&lt;br&gt;</code> for a line break or <code>&lt;b&gt;text&lt;/b&gt;</code> for bold.</p>
 
     <label>Highlights (one per line)</label>
     <textarea v-model="highlightsInput" rows="3"></textarea>
