@@ -5,9 +5,9 @@ const props = defineProps({
   title: { type: String, required: true },
   coverImage: { type: String, required: true },
   coverAlt: { type: String, default: '' },
-  sections: { type: Array, default: () => [] }, // [{ heading?: string, paragraphs: string[] }]
-  mapImage: { type: Object, default: null },     // { src, alt }
-  moodboards: { type: Array, default: () => [] }, // [{ id, title, thumb, image, alt }]
+  sections: { type: Array, default: () => [] },
+  mapImage: { type: Object, default: null },
+  moodboards: { type: Array, default: () => [] },
 })
 
 const activeMoodboard = ref(null)
