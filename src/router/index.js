@@ -116,6 +116,14 @@ const router = createRouter({
             component: () => import("@/views/SessionViews/SessionDetail.vue")
         },
 
+        // ── Community ──
+
+        {
+            path: "/community",
+            name: "community",
+            component: () => import("@/views/CommunityViews/CommunityView.vue")
+        },
+
         // ── Other ──
 
         {

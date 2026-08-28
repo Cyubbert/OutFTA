@@ -1,10 +1,12 @@
 <script setup>
-import {ref, computed} from 'vue'
+import {ref, computed, onMounted, onUnmounted} from 'vue'
 import {useRoute} from 'vue-router'
 import {useAuth} from '@/composables/useAuth'
 
 const route = useRoute()
 const menuOpen = ref(false)
+const profileMenuOpen = ref(false)
+const profileMenuEl = ref(null)
 const {user, profile, signOut} = useAuth()
 
 const avatarInitial = computed(() => (profile.value.username || user.value?.email || '?')[0]?.toUpperCase())
@@ -15,6 +17,7 @@ const links = [
   {label: 'Kingdoms', to: '/kingdom'},
   {label: 'NPCs', to: '/npcs'},
   {label: 'Sessions', to: '/sessions'},
+  {label: 'Community', to: '/community'},
   {label: 'Spells', to: '/spells'},
   {label: 'Gallery', to: '/gallery'},
   // {label: 'Fight', to: '/fight'},
@@ -29,6 +32,23 @@ function isActive(to) {
 function close() {
   menuOpen.value = false
 }
+
+function toggleProfileMenu() {
+  profileMenuOpen.value = !profileMenuOpen.value
+}
+
+function closeProfileMenu() {
+  profileMenuOpen.value = false
+}
+
+function onDocumentClick(e) {
+  if (profileMenuOpen.value && profileMenuEl.value && !profileMenuEl.value.contains(e.target)) {
+    profileMenuOpen.value = false
+  }
+}
+
+onMounted(() => document.addEventListener('click', onDocumentClick))
+onUnmounted(() => document.removeEventListener('click', onDocumentClick))
 </script>
 
 <template>
@@ -57,13 +77,36 @@ function close() {
 
       <!-- Auth -->
       <div class="navbar-auth">
-        <template v-if="user">
-          <router-link to="/profile" class="auth-avatar-link" :title="profile.username || user.email" @click="close">
-            <img v-if="profile.avatar_url" :src="profile.avatar_url" class="auth-avatar-img" alt="Profile" />
-            <span v-else class="auth-avatar-placeholder">{{ avatarInitial }}</span>
-          </router-link>
-          <button class="auth-signout" @click="signOut">Sign out</button>
-        </template>
+        <div v-if="user" class="profile-menu" ref="profileMenuEl">
+          <button
+              class="profile-trigger"
+              :class="{ open: profileMenuOpen }"
+              :title="profile.username || user.email"
+              @click="toggleProfileMenu"
+          >
+            <span class="profile-avatar">
+              <img v-if="profile.avatar_url" :src="profile.avatar_url" class="auth-avatar-img" alt="Profile" />
+              <span v-else class="auth-avatar-placeholder">{{ avatarInitial }}</span>
+            </span>
+            <span class="profile-chevron">▾</span>
+          </button>
+
+          <transition name="dropdown">
+            <ul class="profile-dropdown" v-if="profileMenuOpen">
+              <li class="dropdown-identity">{{ profile.username || user.email }}</li>
+              <li>
+                <router-link to="/profile" class="dropdown-link" @click="closeProfileMenu">Profile</router-link>
+              </li>
+              <li>
+                <router-link to="/community" class="dropdown-link" @click="closeProfileMenu">Community</router-link>
+              </li>
+              <li class="dropdown-divider"/>
+              <li>
+                <button class="dropdown-link dropdown-signout" @click="signOut(); closeProfileMenu()">Sign out</button>
+              </li>
+            </ul>
+          </transition>
+        </div>
         <router-link v-else to="/login" class="auth-login" @click="close">Login</router-link>
       </div>
 
@@ -286,7 +329,30 @@ function close() {
   border-color: #90caf9;
 }
 
-.auth-avatar-link {
+/* ── Profile dropdown ── */
+.profile-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: none;
+  border: none;
+  padding: 2px 4px 2px 2px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.profile-trigger:hover,
+.profile-trigger.open {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.profile-avatar {
   display: block;
   width: 34px;
   height: 34px;
@@ -297,8 +363,80 @@ function close() {
   transition: border-color 0.2s;
 }
 
-.auth-avatar-link:hover {
+.profile-trigger:hover .profile-avatar,
+.profile-trigger.open .profile-avatar {
   border-color: #90caf9;
+}
+
+.profile-chevron {
+  font-size: 0.65rem;
+  color: #888;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.profile-trigger:hover .profile-chevron,
+.profile-trigger.open .profile-chevron {
+  color: #90caf9;
+}
+
+.profile-trigger.open .profile-chevron {
+  transform: rotate(180deg);
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 190px;
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem;
+  background: #181818;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-identity {
+  padding: 0.5rem 0.7rem 0.4rem;
+  font-size: 0.75rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-divider {
+  height: 1px;
+  margin: 0.3rem 0.3rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-link {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  text-align: left;
+  text-decoration: none;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.88rem;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dropdown-link:hover {
+  background: rgba(144, 202, 249, 0.08);
+  color: #90caf9;
+}
+
+.dropdown-signout:hover {
+  background: rgba(224, 82, 82, 0.1);
+  color: #e05252;
 }
 
 .auth-avatar-img {
