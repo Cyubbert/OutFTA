@@ -19,41 +19,17 @@
         <button class="signout-button" @click="signOut">Sign out</button>
       </div>
 
-      <div class="tab-row">
-        <button
-            class="tab-button"
-            :class="{ active: tab === 'journal' }"
-            @click="tab = 'journal'"
-        >Journal entry</button>
-        <button
-            class="tab-button"
-            :class="{ active: tab === 'session' }"
-            @click="tab = 'session'"
-        >Session recap</button>
-        <button
-            class="tab-button"
-            :class="{ active: tab === 'users' }"
-            @click="tab = 'users'"
-        >Users</button>
-      </div>
-
-      <AdminEntryFrom v-if="tab === 'journal'" />
-      <SessionEntryForm v-else-if="tab === 'session'" />
-      <AdminUsersPanel v-else />
+      <AdminUsersPanel />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import LoginForm from '@/components/LoginForm.vue'
-import AdminEntryFrom from '@/components/AdminEntryFrom.vue'
-import SessionEntryForm from '@/components/SessionEntryForm.vue'
 import AdminUsersPanel from '@/components/AdminUsersPanel.vue'
 
 const { user, isAdmin, loading, signOut } = useAuth()
-const tab = ref('journal')
 </script>
 
 <style scoped>
@@ -100,32 +76,6 @@ const tab = ref('journal')
 }
 
 .signout-button:hover {
-  border-color: #90caf9;
-  color: #90caf9;
-}
-
-.tab-row {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.tab-button {
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #888;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: border-color 0.2s, color 0.2s;
-}
-
-.tab-button:hover {
-  color: #e0e0e0;
-}
-
-.tab-button.active {
   border-color: #90caf9;
   color: #90caf9;
 }
