@@ -18,6 +18,7 @@ const filterTag = ref('all')
 const lightbox = ref(null)
 const creating = ref(false)
 const editing = ref(null)
+const tagProfiles = ref({})
 
 const canPost = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_gallery))
 
@@ -30,12 +31,29 @@ function canEdit(img) {
 }
 
 function isCharacterTag(tag) {
-  return CHARACTER_TAGS.includes(tag)
+  return !!tagProfiles.value[tag]
 }
 
 function goToProfile(tag) {
+  const username = tagProfiles.value[tag]
+  if (!username) return
   lightbox.value = null
-  router.push(`/profile/${tag}`)
+  router.push(`/profile/${username}`)
+}
+
+async function loadTagProfiles() {
+  const { data: tags } = await supabase.from('character_tags').select('tag, user_id')
+  const userIds = (tags || []).map(t => t.user_id).filter(Boolean)
+  if (!userIds.length) return
+
+  const { data: profiles } = await supabase.from('profiles').select('id, username').in('id', userIds)
+  const usernameById = Object.fromEntries((profiles || []).map(p => [p.id, p.username]))
+
+  tagProfiles.value = Object.fromEntries(
+      (tags || [])
+          .filter(t => t.user_id && usernameById[t.user_id])
+          .map(t => [t.tag, usernameById[t.user_id]])
+  )
 }
 
 function openLightbox(img) {
@@ -115,6 +133,7 @@ async function deleteImage(img) {
 onMounted(() => {
   window.addEventListener('keydown', onKey)
   loadGallery()
+  loadTagProfiles()
 })
 onUnmounted(() => window.removeEventListener('keydown', onKey))
 </script>
