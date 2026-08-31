@@ -20,6 +20,7 @@
       </div>
 
       <AdminUsersPanel />
+      <AdminCharacterTagsPanel />
     </div>
   </div>
 </template>
@@ -28,6 +29,7 @@
 import { useAuth } from '@/composables/useAuth'
 import LoginForm from '@/components/LoginForm.vue'
 import AdminUsersPanel from '@/components/AdminUsersPanel.vue'
+import AdminCharacterTagsPanel from '@/components/AdminCharacterTagsPanel.vue'
 
 const { user, isAdmin, loading, signOut } = useAuth()
 </script>
