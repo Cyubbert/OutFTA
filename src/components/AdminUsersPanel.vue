@@ -3,11 +3,12 @@
     <p v-if="loading" class="status">Loading users…</p>
     <p v-else-if="error" class="status error">Couldn't load users.</p>
     <template v-else>
-      <p class="hint">Admins always have full access and aren't shown with toggles below.</p>
+      <p class="hint">Admins always have full access — permission toggles only apply to regular users.</p>
 
       <div class="users-table">
         <div class="row header-row">
           <div class="col-user">User</div>
+          <div class="col-toggle">Admin</div>
           <div class="col-toggle">View Moryquinau</div>
           <div class="col-toggle">Post in Community</div>
           <div class="col-toggle">Post in Moryquinau</div>
@@ -20,7 +21,17 @@
               <span v-else class="avatar-placeholder">{{ (u.username || '?')[0]?.toUpperCase() }}</span>
             </span>
             <span class="username">{{ u.username || '(no username)' }}</span>
-            <span v-if="u.role === 'admin'" class="admin-badge">Admin — full access</span>
+            <span v-if="u.id === currentUserId" class="you-badge">You</span>
+          </div>
+
+          <div class="col-toggle">
+            <button
+                class="toggle"
+                :class="{ on: u.role === 'admin' }"
+                :disabled="savingId === u.id || u.id === currentUserId"
+                :title="u.id === currentUserId ? 'You can\'t change your own admin status here' : ''"
+                @click="toggleRole(u)"
+            ><span class="knob" /></button>
           </div>
 
           <template v-if="u.role !== 'admin'">
@@ -65,6 +76,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/composables/useAuth'
+
+const { user } = useAuth()
+const currentUserId = user.value?.id ?? null
 
 const users = ref([])
 const loading = ref(true)
@@ -102,6 +117,31 @@ async function toggle(u, field) {
     saveError.value = err.message
   }
 }
+
+async function toggleRole(u) {
+  if (u.id === currentUserId) return
+
+  const next = u.role === 'admin' ? 'user' : 'admin'
+  const verb = next === 'admin' ? 'Promote' : 'Demote'
+  if (!confirm(`${verb} ${u.username || '(no username)'} ${next === 'admin' ? 'to admin' : 'to a regular user'}?`)) return
+
+  const prev = u.role
+  u.role = next
+  savingId.value = u.id
+  saveError.value = ''
+
+  const { error: err } = await supabase
+      .from('profiles')
+      .update({ role: next })
+      .eq('id', u.id)
+
+  savingId.value = null
+
+  if (err) {
+    u.role = prev
+    saveError.value = err.message
+  }
+}
 </script>
 
 <style scoped>
@@ -133,12 +173,13 @@ async function toggle(u, field) {
   border: 1px solid #2a2a2a;
   border-radius: 10px;
   overflow: hidden;
+  overflow-x: auto;
 }
 
 .row {
   display: grid;
-  grid-template-columns: minmax(160px, 1.6fr) repeat(3, minmax(90px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: minmax(150px, 1.4fr) repeat(4, minmax(80px, 1fr));
+  gap: 0.6rem;
   align-items: center;
   padding: 0.7rem 0.9rem;
   border-bottom: 1px solid #222;
@@ -150,7 +191,7 @@ async function toggle(u, field) {
 
 .header-row {
   background: #161616;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #777;
@@ -196,10 +237,10 @@ async function toggle(u, field) {
   white-space: nowrap;
 }
 
-.admin-badge {
-  font-size: 0.68rem;
-  color: #90caf9;
-  border: 1px solid rgba(144, 202, 249, 0.3);
+.you-badge {
+  font-size: 0.65rem;
+  color: #666;
+  border: 1px solid #333;
   border-radius: 4px;
   padding: 1px 6px;
   white-space: nowrap;
@@ -256,13 +297,13 @@ async function toggle(u, field) {
 
 @media (max-width: 640px) {
   .row {
-    grid-template-columns: minmax(120px, 1.4fr) repeat(3, minmax(60px, 1fr));
-    gap: 0.4rem;
+    grid-template-columns: minmax(120px, 1.3fr) repeat(4, minmax(56px, 1fr));
+    gap: 0.35rem;
     padding: 0.6rem;
   }
 
   .header-row {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
   }
 
   .username {
