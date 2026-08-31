@@ -1,20 +1,29 @@
 import { ref, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase'
 
+const emptyProfile = () => ({
+    username: '',
+    avatar_url: '',
+    banner_url: '',
+    can_view_moryquinau: false,
+    can_post_community: false,
+    can_post_moryquinau: false
+})
+
 const user = ref(null)
 const isAdmin = ref(false)
 const loading = ref(true)
-const profile = ref({ username: '', avatar_url: '', banner_url: '' })
+const profile = ref(emptyProfile())
 
 async function checkAdminStatus(userId) {
     if (!userId) {
         isAdmin.value = false
-        profile.value = { username: '', avatar_url: '', banner_url: '' }
+        profile.value = emptyProfile()
         return
     }
     const { data, error } = await supabase
         .from('profiles')
-        .select('role, username, avatar_url, banner_url')
+        .select('role, username, avatar_url, banner_url, can_view_moryquinau, can_post_community, can_post_moryquinau')
         .eq('id', userId)
         .single()
 
@@ -22,7 +31,10 @@ async function checkAdminStatus(userId) {
     profile.value = {
         username: data?.username || '',
         avatar_url: data?.avatar_url || '',
-        banner_url: data?.banner_url || ''
+        banner_url: data?.banner_url || '',
+        can_view_moryquinau: data?.can_view_moryquinau || false,
+        can_post_community: data?.can_post_community || false,
+        can_post_moryquinau: data?.can_post_moryquinau || false
     }
 }
 
@@ -46,7 +58,7 @@ async function signOut() {
     await supabase.auth.signOut()
     user.value = null
     isAdmin.value = false
-    profile.value = { username: '', avatar_url: '', banner_url: '' }
+    profile.value = emptyProfile()
 }
 
 async function resetPasswordForEmail(email) {
@@ -74,7 +86,7 @@ export function useAuth() {
                 await checkAdminStatus(user.value.id)
             } else {
                 isAdmin.value = false
-                profile.value = { username: '', avatar_url: '', banner_url: '' }
+                profile.value = emptyProfile()
             }
         })
     })

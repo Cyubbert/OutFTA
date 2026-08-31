@@ -34,10 +34,9 @@ const error = ref(null)
 const creating = ref(false)
 const editing = ref(null)
 
-const canWrite = computed(() =>
-    !!user.value && (isAdmin.value || (profile.value.username || '').trim().toLowerCase() === 'waesstan')
-)
-const showGate = computed(() => !authLoading.value && !user.value)
+const canView = computed(() => !!user.value && (isAdmin.value || profile.value.can_view_moryquinau))
+const canWrite = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_moryquinau))
+const showGate = computed(() => !authLoading.value && !canView.value)
 
 async function loadPosts() {
   loading.value = true
@@ -52,8 +51,8 @@ async function loadPosts() {
   loading.value = false
 }
 
-watch(user, (u) => {
-  if (u && !postsLoaded.value) loadPosts()
+watch(canView, (v) => {
+  if (v && !postsLoaded.value) loadPosts()
 }, { immediate: true })
 
 function startCreate() {
@@ -96,14 +95,14 @@ async function deletePost(post) {
     <div v-if="showGate" class="gate">
       <div class="gate-sigil">†</div>
       <p class="gate-text">This place isn't for wandering eyes.</p>
-      <router-link to="/login" class="gate-link">Sign in</router-link>
+      <router-link v-if="!user" to="/login" class="gate-link">Sign in</router-link>
     </div>
 
     <article v-else class="page">
       <header class="page-header">
         <div class="page-sigil">†</div>
-        <h1 class="page-title">Moryquinau</h1>
-        <p class="page-subtitle">Unsigned. Unspoken.</p>
+        <h1 class="page-title">MoryQuin Fanfiction text drops</h1>
+        <p class="page-subtitle">Only for the intended eye.</p>
         <div class="header-rule" />
       </header>
 

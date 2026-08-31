@@ -53,7 +53,7 @@
         <p v-if="!comments.length" class="no-comments">No comments yet.</p>
       </div>
 
-      <form v-if="user" class="comment-form" @submit.prevent="submitComment">
+      <form v-if="canComment" class="comment-form" @submit.prevent="submitComment">
         <input v-model="newCommentDisplayName" placeholder="Commenting as…" required maxlength="60" class="comment-name-input" />
         <div class="comment-form-row">
           <textarea v-model="newCommentBody" rows="2" placeholder="Add a comment…" required class="comment-text-input"></textarea>
@@ -61,6 +61,7 @@
         </div>
         <p v-if="commentError" class="error">{{ commentError }}</p>
       </form>
+      <p v-else-if="user" class="sign-in-note">Your account isn't permitted to comment here.</p>
       <p v-else class="sign-in-note">
         <router-link to="/login">Sign in</router-link> to comment.
       </p>
@@ -95,6 +96,7 @@ const editCommentBody = ref('')
 const savingComment = ref(false)
 
 const canEditPost = computed(() => user.value && (user.value.id === props.post.user_id || isAdmin.value))
+const canComment = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_community))
 
 function canEditComment(c) {
   return user.value && (user.value.id === c.user_id || isAdmin.value)

@@ -1,11 +1,12 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { supabase } from '@/lib/supabase.js'
 import { useAuth } from '@/composables/useAuth'
 import CommunityPostCard from '@/components/CommunityPostCard.vue'
 import CommunityPostForm from '@/components/CommunityPostForm.vue'
 
-const { user } = useAuth()
+const { user, isAdmin, profile } = useAuth()
+const canPost = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_community))
 
 const posts = ref([])
 const loading = ref(true)
@@ -68,7 +69,8 @@ async function deletePost(post) {
 
     <div class="page-body">
       <div class="composer-row">
-        <button v-if="user" class="new-post-btn" @click="startCreate">+ New post</button>
+        <button v-if="canPost" class="new-post-btn" @click="startCreate">+ New post</button>
+        <p v-else-if="user" class="sign-in-note">Your account isn't permitted to post here.</p>
         <p v-else class="sign-in-note"><router-link to="/login">Sign in</router-link> to post or comment.</p>
       </div>
 
