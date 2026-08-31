@@ -30,10 +30,16 @@
             :class="{ active: tab === 'session' }"
             @click="tab = 'session'"
         >Session recap</button>
+        <button
+            class="tab-button"
+            :class="{ active: tab === 'users' }"
+            @click="tab = 'users'"
+        >Users</button>
       </div>
 
       <AdminEntryFrom v-if="tab === 'journal'" />
-      <SessionEntryForm v-else />
+      <SessionEntryForm v-else-if="tab === 'session'" />
+      <AdminUsersPanel v-else />
     </div>
   </div>
 </template>
@@ -44,6 +50,7 @@ import { useAuth } from '@/composables/useAuth'
 import LoginForm from '@/components/LoginForm.vue'
 import AdminEntryFrom from '@/components/AdminEntryFrom.vue'
 import SessionEntryForm from '@/components/SessionEntryForm.vue'
+import AdminUsersPanel from '@/components/AdminUsersPanel.vue'
 
 const { user, isAdmin, loading, signOut } = useAuth()
 const tab = ref('journal')
