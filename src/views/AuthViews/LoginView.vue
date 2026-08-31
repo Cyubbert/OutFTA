@@ -9,10 +9,15 @@
     </div>
 
     <div v-else class="auth-card">
-      <h1>{{ mode === 'signin' ? 'Sign in' : 'Create an account' }}</h1>
+      <h1>{{ modeTitle }}</h1>
 
       <LoginForm v-if="mode === 'signin'" />
-      <SignupForm v-else />
+      <SignupForm v-else-if="mode === 'signup'" />
+      <ForgotPasswordForm v-else />
+
+      <p v-if="mode === 'signin'" class="forgot-link">
+        <a href="#" @click.prevent="mode = 'forgot'">Forgot password?</a>
+      </p>
 
       <p class="switch-mode">
         <template v-if="mode === 'signin'">
@@ -29,13 +34,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import LoginForm from '@/components/LoginForm.vue'
 import SignupForm from '@/components/SignupForm.vue'
+import ForgotPasswordForm from '@/components/ForgotPasswordForm.vue'
 
 const { user, loading, signOut } = useAuth()
 const mode = ref('signin')
+
+const modeTitle = computed(() => {
+  if (mode.value === 'signup') return 'Create an account'
+  if (mode.value === 'forgot') return 'Reset password'
+  return 'Sign in'
+})
 </script>
 
 <style scoped>
@@ -67,6 +79,20 @@ const mode = ref('signin')
 }
 
 .switch-mode a:hover {
+  text-decoration: underline;
+}
+
+.forgot-link {
+  margin-top: 0.6rem;
+  font-size: 0.82rem;
+}
+
+.forgot-link a {
+  color: #90caf9;
+  text-decoration: none;
+}
+
+.forgot-link a:hover {
   text-decoration: underline;
 }
 

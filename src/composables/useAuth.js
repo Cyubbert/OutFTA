@@ -49,6 +49,18 @@ async function signOut() {
     profile.value = { username: '', avatar_url: '', banner_url: '' }
 }
 
+async function resetPasswordForEmail(email) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}${window.location.pathname}#/reset-password`
+    })
+    if (error) throw error
+}
+
+async function updatePassword(newPassword) {
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    if (error) throw error
+}
+
 export function useAuth() {
     onMounted(async () => {
         const { data: { session } } = await supabase.auth.getSession()
@@ -67,5 +79,5 @@ export function useAuth() {
         })
     })
 
-    return { user, isAdmin, loading, profile, signIn, signUp, signOut }
+    return { user, isAdmin, loading, profile, signIn, signUp, signOut, resetPasswordForEmail, updatePassword }
 }
