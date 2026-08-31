@@ -168,6 +168,11 @@ const router = createRouter({
             path: "/profile",
             name: "profile",
             component: () => import("@/views/AuthViews/ProfileView.vue")
+        },
+        {
+            path: "/profile/:username",
+            name: "public-profile",
+            component: () => import("@/views/AuthViews/PublicProfileView.vue")
         }
 
     ]
