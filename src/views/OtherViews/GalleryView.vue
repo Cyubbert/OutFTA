@@ -1,68 +1,45 @@
 <script setup>
-import {ref, computed, onMounted, onUnmounted} from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase.js'
+import { useAuth } from '@/composables/useAuth'
+import GalleryUploadForm from '@/components/GalleryUploadForm.vue'
 
+const router = useRouter()
+const { user, isAdmin, profile } = useAuth()
+
+const CHARACTER_TAGS = ['waesstan', 'marvers', 'ray']
+
+const images = ref([])
 const galleryLoading = ref(true)
 const galleryError = ref(null)
-const SFW_ARTWORKS = ref([])
-const NSFW_ARTWORKS = ref([])
 
-const NSFW_PASSWORD = "pig"
-
-const activeTab = ref('sfw')
-const activeArtist = ref('All')
+const filterTag = ref('all')
 const lightbox = ref(null)
-const nsfwUnlocked = ref(false)
-const passwordInput = ref('')
-const passwordError = ref(false)
-const showPasswordModal = ref(false)
+const creating = ref(false)
+const editing = ref(null)
 
-const currentArtworks = computed(() =>
-    activeTab.value === 'nsfw' && nsfwUnlocked.value ? NSFW_ARTWORKS.value : SFW_ARTWORKS.value
-)
-
-const artists = computed(() => {
-  const a = [...new Set(currentArtworks.value.map(art => art.artist))]
-  return ['All', ...a]
-})
+const canPost = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_gallery))
 
 const filtered = computed(() =>
-    currentArtworks.value.filter(a =>
-        activeArtist.value === 'All' || a.artist === activeArtist.value
-    )
+    filterTag.value === 'all' ? images.value : images.value.filter(img => img.tags?.includes(filterTag.value))
 )
 
-function switchTab(tab) {
-  if (tab === 'nsfw' && !nsfwUnlocked.value) {
-    showPasswordModal.value = true
-    return
-  }
-  activeTab.value = tab
-  activeArtist.value = 'All'
+function canEdit(img) {
+  return user.value && (user.value.id === img.user_id || isAdmin.value)
 }
 
-function submitPassword() {
-  if (passwordInput.value === NSFW_PASSWORD) {
-    nsfwUnlocked.value = true
-    showPasswordModal.value = false
-    activeTab.value = 'nsfw'
-    activeArtist.value = 'All'
-    passwordInput.value = ''
-    passwordError.value = false
-  } else {
-    passwordError.value = true
-    passwordInput.value = ''
-  }
+function isCharacterTag(tag) {
+  return CHARACTER_TAGS.includes(tag)
 }
 
-function closeModal() {
-  showPasswordModal.value = false
-  passwordInput.value = ''
-  passwordError.value = false
+function goToProfile(tag) {
+  lightbox.value = null
+  router.push(`/profile/${tag}`)
 }
 
-function openLightbox(art) {
-  lightbox.value = art
+function openLightbox(img) {
+  lightbox.value = img
   document.body.style.overflow = 'hidden'
 }
 
@@ -82,14 +59,6 @@ function next() {
 }
 
 function onKey(e) {
-  if (showPasswordModal.value && e.key === 'Enter') {
-    submitPassword();
-    return
-  }
-  if (showPasswordModal.value && e.key === 'Escape') {
-    closeModal();
-    return
-  }
   if (!lightbox.value) return
   if (e.key === 'Escape') closeLightbox()
   if (e.key === 'ArrowLeft') prev()
@@ -99,23 +68,48 @@ function onKey(e) {
 async function loadGallery() {
   const { data, error } = await supabase
       .from('gallery_images')
-      .select('id, title, artist, image_path, description, is_nsfw')
-      .order('sort_order', { ascending: true })
+      .select('*')
+      .order('created_at', { ascending: false })
 
-  if (error) {
-    galleryError.value = error
-  } else {
-    const toArt = (row) => ({
-      id: row.id,
-      title: row.title,
-      artist: row.artist,
-      img: row.image_path,
-      description: row.description,
-    })
-    SFW_ARTWORKS.value = data.filter((row) => !row.is_nsfw).map(toArt)
-    NSFW_ARTWORKS.value = data.filter((row) => row.is_nsfw).map(toArt)
-  }
+  if (error) galleryError.value = error
+  else images.value = data
   galleryLoading.value = false
+}
+
+function startCreate() {
+  creating.value = true
+}
+
+function startEdit(img) {
+  lightbox.value = null
+  editing.value = img
+}
+
+function closeModal() {
+  creating.value = false
+  editing.value = null
+}
+
+function onSaved(record) {
+  if (editing.value) {
+    const idx = images.value.findIndex(i => i.id === record.id)
+    if (idx !== -1) images.value[idx] = record
+  } else {
+    images.value.unshift(record)
+  }
+  closeModal()
+}
+
+async function deleteImage(img) {
+  if (!confirm('Delete this picture? This can\'t be undone.')) return
+
+  const { error } = await supabase.from('gallery_images').delete().eq('id', img.id)
+  if (error) {
+    alert(error.message)
+    return
+  }
+  images.value = images.value.filter(i => i.id !== img.id)
+  if (lightbox.value?.id === img.id) closeLightbox()
 }
 
 onMounted(() => {
@@ -131,33 +125,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
       <h1 class="page-title">Gallery</h1>
       <p class="page-subtitle">Art by the Players</p>
 
-      <!-- SFW / NSFW tabs -->
       <div class="gallery-tabs">
-        <button
-            class="gallery-tab"
-            :class="{ active: activeTab === 'sfw' }"
-            @click="switchTab('sfw')"
-        >Art
-        </button>
-        <button
-            class="gallery-tab nsfw-tab"
-            :class="{ active: activeTab === 'nsfw' }"
-            @click="switchTab('nsfw')"
-        >
-          <span v-if="!nsfwUnlocked">🔒 </span>NSFW
-        </button>
+        <button class="gallery-tab" :class="{ active: filterTag === 'all' }" @click="filterTag = 'all'">All</button>
+        <button class="gallery-tab nsfw-tab" :class="{ active: filterTag === 'nsfw' }" @click="filterTag = 'nsfw'">NSFW</button>
       </div>
 
-      <!-- Artist filter -->
-      <div class="artist-filters">
-        <button
-            v-for="artist in artists"
-            :key="artist"
-            class="artist-btn"
-            :class="{ active: activeArtist === artist }"
-            @click="activeArtist = artist"
-        >{{ artist }}
-        </button>
+      <div class="composer-row">
+        <button v-if="canPost" class="upload-btn" @click="startCreate">+ Upload picture</button>
+        <p v-else-if="user" class="sign-in-note">Your account isn't permitted to upload here.</p>
+        <p v-else class="sign-in-note"><router-link to="/login">Sign in</router-link> to upload.</p>
       </div>
     </header>
 
@@ -166,46 +142,33 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
       <p v-else-if="galleryError" class="empty-state">Couldn't load the gallery.</p>
       <template v-else>
         <p class="count-label">{{ filtered.length }} work{{ filtered.length !== 1 ? 's' : '' }}</p>
-        <div v-if="!filtered.length" class="empty-state">No artworks found.</div>
+        <div v-if="!filtered.length" class="empty-state">No pictures found.</div>
 
         <transition-group name="fade" tag="div" class="gallery-grid">
-          <div
-              v-for="art in filtered"
-              :key="art.id"
-              class="gallery-item"
-              @click="openLightbox(art)"
-          >
-            <img :src="art.img" :alt="art.title" class="gallery-img"/>
+          <div v-for="img in filtered" :key="img.id" class="gallery-item" @click="openLightbox(img)">
+            <img :src="img.image_url" :alt="img.title || 'Gallery image'" class="gallery-img" />
+            <span v-if="img.tags?.includes('nsfw')" class="nsfw-badge">NSFW</span>
+
+            <div v-if="canEdit(img)" class="admin-actions">
+              <button class="admin-btn" title="Edit" @click.stop="startEdit(img)">✎</button>
+              <button class="admin-btn delete" title="Delete" @click.stop="deleteImage(img)">✕</button>
+            </div>
+
             <div class="gallery-overlay">
-              <span class="art-title">{{ art.title }}</span>
-              <span class="art-artist">by {{ art.artist }}</span>
+              <span v-if="img.title" class="art-title">{{ img.title }}</span>
+              <span class="art-artist">by {{ img.display_name }}</span>
             </div>
           </div>
         </transition-group>
       </template>
     </div>
 
-    <!-- Password modal -->
-    <transition name="lb">
-      <div class="lightbox" v-if="showPasswordModal" @click.self="closeModal">
-        <div class="password-modal">
-          <h2 class="modal-title">NSFW Gallery</h2>
-          <p class="modal-desc">This section contains mature content. Enter the password to continue.</p>
-          <input
-              class="password-input"
-              type="password"
-              v-model="passwordInput"
-              placeholder="Password..."
-              autofocus
-          />
-          <p class="password-error" v-if="passwordError">Wrong password. Try again.</p>
-          <div class="modal-buttons">
-            <button class="modal-btn cancel" @click="closeModal">Cancel</button>
-            <button class="modal-btn confirm" @click="submitPassword">Enter</button>
-          </div>
-        </div>
+    <!-- Upload / edit modal -->
+    <div v-if="creating || editing" class="modal-backdrop" @click.self="closeModal">
+      <div class="modal-panel">
+        <GalleryUploadForm :edit-post="editing" @saved="onSaved" @cancel="closeModal" />
       </div>
-    </transition>
+    </div>
 
     <!-- Lightbox -->
     <transition name="lb">
@@ -214,10 +177,27 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         <button class="lb-nav lb-prev" @click="prev" v-if="filtered.length > 1">‹</button>
         <button class="lb-nav lb-next" @click="next" v-if="filtered.length > 1">›</button>
         <div class="lb-content">
-          <img :src="lightbox.img" :alt="lightbox.title" class="lb-img"/>
+          <img :src="lightbox.image_url" :alt="lightbox.title || 'Gallery image'" class="lb-img" />
           <div class="lb-info">
-            <span class="lb-title">{{ lightbox.title }}</span>
-            <span class="lb-artist">by {{ lightbox.artist }}</span>
+            <span v-if="lightbox.title" class="lb-title">{{ lightbox.title }}</span>
+            <span class="lb-artist">by {{ lightbox.display_name }}</span>
+            <p v-if="lightbox.body" class="lb-body">{{ lightbox.body }}</p>
+
+            <div v-if="lightbox.tags?.length" class="lb-tags">
+              <button
+                  v-for="tag in lightbox.tags"
+                  :key="tag"
+                  class="tag-chip"
+                  :class="{ nsfw: tag === 'nsfw', clickable: isCharacterTag(tag) }"
+                  :disabled="!isCharacterTag(tag)"
+                  @click="isCharacterTag(tag) && goToProfile(tag)"
+              >#{{ tag }}</button>
+            </div>
+
+            <div v-if="canEdit(lightbox)" class="lb-actions">
+              <button class="lb-action-btn" @click="startEdit(lightbox)">Edit</button>
+              <button class="lb-action-btn danger" @click="deleteImage(lightbox)">Delete</button>
+            </div>
           </div>
         </div>
       </div>
@@ -255,7 +235,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   margin: 0 0 1rem;
 }
 
-/* ── Gallery tabs ── */
+/* ── Filter tabs ── */
 .gallery-tabs {
   display: flex;
   justify-content: center;
@@ -301,38 +281,33 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   background: #2a1212;
 }
 
-/* ── Artist filters ── */
-.artist-filters {
+/* ── Upload composer row ── */
+.composer-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
   justify-content: center;
   margin-bottom: 1.5rem;
 }
 
-.artist-btn {
-  font-size: 0.72rem;
-  padding: 4px 12px;
-  border-radius: 6px;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  color: #555;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: 'Jost', sans-serif;
-}
-
-.artist-btn:hover {
-  border-color: #444;
-  color: #aaa;
-}
-
-.artist-btn.active {
+.upload-btn {
   background: #90caf9;
-  border-color: #90caf9;
   color: #121212;
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
 }
+.upload-btn:hover {
+  background: #64b5f6;
+}
+
+.sign-in-note {
+  font-size: 0.85rem;
+  color: #666;
+}
+.sign-in-note a { color: #90caf9; }
 
 .count-label {
   font-size: 0.7rem;
@@ -384,6 +359,44 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   transform: scale(1.07);
 }
 
+.nsfw-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  background: rgba(196, 108, 108, 0.9);
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.admin-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+.admin-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(18, 18, 18, 0.8);
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  line-height: 1;
+  transition: border-color 0.2s, color 0.2s;
+}
+.admin-btn:hover { border-color: #90caf9; color: #90caf9; }
+.admin-btn.delete:hover { border-color: #e05252; color: #e05252; }
+
 .gallery-overlay {
   position: absolute;
   inset: 0;
@@ -414,89 +427,26 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   margin-top: 2px;
 }
 
-/* ── Password modal ── */
-.password-modal {
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
+/* ── Upload/edit modal ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 3rem 1rem;
+  overflow-y: auto;
+}
+
+.modal-panel {
+  background: #181818;
+  border: 1px solid #333;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   width: 100%;
-  max-width: 380px;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.modal-title {
-  font-family: 'Iosevka Charon', monospace;
-  font-size: 1.3rem;
-  color: #fff;
-  margin: 0;
-}
-
-.modal-desc {
-  font-size: 0.85rem;
-  color: #666;
-  margin: 0;
-  line-height: 1.6;
-}
-
-.password-input {
-  background: #121212;
-  border: 1px solid #2a2a2a;
-  border-radius: 6px;
-  color: #e0e0e0;
-  font-family: 'Jost', sans-serif;
-  font-size: 0.95rem;
-  padding: 0.6rem 0.9rem;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.password-input:focus {
-  border-color: #90caf9;
-}
-
-.password-error {
-  font-size: 0.78rem;
-  color: #ef9a9a;
-  margin: -0.5rem 0 0;
-}
-
-.modal-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-.modal-btn {
-  padding: 0.5rem 1.2rem;
-  border-radius: 6px;
-  border: none;
-  font-family: 'Jost', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s;
-}
-
-.modal-btn.cancel {
-  background: #2a2a2a;
-  color: #888;
-}
-
-.modal-btn.cancel:hover {
-  background: #333;
-  color: #aaa;
-}
-
-.modal-btn.confirm {
-  background: #90caf9;
-  color: #121212;
-}
-
-.modal-btn.confirm:hover {
-  background: #64b5f6;
+  max-width: 540px;
 }
 
 /* ── Lightbox ── */
@@ -518,11 +468,12 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   gap: 0.75rem;
   max-width: 90vw;
   max-height: 90vh;
+  overflow-y: auto;
 }
 
 .lb-img {
   max-width: 90vw;
-  max-height: 80vh;
+  max-height: 70vh;
   object-fit: contain;
   border-radius: 6px;
   box-shadow: 0 8px 50px rgba(0, 0, 0, 0.9);
@@ -533,6 +484,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   flex-direction: column;
   align-items: center;
   gap: 3px;
+  max-width: 480px;
+  text-align: center;
 }
 
 .lb-title {
@@ -547,6 +500,65 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   color: #90caf9;
   letter-spacing: 0.06em;
 }
+
+.lb-body {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin: 0.5rem 0 0;
+  line-height: 1.6;
+}
+
+.lb-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 0.6rem;
+}
+
+.tag-chip {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  color: #90caf9;
+  font-family: 'Jost', sans-serif;
+}
+
+.tag-chip.clickable {
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.tag-chip.clickable:hover {
+  border-color: #90caf9;
+  background: rgba(144, 202, 249, 0.1);
+}
+
+.tag-chip.nsfw {
+  color: #e08a8a;
+  border-color: #3a1a1a;
+  cursor: default;
+}
+
+.lb-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 0.75rem;
+}
+
+.lb-action-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ccc;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.lb-action-btn:hover { border-color: #90caf9; color: #90caf9; }
+.lb-action-btn.danger:hover { border-color: #e05252; color: #e05252; }
 
 .lb-close {
   position: absolute;
