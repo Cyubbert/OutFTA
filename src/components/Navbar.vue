@@ -1,11 +1,10 @@
 <script setup>
-import {ref, computed, onMounted, onUnmounted} from 'vue'
+import {ref, computed, watch} from 'vue'
 import {useRoute} from 'vue-router'
 import {useAuth} from '@/composables/useAuth'
 
 const route = useRoute()
 const menuOpen = ref(false)
-const menuEl = ref(null)
 const {user, profile, isAdmin, signOut} = useAuth()
 
 const avatarInitial = computed(() => (profile.value.username || user.value?.email || '?')[0]?.toUpperCase())
@@ -34,18 +33,13 @@ function toggleMenu() {
   menuOpen.value = !menuOpen.value
 }
 
-function onDocumentClick(e) {
-  if (menuOpen.value && menuEl.value && !menuEl.value.contains(e.target)) {
-    menuOpen.value = false
-  }
-}
-
-onMounted(() => document.addEventListener('click', onDocumentClick))
-onUnmounted(() => document.removeEventListener('click', onDocumentClick))
+watch(menuOpen, (open) => {
+  document.body.style.overflow = open ? 'hidden' : ''
+})
 </script>
 
 <template>
-  <nav class="navbar" ref="menuEl">
+  <nav class="navbar">
     <div class="navbar-inner">
       <router-link to="/" class="navbar-logo" @click="close">
         <span class="logo-rune"></span>
@@ -61,9 +55,15 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
         <span/><span/><span/>
       </button>
     </div>
+  </nav>
 
-    <transition name="dropdown">
-      <div class="menu-dropdown" v-if="menuOpen">
+  <Teleport to="body">
+    <transition name="fade">
+      <div class="menu-backdrop" v-if="menuOpen" @click="close"/>
+    </transition>
+
+    <transition name="slide">
+      <aside class="menu-panel" v-if="menuOpen">
         <ul class="menu-links">
           <li v-for="link in links" :key="link.to">
             <router-link
@@ -95,9 +95,9 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
           </template>
           <router-link v-else to="/login" class="menu-link" @click="close">Login</router-link>
         </div>
-      </div>
+      </aside>
     </transition>
-  </nav>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -174,6 +174,8 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
   width: 32px;
   height: 32px;
   flex-shrink: 0;
+  position: relative;
+  z-index: 210;
 }
 
 .burger span {
@@ -203,20 +205,39 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
   transform: translateY(-6.5px) rotate(-45deg);
   background: #90caf9;
 }
+</style>
 
-/* ── Dropdown menu ── */
-.menu-dropdown {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0.5rem 1.5rem 1rem;
-  border-top: 1px solid rgba(144, 202, 249, 0.08);
-  background: rgba(18, 18, 18, 0.97);
+<style>
+/* Unscoped: this panel/backdrop is teleported to <body>, outside this
+   component's DOM subtree, so scoped [data-v-xxx] attribute selectors
+   would never match it. */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 190;
+}
+
+.menu-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  z-index: 200;
+  background: #161616;
+  border-left: 1px solid rgba(144, 202, 249, 0.12);
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.5);
+  padding: 72px 0 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-links {
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 1rem;
 }
 
 .menu-link {
@@ -226,7 +247,7 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
-  padding: 0.7rem 0.5rem;
+  padding: 0.75rem 0.5rem;
   text-decoration: none;
   font-family: 'Iosevka Charon', regular;
   font-size: 0.85rem;
@@ -240,13 +261,9 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
   transition: color 0.2s, padding-left 0.2s;
 }
 
-.menu-link:last-child {
-  border-bottom: none;
-}
-
 .menu-link:hover {
   color: #e0e0e0;
-  padding-left: 1rem;
+  padding-left: 0.9rem;
 }
 
 .menu-link.active {
@@ -263,13 +280,14 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
 
 .menu-divider {
   height: 1px;
-  margin: 0.3rem 0;
+  margin: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.08);
 }
 
 .menu-auth {
   display: flex;
   flex-direction: column;
+  padding: 0 1rem;
 }
 
 .menu-identity {
@@ -320,15 +338,24 @@ onUnmounted(() => document.removeEventListener('click', onDocumentClick))
   color: #e05252;
 }
 
-/* ── Dropdown transition ── */
-.dropdown-enter-active,
-.dropdown-leave-active {
-  transition: opacity 0.2s, transform 0.2s;
+/* ── Transitions ── */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
 }
 
-.dropdown-enter-from,
-.dropdown-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
-  transform: translateY(-6px);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.28s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
 }
 </style>
