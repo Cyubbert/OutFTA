@@ -2,6 +2,12 @@
   <form class="entry-form" @submit.prevent="handleSubmit">
     <h3>{{ editPost ? 'Edit entry' : 'Leave word' }}</h3>
 
+    <label>Title <span class="optional">(optional)</span></label>
+    <input v-model="form.title" type="text" placeholder="Untitled" />
+
+    <label>Tag <span class="optional">(optional — sets reading order)</span></label>
+    <input v-model="form.tag" type="text" placeholder="e.g. 01, Ch. 2" />
+
     <label>Text</label>
     <textarea v-model="form.body" rows="6" placeholder="What won't be signed…" required></textarea>
 
@@ -29,6 +35,8 @@ const emit = defineEmits(['saved', 'cancel'])
 const { user } = useAuth()
 
 const form = reactive({
+  title: props.editPost?.title ?? '',
+  tag: props.editPost?.tag ?? '',
   body: props.editPost?.body ?? ''
 })
 
@@ -39,7 +47,11 @@ async function handleSubmit() {
   submitting.value = true
   errorMsg.value = ''
 
-  const payload = { body: form.body.trim() }
+  const payload = {
+    title: form.title.trim() || null,
+    tag: form.tag.trim() || null,
+    body: form.body.trim()
+  }
 
   if (props.editPost) {
     const { data, error } = await supabase
@@ -99,7 +111,12 @@ label {
   color: #8a7a6d;
   letter-spacing: 0.04em;
 }
-textarea {
+.optional {
+  font-size: 0.72rem;
+  color: #6b5f56;
+  font-style: italic;
+}
+textarea, input[type="text"] {
   background: #0b0807;
   border: 1px solid rgba(139, 26, 26, 0.3);
   border-radius: 6px;
@@ -110,7 +127,7 @@ textarea {
   outline: none;
   resize: vertical;
 }
-textarea:focus {
+textarea:focus, input[type="text"]:focus {
   border-color: #3f7d4f;
 }
 .form-actions {

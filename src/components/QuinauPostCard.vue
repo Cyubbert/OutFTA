@@ -2,6 +2,7 @@
   <article class="post-card">
     <header class="post-header">
       <span class="post-sigil">†</span>
+      <span v-if="post.tag" class="post-tag">{{ post.tag }}</span>
       <span class="post-date">{{ formatDate(post.created_at) }}<template v-if="post.edited_at"> · edited</template></span>
 
       <div v-if="canEditPost" class="post-actions">
@@ -10,6 +11,7 @@
       </div>
     </header>
 
+    <h2 v-if="post.title" class="post-title">{{ post.title }}</h2>
     <p class="post-body">{{ post.body }}</p>
 
     <div class="post-footer">
@@ -214,6 +216,25 @@ async function deleteComment(c) {
   font-size: 0.72rem;
   color: #6b5f56;
   letter-spacing: 0.04em;
+}
+
+.post-tag {
+  font-size: 0.68rem;
+  color: #4c9a5f;
+  border: 1px solid rgba(63, 125, 79, 0.4);
+  border-radius: 3px;
+  padding: 0.1rem 0.4rem;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.post-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: #e8ded2;
+  margin: 0;
 }
 
 .post-actions {

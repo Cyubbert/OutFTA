@@ -33,6 +33,19 @@ const loading = ref(true)
 const error = ref(null)
 const creating = ref(false)
 const editing = ref(null)
+const sortMode = ref('newest')
+
+const sortedPosts = computed(() => {
+  if (sortMode.value !== 'reading') return posts.value
+
+  return [...posts.value].sort((a, b) => {
+    if (!a.tag && !b.tag) return new Date(a.created_at) - new Date(b.created_at)
+    if (!a.tag) return 1
+    if (!b.tag) return -1
+    return a.tag.localeCompare(b.tag, undefined, { numeric: true, sensitivity: 'base' })
+      || new Date(a.created_at) - new Date(b.created_at)
+  })
+})
 
 const canView = computed(() => !!user.value && (isAdmin.value || profile.value.can_view_moryquinau))
 const canWrite = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_moryquinau))
@@ -110,13 +123,26 @@ async function deletePost(post) {
         <button class="new-post-btn" @click="startCreate">+ Leave word</button>
       </div>
 
+      <div class="sort-row">
+        <button
+            class="sort-btn"
+            :class="{ active: sortMode === 'newest' }"
+            @click="sortMode = 'newest'"
+        >Newest</button>
+        <button
+            class="sort-btn"
+            :class="{ active: sortMode === 'reading' }"
+            @click="sortMode = 'reading'"
+        >Reading order</button>
+      </div>
+
       <p v-if="loading" class="page-status">Loading…</p>
       <p v-else-if="error" class="page-status">Couldn't reach this place.</p>
       <template v-else>
         <p v-if="!posts.length" class="empty-state">Nothing left here yet.</p>
         <transition-group name="fade" tag="div" class="posts-feed">
           <QuinauPostCard
-              v-for="post in posts"
+              v-for="post in sortedPosts"
               :key="post.id"
               :post="post"
               :can-write="canWrite"
@@ -255,6 +281,36 @@ async function deletePost(post) {
   background: rgba(139, 26, 26, 0.1);
   border-color: #c0392b;
   color: #e05252;
+}
+
+.sort-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.sort-btn {
+  background: transparent;
+  border: 1px solid rgba(139, 26, 26, 0.22);
+  color: #6b5f56;
+  padding: 0.35rem 0.9rem;
+  border-radius: 3px;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.sort-btn:hover {
+  color: #a89686;
+}
+
+.sort-btn.active {
+  border-color: #3f7d4f;
+  color: #4c9a5f;
 }
 
 .page-status, .empty-state {
