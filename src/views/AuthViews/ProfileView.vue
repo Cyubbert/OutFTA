@@ -61,12 +61,18 @@
             @click="startView(sheet)"
         >
           <img v-if="sheet.image" :src="sheet.image" :alt="sheet.name" />
+          <span v-if="sheet.is_visible" class="public-badge">Public</span>
           <div class="sheet-text">
             <div class="card-name">{{ sheet.name }}</div>
             <div class="sheet-meta">Level {{ sheet.level ?? '?' }} {{ sheet.race }} {{ sheet.class }}</div>
           </div>
 
           <div class="admin-actions">
+            <button
+                class="admin-btn"
+                :title="sheet.is_visible ? 'Make private' : 'Show on profile'"
+                @click.stop="toggleSheetVisibility(sheet)"
+            >{{ sheet.is_visible ? '👁' : '🙈' }}</button>
             <button class="admin-btn" title="Edit" @click.stop="startEdit(sheet)">✎</button>
             <button class="admin-btn delete" title="Delete" @click.stop="deleteSheet(sheet)">✕</button>
           </div>
@@ -87,14 +93,21 @@
             v-for="img in galleryImages"
             :key="img.id"
             class="card gallery-card"
+            :class="{ 'is-hidden': img.is_visible === false }"
             @click="openImage(img)"
         >
           <img :src="img.image_url" :alt="img.caption || 'Gallery image'" />
+          <span v-if="img.is_visible === false" class="hidden-badge">Hidden</span>
           <div v-if="img.caption" class="sheet-text">
             <div class="card-name">{{ img.caption }}</div>
           </div>
 
           <div class="admin-actions">
+            <button
+                class="admin-btn"
+                :title="img.is_visible === false ? 'Make visible on profile' : 'Hide from profile'"
+                @click.stop="toggleImageVisibility(img)"
+            >{{ img.is_visible === false ? '🙈' : '👁' }}</button>
             <button class="admin-btn delete" title="Delete" @click.stop="deleteImage(img)">✕</button>
           </div>
         </div>
@@ -128,7 +141,12 @@
 
         <div class="form-actions">
           <button class="cancel-btn danger" @click="deleteImage(viewingImage)">Delete picture</button>
-          <button class="cancel-btn" @click="closeImageView">Close</button>
+          <div class="form-actions-right">
+            <button class="cancel-btn" @click="toggleImageVisibility(viewingImage)">
+              {{ viewingImage.is_visible === false ? 'Make visible' : 'Hide from profile' }}
+            </button>
+            <button class="cancel-btn" @click="closeImageView">Close</button>
+          </div>
         </div>
       </div>
     </div>
@@ -346,6 +364,23 @@ function onSaved(record) {
   closeModal()
 }
 
+async function toggleSheetVisibility(sheet) {
+  const nextVisible = !sheet.is_visible
+
+  const { error } = await supabase
+      .from('character_sheets')
+      .update({ is_visible: nextVisible })
+      .eq('id', sheet.id)
+
+  if (error) {
+    alert(error.message)
+    return
+  }
+
+  const idx = sheets.value.findIndex(s => s.id === sheet.id)
+  if (idx !== -1) sheets.value[idx] = { ...sheets.value[idx], is_visible: nextVisible }
+}
+
 async function deleteSheet(sheet) {
   if (!confirm(`Delete "${sheet.name}"? This can't be undone.`)) return
 
@@ -428,6 +463,24 @@ async function saveCaption() {
   viewingImage.value = { ...viewingImage.value, caption }
   const idx = galleryImages.value.findIndex(i => i.id === viewingImage.value.id)
   if (idx !== -1) galleryImages.value[idx] = { ...galleryImages.value[idx], caption }
+}
+
+async function toggleImageVisibility(img) {
+  const nextVisible = img.is_visible === false
+
+  const { error } = await supabase
+      .from('profile_gallery_images')
+      .update({ is_visible: nextVisible })
+      .eq('id', img.id)
+
+  if (error) {
+    galleryError.value = error.message
+    return
+  }
+
+  const idx = galleryImages.value.findIndex(i => i.id === img.id)
+  if (idx !== -1) galleryImages.value[idx] = { ...galleryImages.value[idx], is_visible: nextVisible }
+  if (viewingImage.value?.id === img.id) viewingImage.value = { ...viewingImage.value, is_visible: nextVisible }
 }
 
 async function deleteImage(img) {
@@ -716,6 +769,21 @@ async function deleteImage(img) {
   object-fit: cover;
 }
 
+.public-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  background: rgba(76, 175, 80, 0.85);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
 .sheet-text {
   position: relative;
   z-index: 2;
@@ -756,6 +824,25 @@ async function deleteImage(img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.gallery-card.is-hidden img {
+  opacity: 0.45;
+}
+
+.hidden-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  background: rgba(224, 82, 82, 0.85);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
 }
 
 .create-card:disabled {
@@ -849,8 +936,15 @@ async function deleteImage(img) {
 .form-actions {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 0.5rem;
   margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.form-actions-right {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .cancel-btn.danger:hover {
