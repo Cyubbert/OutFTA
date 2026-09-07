@@ -40,6 +40,19 @@
     <input ref="imageInputEl" type="file" accept="image/*" class="hidden-input" @change="onImageChange" />
     <p v-if="imageError" class="error">{{ imageError }}</p>
 
+    <ImageCropper
+        v-if="croppingImageFile"
+        :file="croppingImageFile"
+        :viewport-width="330"
+        :viewport-height="210"
+        :output-width="660"
+        :output-height="420"
+        shape="rect"
+        title="Crop portrait"
+        @cropped="onImageCropped"
+        @cancel="croppingImageFile = null"
+    />
+
     <div class="row">
       <div>
         <label>HP current</label>
@@ -117,6 +130,7 @@
 import { ref, reactive } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/composables/useAuth'
+import ImageCropper from '@/components/ImageCropper.vue'
 
 const props = defineProps({
   editSheet: { type: Object, default: null }
@@ -191,6 +205,7 @@ const errorMsg = ref('')
 const imageInputEl = ref(null)
 const uploadingImage = ref(false)
 const imageError = ref('')
+const croppingImageFile = ref(null)
 
 function splitLines(value) {
   return value.split('\n').map(v => v.trim()).filter(Boolean)
@@ -200,20 +215,25 @@ function triggerImagePick() {
   imageInputEl.value?.click()
 }
 
-async function onImageChange(e) {
+function onImageChange(e) {
   const file = e.target.files?.[0]
+  e.target.value = ''
   if (!file) return
+  croppingImageFile.value = file
+}
 
+async function onImageCropped(blob) {
+  croppingImageFile.value = null
   uploadingImage.value = true
   imageError.value = ''
 
-  const ext = file.name.split('.').pop()
-  const path = `character-sheets/${user.value.id}/${Date.now()}.${ext}`
+  const path = `character-sheets/${user.value.id}/${Date.now()}.webp`
 
-  const { error: uploadError } = await supabase.storage.from('images').upload(path, file)
+  const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(path, blob, { contentType: 'image/webp' })
 
   uploadingImage.value = false
-  e.target.value = ''
 
   if (uploadError) {
     imageError.value = uploadError.message
