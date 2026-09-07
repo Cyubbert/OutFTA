@@ -45,6 +45,45 @@
         <button class="signout-button" @click="signOut">Sign out</button>
       </header>
 
+      <section class="customize-section">
+        <h3 class="collection-title">Customize Profile</h3>
+
+        <div class="customize-form">
+          <label class="customize-label" for="title-input">Title / Pronouns</label>
+          <input
+              id="title-input"
+              v-model="titleInput"
+              maxlength="60"
+              placeholder="e.g. she/her · Bard extraordinaire"
+              class="customize-input"
+          />
+
+          <label class="customize-label" for="bio-input">Bio</label>
+          <textarea
+              id="bio-input"
+              v-model="bioInput"
+              maxlength="500"
+              rows="3"
+              placeholder="Tell people about yourself…"
+              class="customize-textarea"
+          />
+
+          <label class="customize-label">Accent Color</label>
+          <div class="accent-row">
+            <input type="color" v-model="accentColorInput" class="accent-swatch-input" />
+            <span class="accent-hex">{{ accentColorInput }}</span>
+            <button v-if="accentColorInput !== DEFAULT_ACCENT" class="reset-accent-btn" @click="accentColorInput = DEFAULT_ACCENT">Reset</button>
+          </div>
+
+          <div class="customize-actions">
+            <button class="save-btn" :disabled="savingCustomization" @click="saveCustomization">
+              {{ savingCustomization ? 'Saving…' : 'Save changes' }}
+            </button>
+            <span v-if="customizationMsg" class="username-msg" :class="{ error: customizationError }">{{ customizationMsg }}</span>
+          </div>
+        </div>
+      </section>
+
       <h3 class="collection-title">Character Sheets</h3>
 
       <p v-if="sheetsLoading" class="page-loading">Loading…</p>
@@ -169,6 +208,14 @@ const savingUsername = ref(false)
 const usernameMsg = ref('')
 const usernameError = ref(false)
 
+const DEFAULT_ACCENT = '#90caf9'
+const titleInput = ref('')
+const bioInput = ref('')
+const accentColorInput = ref(DEFAULT_ACCENT)
+const savingCustomization = ref(false)
+const customizationMsg = ref('')
+const customizationError = ref(false)
+
 const avatarInputEl = ref(null)
 const uploadingAvatar = ref(false)
 const avatarError = ref('')
@@ -197,6 +244,9 @@ const avatarInitial = computed(() => (profile.value.username || user.value?.emai
 
 watch(profile, (p) => {
   usernameInput.value = p.username
+  titleInput.value = p.title || ''
+  bioInput.value = p.bio || ''
+  accentColorInput.value = p.accent_color || DEFAULT_ACCENT
 }, { immediate: true })
 
 watch(user, async (u) => {
@@ -256,6 +306,37 @@ async function saveUsername() {
 
   profile.value = { ...profile.value, username: usernameInput.value.trim() }
   editingUsername.value = false
+}
+
+async function saveCustomization() {
+  savingCustomization.value = true
+  customizationMsg.value = ''
+  customizationError.value = false
+
+  const { error } = await supabase
+      .from('profiles')
+      .update({
+        title: titleInput.value.trim() || null,
+        bio: bioInput.value.trim() || null,
+        accent_color: accentColorInput.value || null
+      })
+      .eq('id', user.value.id)
+
+  savingCustomization.value = false
+
+  if (error) {
+    customizationError.value = true
+    customizationMsg.value = error.message
+    return
+  }
+
+  profile.value = {
+    ...profile.value,
+    title: titleInput.value.trim(),
+    bio: bioInput.value.trim(),
+    accent_color: accentColorInput.value
+  }
+  customizationMsg.value = 'Saved.'
 }
 
 function triggerAvatarPick() {
@@ -716,6 +797,89 @@ async function deleteImage(img) {
 .signout-button:hover {
   border-color: #90caf9;
   color: #90caf9;
+}
+
+.customize-section {
+  margin-bottom: 2rem;
+}
+
+.customize-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 480px;
+}
+
+.customize-label {
+  font-size: 0.75rem;
+  color: #888;
+  letter-spacing: 0.04em;
+  margin-top: 0.5rem;
+}
+
+.customize-label:first-child {
+  margin-top: 0;
+}
+
+.customize-input,
+.customize-textarea {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #e0e0e0;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  outline: none;
+  resize: vertical;
+}
+
+.customize-input:focus,
+.customize-textarea:focus {
+  border-color: #90caf9;
+}
+
+.accent-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.accent-swatch-input {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: none;
+  cursor: pointer;
+}
+
+.accent-hex {
+  font-family: 'Iosevka Charon', monospace;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+.reset-accent-btn {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 0.75rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.reset-accent-btn:hover {
+  color: #90caf9;
+}
+
+.customize-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .create-card {

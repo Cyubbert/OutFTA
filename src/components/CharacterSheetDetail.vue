@@ -62,6 +62,13 @@
       </ul>
     </div>
 
+    <div class="sheet-section" v-if="sheet.feats?.length">
+      <h3>Feats</h3>
+      <ul>
+        <li v-for="(item, i) in sheet.feats" :key="i">{{ item }}</li>
+      </ul>
+    </div>
+
     <div class="sheet-section" v-if="sheet.backstory">
       <h3>Backstory</h3>
       <p

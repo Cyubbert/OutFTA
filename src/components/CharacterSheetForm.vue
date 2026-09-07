@@ -82,14 +82,22 @@
       </label>
     </div>
 
-    <label>Skill proficiencies (comma-separated)</label>
-    <input v-model="skillsInput" placeholder="Perception, Stealth, Persuasion" />
+    <label>Skill proficiencies</label>
+    <div class="skill-checks">
+      <label v-for="skill in SKILLS" :key="skill.name" class="skill-check">
+        <input type="checkbox" :value="skill.name" v-model="skills" />
+        {{ skill.name }} <span class="skill-ability">({{ skill.ability.toUpperCase() }})</span>
+      </label>
+    </div>
 
     <label>Equipment (one per line)</label>
     <textarea v-model="equipmentInput" rows="4"></textarea>
 
     <label>Features & traits (one per line)</label>
     <textarea v-model="featuresInput" rows="4"></textarea>
+
+    <label>Feats (one per line)</label>
+    <textarea v-model="featsInput" rows="3"></textarea>
 
     <label>Backstory</label>
     <textarea v-model="form.backstory" rows="6"></textarea>
@@ -119,6 +127,37 @@ const { user } = useAuth()
 
 const abilityKeys = ['str', 'dex', 'con', 'int', 'wis', 'cha']
 
+const SKILLS = [
+  { name: 'Acrobatics', ability: 'dex' },
+  { name: 'Animal Handling', ability: 'wis' },
+  { name: 'Arcana', ability: 'int' },
+  { name: 'Athletics', ability: 'str' },
+  { name: 'Deception', ability: 'cha' },
+  { name: 'History', ability: 'int' },
+  { name: 'Insight', ability: 'wis' },
+  { name: 'Intimidation', ability: 'cha' },
+  { name: 'Investigation', ability: 'int' },
+  { name: 'Medicine', ability: 'wis' },
+  { name: 'Nature', ability: 'int' },
+  { name: 'Perception', ability: 'wis' },
+  { name: 'Performance', ability: 'cha' },
+  { name: 'Persuasion', ability: 'cha' },
+  { name: 'Religion', ability: 'int' },
+  { name: 'Sleight of Hand', ability: 'dex' },
+  { name: 'Stealth', ability: 'dex' },
+  { name: 'Survival', ability: 'wis' }
+]
+
+// Older sheets stored freeform, sometimes lowercase, skill text (e.g.
+// "athletics" instead of "Athletics") -- match case-insensitively against
+// the canonical list so those still show as checked here.
+function normalizeSkills(raw) {
+  return (raw ?? []).map(s => {
+    const match = SKILLS.find(skill => skill.name.toLowerCase() === String(s).trim().toLowerCase())
+    return match ? match.name : s
+  })
+}
+
 const form = reactive({
   name: props.editSheet?.name ?? '',
   class: props.editSheet?.class ?? '',
@@ -142,9 +181,10 @@ const form = reactive({
 })
 
 const savingThrows = ref([...(props.editSheet?.saving_throws ?? [])])
-const skillsInput = ref((props.editSheet?.skills ?? []).join(', '))
+const skills = ref(normalizeSkills(props.editSheet?.skills))
 const equipmentInput = ref((props.editSheet?.equipment ?? []).join('\n'))
 const featuresInput = ref((props.editSheet?.features ?? []).join('\n'))
+const featsInput = ref((props.editSheet?.feats ?? []).join('\n'))
 const submitting = ref(false)
 const errorMsg = ref('')
 
@@ -154,10 +194,6 @@ const imageError = ref('')
 
 function splitLines(value) {
   return value.split('\n').map(v => v.trim()).filter(Boolean)
-}
-
-function splitCommas(value) {
-  return value.split(',').map(v => v.trim()).filter(Boolean)
 }
 
 function triggerImagePick() {
@@ -195,9 +231,10 @@ async function handleSubmit() {
   const payload = {
     ...form,
     saving_throws: savingThrows.value,
-    skills: splitCommas(skillsInput.value),
+    skills: skills.value,
     equipment: splitLines(equipmentInput.value),
-    features: splitLines(featuresInput.value)
+    features: splitLines(featuresInput.value),
+    feats: splitLines(featsInput.value)
   }
 
   if (props.editSheet) {
@@ -284,6 +321,22 @@ label {
   gap: 4px;
   font-size: 0.8rem;
   margin-top: 0;
+}
+.skill-checks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.4rem 0.75rem;
+}
+.skill-check {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  margin-top: 0;
+}
+.skill-ability {
+  color: #888;
+  font-size: 0.7rem;
 }
 .portrait-picker {
   position: relative;
