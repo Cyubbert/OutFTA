@@ -204,6 +204,19 @@
     />
 
     <ImageCropper
+        v-if="croppingGalleryFile"
+        :file="croppingGalleryFile"
+        :viewport-width="450"
+        :viewport-height="300"
+        :output-width="1200"
+        :output-height="800"
+        shape="rect"
+        title="Crop picture"
+        @cropped="onGalleryImageCropped"
+        @cancel="croppingGalleryFile = null"
+    />
+
+    <ImageCropper
         v-if="croppingBannerFile"
         :file="croppingBannerFile"
         :viewport-width="560"
@@ -263,6 +276,7 @@ const galleryImages = ref([])
 const galleryLoading = ref(true)
 const galleryImageInputEl = ref(null)
 const uploadingGalleryImage = ref(false)
+const croppingGalleryFile = ref(null)
 const galleryError = ref('')
 
 const viewingImage = ref(null)
@@ -514,22 +528,27 @@ function triggerGalleryImagePick() {
   galleryImageInputEl.value?.click()
 }
 
-async function onGalleryImageChange(e) {
+function onGalleryImageChange(e) {
   const file = e.target.files?.[0]
+  e.target.value = ''
   if (!file) return
+  croppingGalleryFile.value = file
+}
 
+async function onGalleryImageCropped(blob) {
+  croppingGalleryFile.value = null
   uploadingGalleryImage.value = true
   galleryError.value = ''
 
-  const ext = file.name.split('.').pop()
-  const path = `gallery/${user.value.id}/${Date.now()}.${ext}`
+  const path = `gallery/${user.value.id}/${Date.now()}.webp`
 
-  const { error: uploadError } = await supabase.storage.from('images').upload(path, file)
+  const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(path, blob, { contentType: 'image/webp' })
 
   if (uploadError) {
     galleryError.value = uploadError.message
     uploadingGalleryImage.value = false
-    e.target.value = ''
     return
   }
 
@@ -542,7 +561,6 @@ async function onGalleryImageChange(e) {
       .single()
 
   uploadingGalleryImage.value = false
-  e.target.value = ''
 
   if (dbError) {
     galleryError.value = dbError.message

@@ -19,6 +19,19 @@
     <input ref="imageInputEl" type="file" accept="image/*" class="hidden-input" @change="onImageChange" />
     <button v-if="form.image_url" type="button" class="cancel-btn small" @click="form.image_url = ''">Remove picture</button>
 
+    <ImageCropper
+        v-if="croppingFile"
+        :file="croppingFile"
+        :viewport-width="400"
+        :viewport-height="300"
+        :output-width="1200"
+        :output-height="900"
+        shape="rect"
+        title="Crop picture"
+        @cropped="onImageCropped"
+        @cancel="croppingFile = null"
+    />
+
     <div class="form-actions">
       <button type="submit" :disabled="submitting || uploadingImage">
         {{ submitting ? 'Saving…' : (editPost ? 'Update post' : 'Post') }}
@@ -34,6 +47,7 @@
 import { ref, reactive } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/composables/useAuth'
+import ImageCropper from '@/components/ImageCropper.vue'
 
 const props = defineProps({
   editPost: { type: Object, default: null }
@@ -51,6 +65,7 @@ const form = reactive({
 
 const imageInputEl = ref(null)
 const uploadingImage = ref(false)
+const croppingFile = ref(null)
 const submitting = ref(false)
 const errorMsg = ref('')
 
@@ -59,20 +74,25 @@ function triggerImagePick() {
   imageInputEl.value?.click()
 }
 
-async function onImageChange(e) {
+function onImageChange(e) {
   const file = e.target.files?.[0]
+  e.target.value = ''
   if (!file) return
+  croppingFile.value = file
+}
 
+async function onImageCropped(blob) {
+  croppingFile.value = null
   uploadingImage.value = true
   errorMsg.value = ''
 
-  const ext = file.name.split('.').pop()
-  const path = `community/${user.value.id}/${Date.now()}.${ext}`
+  const path = `community/${user.value.id}/${Date.now()}.webp`
 
-  const { error: uploadError } = await supabase.storage.from('images').upload(path, file)
+  const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(path, blob, { contentType: 'image/webp' })
 
   uploadingImage.value = false
-  e.target.value = ''
 
   if (uploadError) {
     errorMsg.value = uploadError.message
