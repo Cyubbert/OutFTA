@@ -189,6 +189,32 @@
         </div>
       </div>
     </div>
+
+    <ImageCropper
+        v-if="croppingAvatarFile"
+        :file="croppingAvatarFile"
+        :viewport-width="280"
+        :viewport-height="280"
+        :output-width="512"
+        :output-height="512"
+        shape="circle"
+        title="Crop avatar"
+        @cropped="onAvatarCropped"
+        @cancel="croppingAvatarFile = null"
+    />
+
+    <ImageCropper
+        v-if="croppingBannerFile"
+        :file="croppingBannerFile"
+        :viewport-width="560"
+        :viewport-height="160"
+        :output-width="1400"
+        :output-height="400"
+        shape="rect"
+        title="Crop banner"
+        @cropped="onBannerCropped"
+        @cancel="croppingBannerFile = null"
+    />
   </article>
 </template>
 
@@ -199,6 +225,7 @@ import { supabase } from '@/lib/supabase'
 import LoginForm from '@/components/LoginForm.vue'
 import CharacterSheetForm from '@/components/CharacterSheetForm.vue'
 import CharacterSheetDetail from '@/components/CharacterSheetDetail.vue'
+import ImageCropper from '@/components/ImageCropper.vue'
 
 const { user, loading, profile, signOut } = useAuth()
 
@@ -219,10 +246,12 @@ const customizationError = ref(false)
 const avatarInputEl = ref(null)
 const uploadingAvatar = ref(false)
 const avatarError = ref('')
+const croppingAvatarFile = ref(null)
 
 const bannerInputEl = ref(null)
 const uploadingBanner = ref(false)
 const bannerError = ref('')
+const croppingBannerFile = ref(null)
 
 const sheets = ref([])
 const sheetsLoading = ref(true)
@@ -343,22 +372,27 @@ function triggerAvatarPick() {
   avatarInputEl.value?.click()
 }
 
-async function onAvatarChange(e) {
+function onAvatarChange(e) {
   const file = e.target.files?.[0]
+  e.target.value = ''
   if (!file) return
+  croppingAvatarFile.value = file
+}
 
+async function onAvatarCropped(blob) {
+  croppingAvatarFile.value = null
   uploadingAvatar.value = true
   avatarError.value = ''
 
-  const ext = file.name.split('.').pop()
-  const path = `avatars/${user.value.id}/avatar.${ext}`
+  const path = `avatars/${user.value.id}/avatar.webp`
 
-  const { error: uploadError } = await supabase.storage.from('images').upload(path, file, { upsert: true })
+  const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(path, blob, { upsert: true, contentType: 'image/webp' })
 
   if (uploadError) {
     avatarError.value = uploadError.message
     uploadingAvatar.value = false
-    e.target.value = ''
     return
   }
 
@@ -368,7 +402,6 @@ async function onAvatarChange(e) {
   const { error: dbError } = await supabase.from('profiles').update({ avatar_url: url }).eq('id', user.value.id)
 
   uploadingAvatar.value = false
-  e.target.value = ''
 
   if (dbError) {
     avatarError.value = dbError.message
@@ -382,22 +415,27 @@ function triggerBannerPick() {
   bannerInputEl.value?.click()
 }
 
-async function onBannerChange(e) {
+function onBannerChange(e) {
   const file = e.target.files?.[0]
+  e.target.value = ''
   if (!file) return
+  croppingBannerFile.value = file
+}
 
+async function onBannerCropped(blob) {
+  croppingBannerFile.value = null
   uploadingBanner.value = true
   bannerError.value = ''
 
-  const ext = file.name.split('.').pop()
-  const path = `banners/${user.value.id}/banner.${ext}`
+  const path = `banners/${user.value.id}/banner.webp`
 
-  const { error: uploadError } = await supabase.storage.from('images').upload(path, file, { upsert: true })
+  const { error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(path, blob, { upsert: true, contentType: 'image/webp' })
 
   if (uploadError) {
     bannerError.value = uploadError.message
     uploadingBanner.value = false
-    e.target.value = ''
     return
   }
 
@@ -407,7 +445,6 @@ async function onBannerChange(e) {
   const { error: dbError } = await supabase.from('profiles').update({ banner_url: url }).eq('id', user.value.id)
 
   uploadingBanner.value = false
-  e.target.value = ''
 
   if (dbError) {
     bannerError.value = dbError.message
