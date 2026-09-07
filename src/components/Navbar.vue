@@ -46,14 +46,29 @@ watch(menuOpen, (open) => {
         <span class="logo-text">Out for the Ancients</span>
       </router-link>
 
-      <button
-          class="burger"
-          :class="{ open: menuOpen }"
-          @click="toggleMenu"
-          aria-label="Menu"
-      >
-        <span/><span/><span/>
-      </button>
+      <div class="navbar-actions">
+        <router-link
+            to="/people"
+            class="search-btn"
+            :class="{ active: isActive('/people') }"
+            aria-label="Find people"
+            @click="close"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </router-link>
+
+        <button
+            class="burger"
+            :class="{ open: menuOpen }"
+            @click="toggleMenu"
+            aria-label="Menu"
+        >
+          <span/><span/><span/>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -159,6 +174,32 @@ watch(menuOpen, (open) => {
 
 .navbar-logo:hover .logo-text {
   color: #fff;
+}
+
+/* ── Actions (search + burger) ── */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #bbb;
+  transition: color 0.2s;
+}
+
+.search-btn:hover {
+  color: #e0e0e0;
+}
+
+.search-btn.active {
+  color: #90caf9;
 }
 
 /* ── Burger ── */

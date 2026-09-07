@@ -23,6 +23,26 @@
         </div>
       </header>
 
+      <h3 class="collection-title">Character Sheets</h3>
+
+      <p v-if="sheetsLoading" class="page-loading">Loading…</p>
+      <p v-else-if="!sheets.length" class="page-loading">Nothing here yet.</p>
+      <div v-else class="cards-container">
+        <div
+            v-for="sheet in sheets"
+            :key="sheet.id"
+            class="card sheet-card"
+            @click="viewingSheet = sheet"
+        >
+          <img v-if="sheet.image" :src="sheet.image" :alt="sheet.name" />
+          <span v-if="sheet.is_visible === false" class="hidden-badge" title="Not visible to other users">Private</span>
+          <div class="sheet-text">
+            <div class="card-name">{{ sheet.name }}</div>
+            <div class="sheet-meta">Level {{ sheet.level ?? '?' }} {{ sheet.race }} {{ sheet.class }}</div>
+          </div>
+        </div>
+      </div>
+
       <h3 class="collection-title">Gallery</h3>
 
       <p v-if="galleryLoading" class="page-loading">Loading…</p>
@@ -32,15 +52,23 @@
             v-for="img in galleryImages"
             :key="img.id"
             class="card gallery-card"
+            :class="{ 'is-hidden': img.is_visible === false }"
             @click="viewingImage = img"
         >
           <img :src="img.image_url" :alt="img.caption || 'Gallery image'" />
+          <span v-if="img.is_visible === false" class="hidden-badge" title="Not visible to other users">Hidden</span>
           <div v-if="img.caption" class="sheet-text">
             <div class="card-name">{{ img.caption }}</div>
           </div>
         </div>
       </div>
     </template>
+
+    <div v-if="viewingSheet" class="modal-backdrop" @click.self="viewingSheet = null">
+      <div class="modal-panel">
+        <CharacterSheetDetail :sheet="viewingSheet" @close="viewingSheet = null" />
+      </div>
+    </div>
 
     <div v-if="viewingImage" class="modal-backdrop" @click.self="viewingImage = null">
       <div class="modal-panel gallery-viewer">
@@ -58,12 +86,16 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/lib/supabase'
+import CharacterSheetDetail from '@/components/CharacterSheetDetail.vue'
 
 const route = useRoute()
 const username = computed(() => route.params.username)
 
 const loading = ref(true)
 const profile = ref(null)
+const sheets = ref([])
+const sheetsLoading = ref(true)
+const viewingSheet = ref(null)
 const galleryImages = ref([])
 const galleryLoading = ref(true)
 const viewingImage = ref(null)
@@ -72,9 +104,12 @@ const avatarInitial = computed(() => (profile.value?.username || '?')[0]?.toUppe
 
 async function load() {
   loading.value = true
+  sheetsLoading.value = true
   galleryLoading.value = true
   profile.value = null
+  sheets.value = []
   galleryImages.value = []
+  viewingSheet.value = null
   viewingImage.value = null
 
   const { data, error } = await supabase
@@ -85,12 +120,22 @@ async function load() {
 
   if (error || !data) {
     loading.value = false
+    sheetsLoading.value = false
     galleryLoading.value = false
     return
   }
 
   profile.value = data
   loading.value = false
+
+  const { data: sheetData } = await supabase
+      .from('character_sheets')
+      .select('*')
+      .eq('user_id', data.id)
+      .order('created_at', { ascending: false })
+
+  sheets.value = sheetData || []
+  sheetsLoading.value = false
 
   const { data: gallery } = await supabase
       .from('profile_gallery_images')
@@ -167,6 +212,63 @@ watch(username, load, { immediate: true })
   font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
+}
+
+.sheet-card,
+.gallery-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.sheet-card img,
+.gallery-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sheet-text {
+  position: relative;
+  z-index: 2;
+  padding: 0.75rem 1rem 0.85rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 60%, transparent 100%);
+}
+
+.sheet-card .card-name,
+.gallery-card .card-name {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  right: auto;
+}
+
+.sheet-meta {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+}
+
+.gallery-card.is-hidden img {
+  opacity: 0.45;
+}
+
+.hidden-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  background: rgba(224, 82, 82, 0.85);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
 }
 
 .viewer-caption {
