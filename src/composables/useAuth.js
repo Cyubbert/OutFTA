@@ -5,6 +5,9 @@ const emptyProfile = () => ({
     username: '',
     avatar_url: '',
     banner_url: '',
+    title: '',
+    bio: '',
+    accent_color: '',
     can_view_moryquinau: false,
     can_post_community: false,
     can_post_moryquinau: false,
@@ -24,7 +27,7 @@ async function checkAdminStatus(userId) {
     }
     const { data, error } = await supabase
         .from('profiles')
-        .select('role, username, avatar_url, banner_url, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery')
+        .select('role, username, avatar_url, banner_url, title, bio, accent_color, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery')
         .eq('id', userId)
         .single()
 
@@ -33,6 +36,9 @@ async function checkAdminStatus(userId) {
         username: data?.username || '',
         avatar_url: data?.avatar_url || '',
         banner_url: data?.banner_url || '',
+        title: data?.title || '',
+        bio: data?.bio || '',
+        accent_color: data?.accent_color || '',
         can_view_moryquinau: data?.can_view_moryquinau || false,
         can_post_community: data?.can_post_community || false,
         can_post_moryquinau: data?.can_post_moryquinau || false,

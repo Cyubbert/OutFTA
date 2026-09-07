@@ -8,22 +8,25 @@
     </div>
 
     <template v-else>
-      <div class="banner-wrap">
+      <div class="banner-wrap" :style="{ borderColor: accentColor }">
         <img v-if="profile.banner_url" :src="profile.banner_url" class="banner-img" alt="Profile banner" />
       </div>
 
       <header class="profile-header">
-        <div class="avatar-wrap">
+        <div class="avatar-wrap" :style="{ borderColor: accentColor }">
           <img v-if="profile.avatar_url" :src="profile.avatar_url" class="avatar-img" alt="Profile picture" />
-          <div v-else class="avatar-placeholder">{{ avatarInitial }}</div>
+          <div v-else class="avatar-placeholder" :style="{ color: accentColor }">{{ avatarInitial }}</div>
         </div>
 
         <div class="profile-info">
           <span class="username-display">{{ profile.username }}</span>
+          <span v-if="profile.title" class="profile-title" :style="{ color: accentColor }">{{ profile.title }}</span>
         </div>
       </header>
 
-      <h3 class="collection-title">Character Sheets</h3>
+      <p v-if="profile.bio" class="profile-bio">{{ profile.bio }}</p>
+
+      <h3 class="collection-title" :style="{ color: accentColor }">Character Sheets</h3>
 
       <p v-if="sheetsLoading" class="page-loading">Loading…</p>
       <p v-else-if="!sheets.length" class="page-loading">Nothing here yet.</p>
@@ -43,7 +46,7 @@
         </div>
       </div>
 
-      <h3 class="collection-title">Gallery</h3>
+      <h3 class="collection-title" :style="{ color: accentColor }">Gallery</h3>
 
       <p v-if="galleryLoading" class="page-loading">Loading…</p>
       <p v-else-if="!galleryImages.length" class="page-loading">Nothing here yet.</p>
@@ -101,6 +104,7 @@ const galleryLoading = ref(true)
 const viewingImage = ref(null)
 
 const avatarInitial = computed(() => (profile.value?.username || '?')[0]?.toUpperCase())
+const accentColor = computed(() => profile.value?.accent_color || '#90caf9')
 
 async function load() {
   loading.value = true
@@ -114,7 +118,7 @@ async function load() {
 
   const { data, error } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, banner_url')
+      .select('id, username, avatar_url, banner_url, title, bio, accent_color')
       .ilike('username', username.value)
       .maybeSingle()
 
@@ -206,12 +210,29 @@ watch(username, load, { immediate: true })
 
 .profile-info {
   padding-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .username-display {
   font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
+}
+
+.profile-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+}
+
+.profile-bio {
+  color: #ccc;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  padding: 0 1rem;
+  margin: 0 0 1.5rem;
 }
 
 .sheet-card,
