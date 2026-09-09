@@ -9,6 +9,7 @@ const router = useRouter()
 const { user, isAdmin, profile } = useAuth()
 
 const CHARACTER_TAGS = ['waesstan', 'marvers', 'ray']
+const FILTER_TAGS = ['nsfw', 'waesstan', 'marvers', 'ray', 'other']
 
 const images = ref([])
 const galleryLoading = ref(true)
@@ -32,6 +33,10 @@ function canEdit(img) {
 
 function isCharacterTag(tag) {
   return !!tagProfiles.value[tag]
+}
+
+function tagLabel(tag) {
+  return tag === 'nsfw' ? 'NSFW' : tag.charAt(0).toUpperCase() + tag.slice(1)
 }
 
 function goToProfile(tag) {
@@ -146,7 +151,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
       <div class="gallery-tabs">
         <button class="gallery-tab" :class="{ active: filterTag === 'all' }" @click="filterTag = 'all'">All</button>
-        <button class="gallery-tab nsfw-tab" :class="{ active: filterTag === 'nsfw' }" @click="filterTag = 'nsfw'">NSFW</button>
+        <button
+            v-for="tag in FILTER_TAGS"
+            :key="tag"
+            class="gallery-tab"
+            :class="{ active: filterTag === tag, 'nsfw-tab': tag === 'nsfw' }"
+            @click="filterTag = tag"
+        >{{ tagLabel(tag) }}</button>
       </div>
 
       <div class="composer-row">
@@ -183,7 +194,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
     </div>
 
     <!-- Upload / edit modal -->
-    <div v-if="creating || editing" class="modal-backdrop" @click.self="closeModal">
+    <div v-if="creating || editing" class="modal-backdrop">
       <div class="modal-panel">
         <GalleryUploadForm :edit-post="editing" @saved="onSaved" @cancel="closeModal" />
       </div>
@@ -191,7 +202,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
     <!-- Lightbox -->
     <transition name="lb">
-      <div class="lightbox" v-if="lightbox" @click.self="closeLightbox">
+      <div class="lightbox" v-if="lightbox">
         <button class="lb-close" @click="closeLightbox">✕</button>
         <button class="lb-nav lb-prev" @click="prev" v-if="filtered.length > 1">‹</button>
         <button class="lb-nav lb-next" @click="next" v-if="filtered.length > 1">›</button>
@@ -257,6 +268,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 /* ── Filter tabs ── */
 .gallery-tabs {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
   margin-bottom: 1rem;

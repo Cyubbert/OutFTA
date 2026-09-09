@@ -1,5 +1,5 @@
 <template>
-  <div class="cropper-backdrop" @click.self="$emit('cancel')">
+  <div class="cropper-backdrop">
     <div class="cropper-panel">
       <h3 class="cropper-title">{{ title }}</h3>
       <p class="cropper-hint">Drag to reposition · scroll or use the slider to zoom</p>

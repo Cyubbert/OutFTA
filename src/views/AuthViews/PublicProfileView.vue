@@ -67,13 +67,13 @@
       </div>
     </template>
 
-    <div v-if="viewingSheet" class="modal-backdrop" @click.self="viewingSheet = null">
+    <div v-if="viewingSheet" class="modal-backdrop">
       <div class="modal-panel">
         <CharacterSheetDetail :sheet="viewingSheet" @close="viewingSheet = null" />
       </div>
     </div>
 
-    <div v-if="viewingImage" class="modal-backdrop" @click.self="viewingImage = null">
+    <div v-if="viewingImage" class="modal-backdrop">
       <div class="modal-panel gallery-viewer">
         <img :src="viewingImage.image_url" :alt="viewingImage.caption || 'Gallery image'" class="gallery-full-img" />
         <p v-if="viewingImage.caption" class="viewer-caption">{{ viewingImage.caption }}</p>
