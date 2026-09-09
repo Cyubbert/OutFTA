@@ -11,7 +11,8 @@ const emptyProfile = () => ({
     can_view_moryquinau: false,
     can_post_community: false,
     can_post_moryquinau: false,
-    can_post_gallery: false
+    can_post_gallery: false,
+    can_view_nsfw: false
 })
 
 const user = ref(null)
@@ -27,7 +28,7 @@ async function checkAdminStatus(userId) {
     }
     const { data, error } = await supabase
         .from('profiles')
-        .select('role, username, avatar_url, banner_url, title, bio, accent_color, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery')
+        .select('role, username, avatar_url, banner_url, title, bio, accent_color, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw')
         .eq('id', userId)
         .single()
 
@@ -42,7 +43,8 @@ async function checkAdminStatus(userId) {
         can_view_moryquinau: data?.can_view_moryquinau || false,
         can_post_community: data?.can_post_community || false,
         can_post_moryquinau: data?.can_post_moryquinau || false,
-        can_post_gallery: data?.can_post_gallery || false
+        can_post_gallery: data?.can_post_gallery || false,
+        can_view_nsfw: data?.can_view_nsfw || false
     }
 }
 
