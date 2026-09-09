@@ -267,7 +267,7 @@ async function deleteEntry(entry) {
       </div>
     </transition>
 
-    <div v-if="editing || creating" class="modal-backdrop" @click.self="closeModal">
+    <div v-if="editing || creating" class="modal-backdrop">
       <div class="modal-panel">
         <AdminEntryFrom :edit-entry="editing" @saved="onSaved" @cancel="closeModal" />
       </div>

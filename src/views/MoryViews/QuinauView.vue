@@ -152,7 +152,7 @@ async function deletePost(post) {
         </transition-group>
       </template>
 
-      <div v-if="creating || editing" class="modal-backdrop" @click.self="closeModal">
+      <div v-if="creating || editing" class="modal-backdrop">
         <div class="modal-panel">
           <QuinauPostForm :edit-post="editing" @saved="onSaved" @cancel="closeModal" />
         </div>

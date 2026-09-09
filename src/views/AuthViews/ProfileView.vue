@@ -154,19 +154,19 @@
       <p v-if="galleryError" class="error">{{ galleryError }}</p>
     </template>
 
-    <div v-if="creating || editing" class="modal-backdrop" @click.self="closeModal">
+    <div v-if="creating || editing" class="modal-backdrop">
       <div class="modal-panel">
         <CharacterSheetForm :edit-sheet="editing" @saved="onSaved" @cancel="closeModal" />
       </div>
     </div>
 
-    <div v-if="viewing" class="modal-backdrop" @click.self="closeModal">
+    <div v-if="viewing" class="modal-backdrop">
       <div class="modal-panel">
         <CharacterSheetDetail :sheet="viewing" @close="closeModal" />
       </div>
     </div>
 
-    <div v-if="viewingImage" class="modal-backdrop" @click.self="closeImageView">
+    <div v-if="viewingImage" class="modal-backdrop">
       <div class="modal-panel gallery-viewer">
         <img :src="viewingImage.image_url" :alt="viewingImage.caption || 'Gallery image'" class="gallery-full-img" />
 

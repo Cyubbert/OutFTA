@@ -32,7 +32,7 @@
       <button type="submit" :disabled="submitting">
         {{ submitting ? 'Saving…' : (editEntry ? 'Update entry' : 'Save entry') }}
       </button>
-      <button v-if="editEntry" type="button" class="cancel-btn" @click="$emit('cancel')">Cancel</button>
+      <button type="button" class="cancel-btn" @click="$emit('cancel')">Cancel</button>
     </div>
 
     <p v-if="successMsg" class="success">{{ successMsg }}</p>

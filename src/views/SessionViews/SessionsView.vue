@@ -112,7 +112,7 @@ async function deleteSession(s) {
       </section>
     </div>
 
-    <div v-if="editing || creating" class="modal-backdrop" @click.self="closeModal">
+    <div v-if="editing || creating" class="modal-backdrop">
       <div class="modal-panel">
         <SessionEntryForm :edit-session="editing" @saved="onSaved" @cancel="closeModal" />
       </div>

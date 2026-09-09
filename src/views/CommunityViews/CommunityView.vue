@@ -90,7 +90,7 @@ async function deletePost(post) {
       </template>
     </div>
 
-    <div v-if="creating || editing" class="modal-backdrop" @click.self="closeModal">
+    <div v-if="creating || editing" class="modal-backdrop">
       <div class="modal-panel">
         <CommunityPostForm :edit-post="editing" @saved="onSaved" @cancel="closeModal" />
       </div>
