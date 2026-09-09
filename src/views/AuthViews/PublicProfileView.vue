@@ -20,10 +20,10 @@
 
         <div class="profile-info">
           <span class="username-display">{{ profile.username }}</span>
-          <span v-if="profile.title" class="profile-title" :style="{ color: accentColor }">{{ profile.title }}</span>
         </div>
       </header>
 
+      <p v-if="profile.title" class="profile-title" :style="{ color: accentColor }">{{ profile.title }}</p>
       <p v-if="profile.bio" class="profile-bio">{{ profile.bio }}</p>
 
       <h3 class="collection-title" :style="{ color: accentColor }">Character Sheets</h3>
@@ -210,9 +210,6 @@ watch(username, load, { immediate: true })
 
 .profile-info {
   padding-bottom: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
 }
 
 .username-display {
@@ -224,6 +221,8 @@ watch(username, load, { immediate: true })
 .profile-title {
   font-size: 0.85rem;
   letter-spacing: 0.03em;
+  padding: 0 1rem;
+  margin: -1rem 0 1rem;
 }
 
 .profile-bio {
