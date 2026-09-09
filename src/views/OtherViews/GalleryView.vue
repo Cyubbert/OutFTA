@@ -9,19 +9,21 @@ const router = useRouter()
 const { user, isAdmin, profile } = useAuth()
 
 const CHARACTER_TAGS = ['waesstan', 'marvers', 'ray']
-const FILTER_TAGS = ['nsfw', 'waesstan', 'marvers', 'ray', 'other']
+const FILTER_TAGS = ['waesstan', 'marvers', 'ray', 'other']
 
 const images = ref([])
 const galleryLoading = ref(true)
 const galleryError = ref(null)
 
 const filterTag = ref('all')
+const showNsfw = ref(false)
 const lightbox = ref(null)
 const creating = ref(false)
 const editing = ref(null)
 const tagProfiles = ref({})
 
 const canPost = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_gallery))
+const canViewNsfw = computed(() => !!user.value && (isAdmin.value || profile.value.can_view_nsfw))
 
 const filtered = computed(() =>
     filterTag.value === 'all' ? images.value : images.value.filter(img => img.tags?.includes(filterTag.value))
@@ -33,6 +35,10 @@ function canEdit(img) {
 
 function isCharacterTag(tag) {
   return !!tagProfiles.value[tag]
+}
+
+function isNsfw(img) {
+  return !!img.tags?.includes('nsfw')
 }
 
 function tagLabel(tag) {
@@ -155,9 +161,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
             v-for="tag in FILTER_TAGS"
             :key="tag"
             class="gallery-tab"
-            :class="{ active: filterTag === tag, 'nsfw-tab': tag === 'nsfw' }"
+            :class="{ active: filterTag === tag }"
             @click="filterTag = tag"
         >{{ tagLabel(tag) }}</button>
+        <button
+            v-if="canViewNsfw"
+            class="gallery-tab nsfw-tab"
+            :class="{ active: showNsfw }"
+            @click="showNsfw = !showNsfw"
+        >{{ showNsfw ? 'Hide NSFW' : 'Show NSFW' }}</button>
       </div>
 
       <div class="composer-row">
@@ -176,8 +188,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
         <transition-group name="fade" tag="div" class="gallery-grid">
           <div v-for="img in filtered" :key="img.id" class="gallery-item" @click="openLightbox(img)">
-            <img :src="img.image_url" :alt="img.title || 'Gallery image'" class="gallery-img" />
-            <span v-if="img.tags?.includes('nsfw')" class="nsfw-badge">NSFW</span>
+            <img
+                :src="img.image_url"
+                :alt="img.title || 'Gallery image'"
+                class="gallery-img"
+                :class="{ 'nsfw-blur': isNsfw(img) && !showNsfw }"
+            />
+            <span v-if="isNsfw(img)" class="nsfw-badge">NSFW</span>
 
             <div v-if="canEdit(img)" class="admin-actions">
               <button class="admin-btn" title="Edit" @click.stop="startEdit(img)">✎</button>
@@ -402,6 +419,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   letter-spacing: 0.05em;
   padding: 2px 6px;
   border-radius: 4px;
+}
+
+.gallery-img.nsfw-blur {
+  filter: blur(22px);
+  transform: scale(1.15);
+}
+
+.gallery-item:hover .gallery-img.nsfw-blur {
+  transform: scale(1.2);
 }
 
 .admin-actions {
