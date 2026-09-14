@@ -398,8 +398,9 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 .gallery-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+  background: #0d0d0d;
   transition: transform 0.35s;
 }
 
