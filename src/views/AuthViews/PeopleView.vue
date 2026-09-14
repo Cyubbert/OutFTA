@@ -24,6 +24,7 @@
           :key="p.id"
           :to="`/profile/${p.username}`"
           class="card person-card"
+          :style="{ background: p.accent_color || '#1a1a1a' }"
       >
         <div class="person-avatar-wrap">
           <img v-if="p.avatar_url" :src="p.avatar_url" class="person-avatar" alt="" />
@@ -51,7 +52,7 @@ async function search() {
 
   let req = supabase
       .from('profiles')
-      .select('id, username, avatar_url')
+      .select('id, username, avatar_url, accent_color')
       .not('username', 'is', null)
       .order('username', { ascending: true })
       .limit(40)
