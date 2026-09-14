@@ -251,6 +251,11 @@ watch(username, load, { immediate: true })
   object-fit: cover;
 }
 
+.gallery-card img {
+  object-fit: contain;
+  background: #0d0d0d;
+}
+
 .sheet-text {
   position: relative;
   z-index: 2;
