@@ -293,7 +293,7 @@ async function handleSubmit() {
     </div>
 
     <div class="q-field">
-      <label>Marginalia (one per line)</label>
+      <label>Notable (one per line)</label>
       <textarea v-model="highlightsInput" rows="3" placeholder="Short notable lines, one per row…"></textarea>
     </div>
 
