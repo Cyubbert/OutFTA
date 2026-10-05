@@ -215,7 +215,7 @@ async function deleteEntry(entry) {
     <div class="cover" :style="headerStyle" role="img" aria-label="Torn, stained page with a red star" />
 
     <div v-if="showGate" class="gate">
-      <p class="gate-text">The grimoire remains sealed to the uninitiated.</p>
+      <p class="gate-text">The book remains sealed to the uninitiated.</p>
       <router-link v-if="!user" to="/login" class="gate-link">Sign in</router-link>
     </div>
 
@@ -233,7 +233,7 @@ async function deleteEntry(entry) {
         <article class="page" v-if="activeEntry">
           <button class="back-btn" @click="close">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
-            Quinlan's Grimoire
+            Quinlan's Book
           </button>
 
           <div class="page-session">Chapter {{ toRoman(activeEntry.session) }}</div>
@@ -292,7 +292,7 @@ async function deleteEntry(entry) {
       <!-- ───────── Index ───────── -->
       <transition name="fade">
         <section class="index" v-if="!activeEntry">
-          <h1 class="grimoire-title">𝔎𝔞𝔢𝔩𝔞𝔩 𝔩𝔩𝔢 𝔱𝔶𝔞𝔳 𝔦𝔯𝔢𝔩 𝔯𝔦𝔢𝔩𝔱𝔥𝔞𝔩</h1>
+          <h1 class="book-title">𝔎𝔞𝔢𝔩𝔞𝔩 𝔩𝔩𝔢 𝔱𝔶𝔞𝔳 𝔦𝔯𝔢𝔩 𝔯𝔦𝔢𝔩𝔱𝔥𝔞𝔩</h1>
 
           <div class="toolbar">
             <div class="toc-caption">Table of Contents</div>
@@ -482,7 +482,7 @@ button { font-family: inherit; }
 .gate-link:hover { background: var(--surface-hover); }
 
 /* ───────── Index header ───────── */
-.grimoire-title {
+.book-title {
   font-family: 'UnifrakturCook', serif;
   font-weight: 700;
   font-size: clamp(2.4rem, 4.2vw, 3.6rem);

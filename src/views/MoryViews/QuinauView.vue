@@ -114,13 +114,13 @@ async function deletePost(post) {
     <article v-else class="page">
       <header class="page-header">
         <div class="page-sigil">†</div>
-        <h1 class="page-title">MoryQuin Fanfiction text drops</h1>
+        <h1 class="page-title">MoryQuin AU Scripts</h1>
         <p class="page-subtitle">Only for the intended eye.</p>
         <div class="header-rule" />
       </header>
 
       <div class="composer-row" v-if="canWrite">
-        <button class="new-post-btn" @click="startCreate">+ Leave word</button>
+        <button class="new-post-btn" @click="startCreate">+ add page</button>
       </div>
 
       <div class="sort-row">
