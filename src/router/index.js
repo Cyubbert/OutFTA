@@ -188,4 +188,21 @@ const router = createRouter({
     ]
 });
 
+// After a deploy, a cached index can point at view chunks that no longer exist.
+// Reload once to fetch the fresh build instead of rendering an empty page.
+router.onError((error, to) => {
+    const chunkFailed = /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module/i.test(error?.message ?? "");
+    if (!chunkFailed) return;
+    try {
+        if (sessionStorage.getItem("chunk-reload")) return;
+        sessionStorage.setItem("chunk-reload", "1");
+    } catch {}
+    window.location.hash = to.fullPath;
+    window.location.reload();
+});
+
+router.afterEach(() => {
+    try { sessionStorage.removeItem("chunk-reload"); } catch {}
+});
+
 export default router;
