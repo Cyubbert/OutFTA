@@ -94,7 +94,7 @@ function toRoman(num) {
 }
 
 function folio(index) {
-  return String(7 + index * 4).padStart(2, '0')
+  return String(index + 1)
 }
 
 function splitParas(text) {
@@ -236,26 +236,15 @@ async function deleteEntry(entry) {
             Quinlan's Grimoire
           </button>
 
+          <div class="page-session">Chapter {{ toRoman(activeEntry.session) }}</div>
           <h1 class="page-title">{{ activeEntry.title }}</h1>
 
-          <dl class="props">
-            <div class="prop">
-              <dt>Session</dt>
-              <dd><span class="tag tag-gray">session {{ toRoman(activeEntry.session) }}</span></dd>
-            </div>
-            <div class="prop" v-if="activeEntry.date">
-              <dt>Date</dt>
-              <dd>{{ activeEntry.date }}</dd>
-            </div>
-            <div class="prop" v-if="activeEntry.location">
-              <dt>Location</dt>
-              <dd><span class="tag tag-green">{{ activeEntry.location }}</span></dd>
-            </div>
-            <div class="prop" v-if="activeEntry.mood">
-              <dt>Mood</dt>
-              <dd><span class="tag" :style="moodStyle(activeEntry.mood)">{{ activeEntry.mood }}</span></dd>
-            </div>
-          </dl>
+          <div class="page-meta">
+            <span v-if="activeEntry.date" class="meta-date">{{ activeEntry.date }}</span>
+            <span v-if="activeEntry.date && activeEntry.location" class="meta-sep">·</span>
+            <span v-if="activeEntry.location" class="meta-location">{{ activeEntry.location }}</span>
+            <span v-if="activeEntry.mood" class="tag" :style="moodStyle(activeEntry.mood)">{{ activeEntry.mood }}</span>
+          </div>
 
           <hr class="divider" />
 
@@ -286,7 +275,7 @@ async function deleteEntry(entry) {
           </div>
 
           <aside class="marginalia" v-if="activeEntry.highlights?.length">
-            <h2>Marginalia</h2>
+            <h2>Notable</h2>
             <ul>
               <li v-for="h in activeEntry.highlights" :key="h">{{ h }}</li>
             </ul>
@@ -328,8 +317,8 @@ async function deleteEntry(entry) {
           </div>
 
           <p v-if="entriesLoading" class="status">The pages are turning…</p>
-          <p v-else-if="entriesError" class="status">Couldn't load the grimoire. Refresh the page to try again.</p>
-          <p v-else-if="!entries.length" class="status">No chapters yet. Add the first entry to begin the grimoire.</p>
+          <p v-else-if="entriesError" class="status">Couldn't load the Book. Refresh the page to try again.</p>
+          <p v-else-if="!entries.length" class="status">No chapters yet. Add the first entry to begin the Book.</p>
           <p v-else-if="!visible.length" class="status">Nothing matches “{{ query }}”.</p>
 
           <template v-else>
@@ -725,32 +714,45 @@ button { font-family: inherit; }
 
 .back-btn:hover { background: var(--surface-hover); color: var(--text); }
 
+.page-session {
+  margin-top: 1.5rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--blood);
+}
+
 .page-title {
   font-family: 'UnifrakturCook', serif;
   font-weight: 700;
   font-size: clamp(2.2rem, 5vw, 3.2rem);
   line-height: 1.12;
   color: var(--text-strong);
-  margin: 1.5rem 0 1.5rem;
+  margin: 0.5rem 0 0.75rem;
 }
 
-.props { margin: 0; }
-
-.prop {
-  display: grid;
-  grid-template-columns: 140px 1fr;
+.page-meta {
+  display: flex;
   align-items: center;
-  min-height: 34px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1.25rem;
 }
 
-.prop dt {
-  color: var(--muted);
+.meta-date {
   font-size: 0.9rem;
+  color: var(--muted);
 }
 
-.prop dd {
-  margin: 0;
-  font-size: 0.95rem;
+.meta-sep {
+  color: var(--faint);
+  font-size: 0.8rem;
+}
+
+.meta-location {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-style: italic;
 }
 
 .page-img {
@@ -934,7 +936,6 @@ button { font-family: inherit; }
 /* ───────── Small screens ───────── */
 @media (max-width: 600px) {
   .search { width: 140px; }
-  .prop { grid-template-columns: 100px 1fr; }
   .toc-title { max-width: 70%; font-size: 0.95rem; }
 }
 </style>
