@@ -146,6 +146,11 @@ const router = createRouter({
             name: "mory-quinau",
             component: () => import("@/views/MoryViews/QuinauView.vue")
         },
+        {
+            path: "/quinlan",
+            name: "quinlan",
+            component: () => import("@/views/QuinlanViews/DiaryView.vue")
+        },
 
         // ── Auth ──
 

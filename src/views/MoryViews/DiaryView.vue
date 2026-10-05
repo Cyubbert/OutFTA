@@ -4,6 +4,7 @@ import {onMounted, onUnmounted} from 'vue'
 import { supabase } from '@/lib/supabase.js'
 import { useAuth } from '@/composables/useAuth'
 import AdminEntryFrom from '@/components/AdminEntryFrom.vue'
+import DiaryNav from '@/components/DiaryNav.vue'
 
 const { isAdmin } = useAuth()
 const editing = ref(null)
@@ -156,6 +157,7 @@ async function deleteEntry(entry) {
 
 <template>
   <div class="diary-root">
+    <DiaryNav active="mory" />
 
     <transition name="page-slide">
       <div class="diary-detail" v-if="activeEntry">

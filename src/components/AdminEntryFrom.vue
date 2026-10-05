@@ -45,7 +45,8 @@ import { ref, reactive } from 'vue'
 import { supabase } from '@/lib/supabase'
 
 const props = defineProps({
-  editEntry: { type: Object, default: null }
+  editEntry: { type: Object, default: null },
+  table: { type: String, default: 'diary_entries' }
 })
 const emit = defineEmits(['saved', 'cancel'])
 
@@ -90,7 +91,7 @@ async function handleSubmit() {
   }
 
   if (props.editEntry) {
-    const { error } = await supabase.from('diary_entries').update(payload).eq('id', props.editEntry.id)
+    const { error } = await supabase.from(props.table).update(payload).eq('id', props.editEntry.id)
 
     submitting.value = false
 
@@ -103,7 +104,7 @@ async function handleSubmit() {
     return
   }
 
-  const { data, error } = await supabase.from('diary_entries').insert(payload).select().single()
+  const { data, error } = await supabase.from(props.table).insert(payload).select().single()
 
   submitting.value = false
 
