@@ -879,6 +879,7 @@ button { font-family: inherit; }
 
 /* ───────── Small screens ───────── */
 @media (max-width: 600px) {
+  .cover { height: clamp(96px, 28vw, 150px); }
   .search { width: 140px; }
   .toc-title { max-width: 70%; font-size: 0.95rem; }
 }
