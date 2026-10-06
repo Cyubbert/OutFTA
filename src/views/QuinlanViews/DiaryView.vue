@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase.js'
 import { useAuth } from '@/composables/useAuth'
 import QuinlanEntryForm from '@/components/QuinlanEntryForm.vue'
 import DiaryNav from '@/components/DiaryNav.vue'
+import SongPlayer from '@/components/SongPlayer.vue'
 import headerImg from '@/assets/quinheader.png'
 
 const { user, isAdmin, profile } = useAuth()
@@ -136,7 +137,7 @@ async function loadEntries() {
   entriesLoading.value = true
   const { data, error } = await supabase
       .from('quinlan_diary_entries')
-      .select('id, session, title, date, location, images, body, highlights')
+      .select('id, session, title, date, location, images, body, highlights, song_url, song_title, song_artist, song_cover')
 
   if (error) entriesError.value = error
   else entries.value = data
@@ -220,6 +221,15 @@ async function deleteEntry(entry) {
               :alt="activeEntry.title"
               class="page-img"
               @click="lightboxImg = activeEntry.images[0]"
+          />
+
+          <SongPlayer
+              v-if="activeEntry.song_url"
+              :key="activeEntry.id"
+              :url="activeEntry.song_url"
+              :title="activeEntry.song_title"
+              :artist="activeEntry.song_artist"
+              :cover="activeEntry.song_cover"
           />
 
           <div class="page-body">
@@ -365,7 +375,7 @@ svg { flex-shrink: 0; }
 
 /* ───────── Cover ───────── */
 .cover {
-  height: clamp(190px, 24vw, 400px);
+  height: clamp(150px, 18vw, 300px);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center bottom;

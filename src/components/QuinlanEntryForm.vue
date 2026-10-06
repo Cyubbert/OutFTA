@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, computed, nextTick } from 'vue'
 import { supabase } from '@/lib/supabase'
+import { useSongForm, songFields } from '@/composables/useSongForm'
 
 const props = defineProps({
   editEntry: { type: Object, default: null }
@@ -12,7 +13,8 @@ const form = reactive({
   title: props.editEntry?.title ?? '',
   date: props.editEntry?.date ?? '',
   location: props.editEntry?.location ?? '',
-  body: props.editEntry?.body ?? ''
+  body: props.editEntry?.body ?? '',
+  ...songFields(props.editEntry)
 })
 
 const imageUrlInput = ref(props.editEntry?.images?.[0] ?? '')
@@ -118,6 +120,10 @@ const previewBlocks = computed(() => {
   return blocks
 })
 
+// ── song ──
+
+const { songLooking, songError, hasSong, fetchSong, onSongUrlChange, clearSong, songPayload } = useSongForm(form)
+
 // ── submit ──
 
 async function handleSubmit() {
@@ -138,7 +144,8 @@ async function handleSubmit() {
     location: form.location,
     body: form.body,
     images,
-    highlights
+    highlights,
+    ...songPayload()
   }
 
   if (props.editEntry) {
@@ -171,6 +178,7 @@ async function handleSubmit() {
   form.date = ''
   form.location = ''
   form.body = ''
+  clearSong()
   imageUrlInput.value = ''
   highlightsInput.value = ''
 }
@@ -213,6 +221,45 @@ async function handleSubmit() {
     <div class="q-field">
       <label>Image URL</label>
       <input v-model="imageUrlInput" placeholder="https://…" />
+    </div>
+
+    <div class="q-field">
+      <label>Song (YouTube link)</label>
+      <div class="q-song-row">
+        <input
+            v-model="form.song_url"
+            placeholder="https://www.youtube.com/watch?v=…"
+            @change="onSongUrlChange"
+        />
+        <button type="button" class="q-tool-btn q-song-btn" :disabled="!hasSong || songLooking" @click="fetchSong">
+          {{ songLooking ? 'Looking up…' : 'Look up' }}
+        </button>
+        <button v-if="hasSong" type="button" class="q-tool-btn q-song-btn" @click="clearSong">Remove</button>
+      </div>
+      <p v-if="songError" class="q-error">{{ songError }}</p>
+    </div>
+
+    <div v-if="hasSong" class="q-song-details">
+      <div class="q-song-cover">
+        <img v-if="form.song_cover" :src="form.song_cover" alt="" />
+        <span v-else aria-hidden="true">♪</span>
+      </div>
+      <div class="q-song-fields">
+        <div class="q-grid">
+          <div class="q-field">
+            <label>Song title</label>
+            <input v-model="form.song_title" placeholder="Track name" />
+          </div>
+          <div class="q-field">
+            <label>Artist</label>
+            <input v-model="form.song_artist" placeholder="Artist" />
+          </div>
+        </div>
+        <div class="q-field">
+          <label>Album cover URL</label>
+          <input v-model="form.song_cover" placeholder="https://…" />
+        </div>
+      </div>
     </div>
 
     <div class="q-field q-body-field">
@@ -593,6 +640,63 @@ async function handleSubmit() {
   color: #D1CABD;
 }
 
+.q-song-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.q-song-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.q-song-btn {
+  flex-shrink: 0;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.88rem;
+  padding: 0 0.9rem;
+}
+
+.q-song-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+
+.q-song-details {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+}
+
+.q-song-cover {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid rgba(177, 122, 42, 0.3);
+  background: rgba(23, 12, 15, 0.6);
+  display: grid;
+  place-items: center;
+  color: #6b625a;
+  font-size: 1.6rem;
+}
+
+.q-song-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.q-song-fields {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
 .q-success {
   color: #7fae8a;
   font-size: 0.85rem;
@@ -608,6 +712,10 @@ async function handleSubmit() {
 @media (max-width: 540px) {
   .q-grid {
     grid-template-columns: 1fr;
+  }
+
+  .q-song-details {
+    flex-direction: column;
   }
 }
 </style>

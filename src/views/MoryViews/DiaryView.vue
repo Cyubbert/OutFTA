@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabase.js'
 import { useAuth } from '@/composables/useAuth'
 import AdminEntryFrom from '@/components/AdminEntryFrom.vue'
 import DiaryNav from '@/components/DiaryNav.vue'
+import SongPlayer from '@/components/SongPlayer.vue'
 
 const { isAdmin } = useAuth()
 const editing = ref(null)
@@ -112,7 +113,7 @@ function moodColor(mood) {
 onMounted(async () => {
   const { data, error } = await supabase
       .from('diary_entries')
-      .select('id, session, title, date, location, mood, images, body, highlights')
+      .select('id, session, title, date, location, mood, images, body, highlights, song_url, song_title, song_artist, song_cover')
 
   if (error) entriesError.value = error
   else entries.value = data
@@ -186,6 +187,16 @@ async function deleteEntry(entry) {
               @click="lightboxImg = activeEntry.images[0]"
           />
         </div>
+
+        <SongPlayer
+            v-if="activeEntry.song_url"
+            :key="activeEntry.id"
+            class="mory-song"
+            :url="activeEntry.song_url"
+            :title="activeEntry.song_title"
+            :artist="activeEntry.song_artist"
+            :cover="activeEntry.song_cover"
+        />
 
         <div class="detail-body">
           <template v-for="(block, i) in paragraphs" :key="i">
@@ -871,17 +882,26 @@ async function deleteEntry(entry) {
 }
 
 .modal-panel {
-  background: #181818;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: #f5f0e8;
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  border-radius: 6px;
+  padding: 2rem 2rem 1.75rem;
   width: 100%;
-  max-width: 540px;
-  color: #e0e0e0;
-  font-family: 'Jost', ui-sans-serif, system-ui, sans-serif;
+  max-width: 620px;
+  color: #1a1008;
+  box-shadow: 0 24px 60px rgba(10, 5, 0, 0.45);
 }
 
-.modal-panel :deep(h3) {
-  color: #fff;
+/* Song player in the parchment palette */
+.mory-song {
+  --surface: #f0e8d8;
+  --surface-hover: #e8dcc8;
+  --border: rgba(192, 57, 43, 0.18);
+  --bg: #f5f0e8;
+  --text: #1a1008;
+  --text-strong: #1a1008;
+  --muted: #9a8878;
+  --blood: #c0392b;
+  --track: #ddd0bc;
 }
 </style>
