@@ -2,6 +2,7 @@
 import { ref, reactive, computed, nextTick } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useSongForm, songFields } from '@/composables/useSongForm'
+import scarabImg from '@/assets/scarab.webp'
 
 const props = defineProps({
   editEntry: { type: Object, default: null }
@@ -187,48 +188,47 @@ async function handleSubmit() {
 <template>
   <form class="q-form" @submit.prevent="handleSubmit">
     <header class="q-form-header">
-      <svg viewBox="0 0 64 48" class="q-scarab" aria-hidden="true">
-        <ellipse cx="32" cy="26" rx="18" ry="14" />
-        <circle cx="32" cy="10" r="5" />
-        <path d="M32 12 L32 40" stroke="#B17A2A" stroke-width="1.5" fill="none" opacity="0.6" />
-        <path d="M20 14 Q10 10 6 18" stroke="#B17A2A" stroke-width="1.5" fill="none" />
-        <path d="M44 14 Q54 10 58 18" stroke="#B17A2A" stroke-width="1.5" fill="none" />
-      </svg>
+      <img :src="scarabImg" class="q-scarab" alt="" />
       <h3>{{ editEntry ? 'Amend the chapter' : 'Inscribe a new chapter' }}</h3>
     </header>
 
-    <div class="q-grid">
-      <div class="q-field">
-        <label>Session #</label>
-        <input v-model.number="form.session" type="number" min="1" required />
+    <fieldset class="q-section">
+      <legend>Chapter</legend>
+      <div class="q-grid">
+        <div class="q-field">
+          <label for="qf-session">Session #</label>
+          <input id="qf-session" v-model.number="form.session" type="number" min="1" required />
+        </div>
+        <div class="q-field">
+          <label for="qf-date">Date</label>
+          <input id="qf-date" v-model="form.date" type="date" required />
+        </div>
       </div>
+
       <div class="q-field">
-        <label>Date</label>
-        <input v-model="form.date" type="date" required />
+        <label for="qf-title">Title</label>
+        <input id="qf-title" v-model="form.title" required placeholder="The name of this chapter…" />
       </div>
-    </div>
 
-    <div class="q-field">
-      <label>Title</label>
-      <input v-model="form.title" required placeholder="The name of this chapter…" />
-    </div>
+      <div class="q-grid">
+        <div class="q-field">
+          <label for="qf-location">Location</label>
+          <input id="qf-location" v-model="form.location" required placeholder="Where it happened…" />
+        </div>
+        <div class="q-field">
+          <label for="qf-image">Image URL</label>
+          <input id="qf-image" v-model="imageUrlInput" placeholder="https://…" />
+        </div>
+      </div>
+    </fieldset>
 
-    <div class="q-field">
-      <label>Location</label>
-      <input v-model="form.location" required placeholder="Where it happened…" />
-    </div>
-
-    <div class="q-field">
-      <label>Image URL</label>
-      <input v-model="imageUrlInput" placeholder="https://…" />
-    </div>
-
-    <div class="q-field">
-      <label>Song (YouTube link)</label>
+    <fieldset class="q-section">
+      <legend>Song</legend>
       <div class="q-song-row">
         <input
             v-model="form.song_url"
-            placeholder="https://www.youtube.com/watch?v=…"
+            aria-label="YouTube link"
+            placeholder="Paste a YouTube link…"
             @change="onSongUrlChange"
         />
         <button type="button" class="q-tool-btn q-song-btn" :disabled="!hasSong || songLooking" @click="fetchSong">
@@ -237,103 +237,107 @@ async function handleSubmit() {
         <button v-if="hasSong" type="button" class="q-tool-btn q-song-btn" @click="clearSong">Remove</button>
       </div>
       <p v-if="songError" class="q-error">{{ songError }}</p>
-    </div>
 
-    <div v-if="hasSong" class="q-song-details">
-      <div class="q-song-cover">
-        <img v-if="form.song_cover" :src="form.song_cover" alt="" />
-        <span v-else aria-hidden="true">♪</span>
-      </div>
-      <div class="q-song-fields">
-        <div class="q-grid">
-          <div class="q-field">
-            <label>Song title</label>
-            <input v-model="form.song_title" placeholder="Track name" />
+      <div v-if="hasSong" class="q-song-details">
+        <div class="q-song-cover">
+          <img v-if="form.song_cover" :src="form.song_cover" alt="" />
+          <span v-else aria-hidden="true">♪</span>
+        </div>
+        <div class="q-song-fields">
+          <div class="q-grid">
+            <div class="q-field">
+              <label for="qf-song-title">Song title</label>
+              <input id="qf-song-title" v-model="form.song_title" placeholder="Track name" />
+            </div>
+            <div class="q-field">
+              <label for="qf-song-artist">Artist</label>
+              <input id="qf-song-artist" v-model="form.song_artist" placeholder="Artist" />
+            </div>
           </div>
           <div class="q-field">
-            <label>Artist</label>
-            <input v-model="form.song_artist" placeholder="Artist" />
+            <label for="qf-song-cover">Album cover URL</label>
+            <input id="qf-song-cover" v-model="form.song_cover" placeholder="https://…" />
           </div>
         </div>
-        <div class="q-field">
-          <label>Album cover URL</label>
-          <input v-model="form.song_cover" placeholder="https://…" />
-        </div>
       </div>
-    </div>
+    </fieldset>
 
-    <div class="q-field q-body-field">
-      <label>The chapter</label>
+    <fieldset class="q-section">
+      <legend>Writing</legend>
 
-      <div class="q-toolbar">
-        <div class="q-tool-group">
-          <button
-              v-for="f in fonts"
-              :key="f.label"
-              type="button"
-              class="q-tool-btn q-font-btn"
-              :style="{ fontFamily: f.family }"
-              :title="`Apply ${f.label} to the selected text`"
-              @mousedown.prevent="applyFont(f.family)"
-          >{{ f.label }}</button>
-        </div>
-
-        <div class="q-tool-group">
-          <button
-              v-for="c in colors"
-              :key="c.hex"
-              type="button"
-              class="q-tool-btn q-color-btn"
-              :style="{ backgroundColor: c.hex }"
-              :title="`Color selected text ${c.label}`"
-              @mousedown.prevent="applyColor(c.hex)"
-          />
-          <input
-              type="color"
-              class="q-color-custom"
-              title="Custom color"
-              @mousedown.prevent
-              @input="applyColor($event.target.value)"
-          />
-        </div>
-
-        <div class="q-tool-group">
-          <button type="button" class="q-tool-btn q-style-btn" title="Bold" @mousedown.prevent="applyBold">B</button>
-          <button type="button" class="q-tool-btn q-style-btn q-italic" title="Cursive / italic" @mousedown.prevent="applyItalic">I</button>
-          <button type="button" class="q-tool-btn q-style-btn q-strike" title="Strike through" @mousedown.prevent="applyStrike">S</button>
-        </div>
-      </div>
-
-      <p class="q-toolbar-hint" :class="{ visible: !!toolbarHint }">{{ toolbarHint || 'Select text in the chapter, then press a style above.' }}</p>
-
-      <textarea
-          ref="bodyEl"
-          v-model="form.body"
-          rows="10"
-          required
-          placeholder="Begin the chapter…"
-      ></textarea>
-
-      <p class="q-hint">Separate paragraphs with a blank line. Wrap sensitive text in <code>[tw:label]…[/tw]</code> to hide it behind a warning.</p>
-    </div>
-
-    <div class="q-field" v-if="form.body">
-      <label>Preview</label>
-      <div class="q-preview">
-        <template v-for="(block, i) in previewBlocks" :key="i">
-          <div v-if="block.sensitive" class="q-preview-tw">
-            <div class="q-preview-tw-label">⚠ trigger warning<span v-if="block.label"> — {{ block.label }}</span></div>
-            <p v-for="(p, j) in block.paragraphs" :key="j" v-html="p"></p>
+      <div class="q-editor">
+        <div class="q-toolbar">
+          <div class="q-tool-group">
+            <button
+                v-for="f in fonts"
+                :key="f.label"
+                type="button"
+                class="q-tool-btn q-font-btn"
+                :style="{ fontFamily: f.family }"
+                :title="`Apply ${f.label} to the selected text`"
+                @mousedown.prevent="applyFont(f.family)"
+            >{{ f.label }}</button>
           </div>
-          <p v-else class="q-preview-para" v-html="block.text"></p>
-        </template>
-      </div>
-    </div>
 
-    <div class="q-field">
-      <label>Notable (one per line)</label>
-      <textarea v-model="highlightsInput" rows="3" placeholder="Short notable lines, one per row…"></textarea>
-    </div>
+          <div class="q-tool-group">
+            <button
+                v-for="c in colors"
+                :key="c.hex"
+                type="button"
+                class="q-tool-btn q-color-btn"
+                :style="{ backgroundColor: c.hex }"
+                :title="`Color selected text ${c.label}`"
+                @mousedown.prevent="applyColor(c.hex)"
+            />
+            <input
+                type="color"
+                class="q-color-custom"
+                title="Custom color"
+                @mousedown.prevent
+                @input="applyColor($event.target.value)"
+            />
+          </div>
+
+          <div class="q-tool-group">
+            <button type="button" class="q-tool-btn q-style-btn" title="Bold" @mousedown.prevent="applyBold">B</button>
+            <button type="button" class="q-tool-btn q-style-btn q-italic" title="Cursive / italic" @mousedown.prevent="applyItalic">I</button>
+            <button type="button" class="q-tool-btn q-style-btn q-strike" title="Strike through" @mousedown.prevent="applyStrike">S</button>
+          </div>
+        </div>
+
+        <textarea
+            ref="bodyEl"
+            v-model="form.body"
+            rows="10"
+            required
+            aria-label="Chapter text"
+            placeholder="Begin the chapter…"
+        ></textarea>
+      </div>
+
+      <div class="q-hints">
+        <p class="q-hint" :class="{ 'q-hint-flash': !!toolbarHint }">{{ toolbarHint || 'Select text in the chapter, then press a style above.' }}</p>
+        <p class="q-hint">Separate paragraphs with a blank line. Wrap sensitive text in <code>[tw:label]…[/tw]</code> to hide it behind a warning.</p>
+      </div>
+
+      <div class="q-field" v-if="form.body">
+        <label>Preview</label>
+        <div class="q-preview">
+          <template v-for="(block, i) in previewBlocks" :key="i">
+            <div v-if="block.sensitive" class="q-preview-tw">
+              <div class="q-preview-tw-label">⚠ trigger warning<span v-if="block.label"> — {{ block.label }}</span></div>
+              <p v-for="(p, j) in block.paragraphs" :key="j" v-html="p"></p>
+            </div>
+            <p v-else class="q-preview-para" v-html="block.text"></p>
+          </template>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="q-section">
+      <legend>Notable</legend>
+      <textarea v-model="highlightsInput" rows="3" aria-label="Notable lines" placeholder="Short notable lines, one per row…"></textarea>
+    </fieldset>
 
     <div class="q-actions">
       <button type="submit" class="q-save" :disabled="submitting">
@@ -348,15 +352,15 @@ async function handleSubmit() {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Pirata+One&family=IM+Fell+English:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=IM+Fell+English:ital@0;1&display=swap');
 
 .q-form {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
   max-width: 100%;
-  font-family: 'EB Garamond', serif;
-  color: #D1CABD;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  color: #E3E2DF;
 }
 
 .q-form-header {
@@ -364,24 +368,63 @@ async function handleSubmit() {
   align-items: center;
   gap: 0.7rem;
   padding-bottom: 0.9rem;
-  border-bottom: 1px solid rgba(177, 122, 42, 0.3);
+  border-bottom: 1px solid #2F2F2F;
 }
 
 .q-scarab {
-  width: 30px;
-  height: 22px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
-  color: #454D3D;
-  fill: currentColor;
+  object-fit: contain;
 }
 
 .q-form-header h3 {
-  font-family: 'Pirata One', serif;
-  font-weight: 400;
-  font-size: 1.6rem;
+  font-family: 'UnifrakturCook', serif;
+  font-weight: 700;
+  font-size: 1.7rem;
   margin: 0;
-  color: #D1CABD;
+  color: #E3E2DF;
   letter-spacing: 0.03em;
+}
+
+.q-section {
+  margin: 0;
+  padding: 1rem 1.1rem 1.15rem;
+  border: 1px solid #2F2F2F;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.q-section > legend {
+  padding: 0 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #FFFFFF;
+}
+
+.q-section > textarea {
+  background: #191919;
+  border: 1px solid #2F2F2F;
+  border-radius: 3px;
+  color: #E3E2DF;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  padding: 0.55rem 0.7rem;
+  outline: none;
+  resize: vertical;
+}
+
+.q-section > textarea::placeholder { color: #5A5A58; }
+
+.q-section > textarea:focus {
+  border-color: #8A1424;
+  box-shadow: 0 0 0 3px rgba(138, 20, 36, 0.25);
 }
 
 .q-grid {
@@ -400,16 +443,16 @@ async function handleSubmit() {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: #B17A2A;
+  color: #9B9A97;
 }
 
 .q-field input,
 .q-field textarea {
-  background: rgba(23, 12, 15, 0.6);
-  border: 1px solid rgba(177, 122, 42, 0.3);
+  background: #191919;
+  border: 1px solid #2F2F2F;
   border-radius: 3px;
-  color: #D1CABD;
-  font-family: 'IM Fell English', 'EB Garamond', serif;
+  color: #E3E2DF;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
   padding: 0.55rem 0.7rem;
   outline: none;
@@ -418,22 +461,45 @@ async function handleSubmit() {
 
 .q-field input::placeholder,
 .q-field textarea::placeholder {
-  color: #6b625a;
+  color: #5A5A58;
 }
 
 .q-field input:focus,
 .q-field textarea:focus {
-  border-color: #B17A2A;
-  box-shadow: 0 0 0 3px rgba(177, 122, 42, 0.15);
+  border-color: #8A1424;
+  box-shadow: 0 0 0 3px rgba(138, 20, 36, 0.25);
 }
 
 .q-field input[type='date'] {
   color-scheme: dark;
 }
 
-.q-body-field textarea {
+.q-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.q-editor textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #191919;
+  border: 1px solid #2F2F2F;
+  border-radius: 0 0 3px 3px;
+  color: #E3E2DF;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  padding: 0.7rem 0.8rem;
   line-height: 1.7;
   resize: vertical;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.q-editor textarea::placeholder { color: #5A5A58; }
+
+.q-editor textarea:focus {
+  border-color: #8A1424;
+  box-shadow: 0 0 0 3px rgba(138, 20, 36, 0.25);
 }
 
 .q-toolbar {
@@ -442,8 +508,8 @@ async function handleSubmit() {
   align-items: center;
   gap: 0.9rem;
   padding: 0.6rem 0.7rem;
-  background: rgba(69, 77, 61, 0.15);
-  border: 1px solid rgba(177, 122, 42, 0.25);
+  background: #1C1C1C;
+  border: 1px solid #2F2F2F;
   border-radius: 3px 3px 0 0;
   border-bottom: none;
 }
@@ -453,7 +519,7 @@ async function handleSubmit() {
   align-items: center;
   gap: 0.4rem;
   padding-right: 0.9rem;
-  border-right: 1px solid rgba(177, 122, 42, 0.2);
+  border-right: 1px solid #2F2F2F;
 }
 
 .q-tool-group:last-child {
@@ -462,17 +528,17 @@ async function handleSubmit() {
 }
 
 .q-tool-btn {
-  background: rgba(23, 12, 15, 0.6);
-  border: 1px solid rgba(177, 122, 42, 0.3);
+  background: #191919;
+  border: 1px solid #2F2F2F;
   border-radius: 3px;
-  color: #D1CABD;
+  color: #E3E2DF;
   cursor: pointer;
   transition: border-color 0.15s, color 0.15s, transform 0.1s;
 }
 
 .q-tool-btn:hover {
-  border-color: #B17A2A;
-  color: #B17A2A;
+  border-color: #8A1424;
+  color: #FFFFFF;
   transform: translateY(-1px);
 }
 
@@ -492,7 +558,7 @@ async function handleSubmit() {
   width: 22px;
   height: 22px;
   padding: 0;
-  border: 1px solid rgba(177, 122, 42, 0.3);
+  border: 1px solid #2F2F2F;
   border-radius: 50%;
   background: none;
   cursor: pointer;
@@ -502,7 +568,7 @@ async function handleSubmit() {
 .q-style-btn {
   width: 28px;
   height: 28px;
-  font-family: 'EB Garamond', serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   font-size: 0.95rem;
 }
@@ -516,43 +582,35 @@ async function handleSubmit() {
   text-decoration: line-through;
 }
 
-.q-toolbar-hint {
-  margin: 0;
-  padding: 0.35rem 0.1rem;
-  font-size: 0.74rem;
-  font-style: italic;
-  color: #6b625a;
-  min-height: 1.1em;
-  transition: color 0.2s;
-}
-
-.q-toolbar-hint.visible {
-  color: #B17A2A;
-}
-
-.q-body-field textarea {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  margin-top: -1.05rem;
+.q-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-top: -0.35rem;
 }
 
 .q-hint {
-  font-size: 0.75rem;
-  color: #8a7e72;
-  margin: 0.1rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #9B9A97;
+  margin: 0;
+  transition: color 0.2s;
+}
+
+.q-hint-flash {
+  color: #E06C7A;
 }
 
 .q-hint code {
-  background: rgba(177, 122, 42, 0.12);
-  color: #D1CABD;
+  background: #2A2A2A;
+  color: #E3E2DF;
   padding: 1px 5px;
   border-radius: 3px;
 }
 
 .q-preview {
-  background: #2F171E;
-  background-image: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(125, 0, 16, 0.12), transparent 60%);
-  border: 1px solid rgba(177, 122, 42, 0.25);
+  background: #191919;
+  border: 1px solid #2F2F2F;
   border-radius: 3px;
   padding: 1.2rem 1.3rem;
   max-height: 260px;
@@ -560,10 +618,10 @@ async function handleSubmit() {
 }
 
 .q-preview-para {
-  font-family: 'IM Fell English', 'EB Garamond', serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   font-size: 1.02rem;
   line-height: 1.8;
-  color: #D1CABD;
+  color: #E3E2DF;
   margin: 0 0 0.9rem;
 }
 
@@ -572,8 +630,9 @@ async function handleSubmit() {
 }
 
 .q-preview-tw {
-  border: 1px dashed rgba(125, 0, 16, 0.5);
-  background: rgba(125, 0, 16, 0.08);
+  border: 0;
+  border-left: 3px solid #8A1424;
+  background: #2A1A1C;
   border-radius: 3px;
   padding: 0.7rem 0.9rem;
   margin-bottom: 0.9rem;
@@ -583,13 +642,13 @@ async function handleSubmit() {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #e0556a;
+  color: #E06C7A;
   margin-bottom: 0.4rem;
 }
 
 .q-preview-tw p {
-  font-family: 'IM Fell English', 'EB Garamond', serif;
-  color: #D1CABD;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  color: #E3E2DF;
   margin: 0 0 0.5rem;
 }
 
@@ -605,7 +664,7 @@ async function handleSubmit() {
 
 .q-save,
 .q-cancel {
-  font-family: 'EB Garamond', serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   font-size: 0.88rem;
   letter-spacing: 0.05em;
   padding: 0.6rem 1.3rem;
@@ -615,13 +674,14 @@ async function handleSubmit() {
 }
 
 .q-save {
-  background: linear-gradient(180deg, rgba(177, 122, 42, 0.25), rgba(177, 122, 42, 0.12));
-  border: 1px solid #B17A2A;
-  color: #f0e6d2;
+  background: #8A1424;
+  border: 1px solid #8A1424;
+  color: #FFFFFF;
 }
 
 .q-save:hover:not(:disabled) {
-  background: rgba(177, 122, 42, 0.35);
+  background: #A11A2D;
+  border-color: #A11A2D;
 }
 
 .q-save:disabled {
@@ -631,13 +691,13 @@ async function handleSubmit() {
 
 .q-cancel {
   background: none;
-  border: 1px solid rgba(209, 202, 189, 0.25);
-  color: #a69c8d;
+  border: 1px solid #2F2F2F;
+  color: #9B9A97;
 }
 
 .q-cancel:hover {
-  border-color: #D1CABD;
-  color: #D1CABD;
+  border-color: #5A5A58;
+  color: #FFFFFF;
 }
 
 .q-song-row {
@@ -652,7 +712,7 @@ async function handleSubmit() {
 
 .q-song-btn {
   flex-shrink: 0;
-  font-family: 'EB Garamond', serif;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   font-size: 0.88rem;
   padding: 0 0.9rem;
 }
@@ -675,11 +735,11 @@ async function handleSubmit() {
   height: 96px;
   border-radius: 3px;
   overflow: hidden;
-  border: 1px solid rgba(177, 122, 42, 0.3);
-  background: rgba(23, 12, 15, 0.6);
+  border: 1px solid #2F2F2F;
+  background: #191919;
   display: grid;
   place-items: center;
-  color: #6b625a;
+  color: #5A5A58;
   font-size: 1.6rem;
 }
 
@@ -698,13 +758,13 @@ async function handleSubmit() {
 }
 
 .q-success {
-  color: #7fae8a;
+  color: #8FBF9A;
   font-size: 0.85rem;
   margin: 0;
 }
 
 .q-error {
-  color: #e0556a;
+  color: #E06C7A;
   font-size: 0.85rem;
   margin: 0;
 }
