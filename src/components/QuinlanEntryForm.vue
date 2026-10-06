@@ -3,6 +3,8 @@ import { ref, reactive, computed, nextTick } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useSongForm, songFields } from '@/composables/useSongForm'
 import scarabImg from '@/assets/scarab.webp'
+import { useAuth } from '@/composables/useAuth'
+import { uploadEntryImage } from '@/lib/uploadEntryImage'
 
 const props = defineProps({
   editEntry: { type: Object, default: null }
@@ -19,6 +21,26 @@ const form = reactive({
 })
 
 const imageUrlInput = ref(props.editEntry?.images?.[0] ?? '')
+const { user } = useAuth()
+const imageFileEl = ref(null)
+const uploadingImage = ref(false)
+const imageError = ref('')
+const showImageLink = ref(false)
+
+async function onImageFile(e) {
+  const file = e.target.files?.[0]
+  e.target.value = ''
+  if (!file) return
+  uploadingImage.value = true
+  imageError.value = ''
+  try {
+    imageUrlInput.value = await uploadEntryImage(file, user.value.id)
+  } catch (err) {
+    imageError.value = err.message
+  } finally {
+    uploadingImage.value = false
+  }
+}
 const highlightsInput = ref((props.editEntry?.highlights ?? []).join('\n'))
 const submitting = ref(false)
 const successMsg = ref('')
@@ -210,15 +232,31 @@ async function handleSubmit() {
         <input id="qf-title" v-model="form.title" required placeholder="The name of this chapter…" />
       </div>
 
-      <div class="q-grid">
-        <div class="q-field">
-          <label for="qf-location">Location</label>
-          <input id="qf-location" v-model="form.location" required placeholder="Where it happened…" />
+      <div class="q-field">
+        <label for="qf-location">Location</label>
+        <input id="qf-location" v-model="form.location" required placeholder="Where it happened…" />
+      </div>
+
+      <div class="q-field">
+        <label>Image</label>
+        <button
+            type="button"
+            class="q-image-drop"
+            :class="{ filled: !!imageUrlInput }"
+            :disabled="uploadingImage"
+            @click="imageFileEl.click()"
+        >
+          <img v-if="imageUrlInput" :src="imageUrlInput" alt="" />
+          <span v-else class="q-image-placeholder">{{ uploadingImage ? 'Uploading…' : '+ Upload a picture' }}</span>
+          <span v-if="imageUrlInput" class="q-image-change">{{ uploadingImage ? 'Uploading…' : 'Change picture' }}</span>
+        </button>
+        <input ref="imageFileEl" type="file" accept="image/*" class="q-hidden-input" @change="onImageFile" />
+        <div class="q-image-actions">
+          <button v-if="imageUrlInput" type="button" class="q-link-btn" @click="imageUrlInput = ''">Remove picture</button>
+          <button type="button" class="q-link-btn" @click="showImageLink = !showImageLink">{{ showImageLink ? 'Hide link' : 'Use a link instead' }}</button>
         </div>
-        <div class="q-field">
-          <label for="qf-image">Image URL</label>
-          <input id="qf-image" v-model="imageUrlInput" placeholder="https://…" />
-        </div>
+        <input v-if="showImageLink" id="qf-image" v-model="imageUrlInput" aria-label="Image URL" placeholder="https://…" />
+        <p v-if="imageError" class="q-error">{{ imageError }}</p>
       </div>
     </fieldset>
 
@@ -340,7 +378,7 @@ async function handleSubmit() {
     </fieldset>
 
     <div class="q-actions">
-      <button type="submit" class="q-save" :disabled="submitting">
+      <button type="submit" class="q-save" :disabled="submitting || uploadingImage">
         {{ submitting ? 'Inscribing…' : (editEntry ? 'Update chapter' : 'Save chapter') }}
       </button>
       <button type="button" class="q-cancel" @click="$emit('cancel')">Cancel</button>
@@ -699,6 +737,88 @@ async function handleSubmit() {
   border-color: #5A5A58;
   color: #FFFFFF;
 }
+
+.q-image-drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 160px;
+  padding: 0;
+  border: 1px dashed #3A3A3A;
+  border-radius: 4px;
+  background: #191919;
+  color: #9B9A97;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.q-image-drop:hover:not(:disabled) {
+  border-color: #8A1424;
+  color: #FFFFFF;
+}
+
+.q-image-drop:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.q-image-drop.filled {
+  border-style: solid;
+  border-color: #2F2F2F;
+}
+
+.q-image-drop img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.q-image-change {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  background: rgba(25, 25, 25, 0.85);
+  color: #E3E2DF;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.q-image-drop:hover .q-image-change,
+.q-image-drop:focus-visible .q-image-change { opacity: 1; }
+
+@media (hover: none) {
+  .q-image-change { opacity: 1; }
+}
+
+.q-hidden-input { display: none; }
+
+.q-image-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.q-link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #9B9A97;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.q-link-btn:hover { color: #FFFFFF; }
 
 .q-song-row {
   display: flex;
