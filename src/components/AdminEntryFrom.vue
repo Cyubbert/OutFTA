@@ -34,8 +34,25 @@
     </div>
 
     <div class="field">
-      <label for="mf-image">Image URL</label>
-      <input id="mf-image" v-model="imageUrlInput" placeholder="https://…" />
+      <label>Image</label>
+      <button
+          type="button"
+          class="image-drop"
+          :class="{ filled: !!imageUrlInput }"
+          :disabled="uploadingImage"
+          @click="imageFileEl.click()"
+      >
+        <img v-if="imageUrlInput" :src="imageUrlInput" alt="" />
+        <span v-else class="image-placeholder">{{ uploadingImage ? 'Uploading…' : '+ Upload a picture' }}</span>
+        <span v-if="imageUrlInput" class="image-change">{{ uploadingImage ? 'Uploading…' : 'Change picture' }}</span>
+      </button>
+      <input ref="imageFileEl" type="file" accept="image/*" class="hidden-input" @change="onImageFile" />
+      <div class="image-actions">
+        <button v-if="imageUrlInput" type="button" class="link-btn" @click="imageUrlInput = ''">Remove picture</button>
+        <button type="button" class="link-btn" @click="showImageLink = !showImageLink">{{ showImageLink ? 'Hide link' : 'Use a link instead' }}</button>
+      </div>
+      <input v-if="showImageLink" id="mf-image" v-model="imageUrlInput" aria-label="Image URL" placeholder="https://…" />
+      <p v-if="imageError" class="error">{{ imageError }}</p>
     </div>
 
     <fieldset class="section">
@@ -90,7 +107,7 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary" :disabled="submitting">
+      <button type="submit" class="btn-primary" :disabled="submitting || uploadingImage">
         {{ submitting ? 'Saving…' : (editEntry ? 'Update entry' : 'Save entry') }}
       </button>
       <button type="button" class="btn-ghost" @click="$emit('cancel')">Cancel</button>
@@ -105,6 +122,8 @@
 import { ref, reactive } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useSongForm, songFields } from '@/composables/useSongForm'
+import { useAuth } from '@/composables/useAuth'
+import { uploadEntryImage } from '@/lib/uploadEntryImage'
 
 const props = defineProps({
   editEntry: { type: Object, default: null },
@@ -125,6 +144,26 @@ const form = reactive({
 const { songLooking, songError, hasSong, fetchSong, onSongUrlChange, clearSong, songPayload } = useSongForm(form)
 
 const imageUrlInput = ref(props.editEntry?.images?.[0] ?? '')
+const { user } = useAuth()
+const imageFileEl = ref(null)
+const uploadingImage = ref(false)
+const imageError = ref('')
+const showImageLink = ref(false)
+
+async function onImageFile(e) {
+  const file = e.target.files?.[0]
+  e.target.value = ''
+  if (!file) return
+  uploadingImage.value = true
+  imageError.value = ''
+  try {
+    imageUrlInput.value = await uploadEntryImage(file, user.value.id)
+  } catch (err) {
+    imageError.value = err.message
+  } finally {
+    uploadingImage.value = false
+  }
+}
 const highlightsInput = ref((props.editEntry?.highlights ?? []).join('\n'))
 const submitting = ref(false)
 const successMsg = ref('')
@@ -295,6 +334,89 @@ textarea {
   line-height: 1.65;
   resize: vertical;
 }
+
+.image-drop {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 160px;
+  padding: 0;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  background: #fbf8f2;
+  color: var(--faded);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-style: italic;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.image-drop:hover:not(:disabled) {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.image-drop:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.image-drop.filled {
+  border-style: solid;
+}
+
+.image-drop img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-change {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 3px;
+  background: rgba(245, 240, 232, 0.92);
+  color: var(--ink);
+  font-style: normal;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.image-drop:hover .image-change,
+.image-drop:focus-visible .image-change { opacity: 1; }
+
+@media (hover: none) {
+  .image-change { opacity: 1; }
+}
+
+.hidden-input { display: none; }
+
+.image-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--faded);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 0.92rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.link-btn:hover { color: var(--red); }
 
 .section {
   margin: 0;
