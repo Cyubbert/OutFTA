@@ -12,7 +12,6 @@ const form = reactive({
   title: props.editEntry?.title ?? '',
   date: props.editEntry?.date ?? '',
   location: props.editEntry?.location ?? '',
-  mood: props.editEntry?.mood ?? '',
   body: props.editEntry?.body ?? ''
 })
 
@@ -137,7 +136,6 @@ async function handleSubmit() {
     title: form.title,
     date: form.date,
     location: form.location,
-    mood: form.mood,
     body: form.body,
     images,
     highlights
@@ -172,7 +170,6 @@ async function handleSubmit() {
   form.title = ''
   form.date = ''
   form.location = ''
-  form.mood = ''
   form.body = ''
   imageUrlInput.value = ''
   highlightsInput.value = ''
@@ -208,15 +205,9 @@ async function handleSubmit() {
       <input v-model="form.title" required placeholder="The name of this chapter…" />
     </div>
 
-    <div class="q-grid">
-      <div class="q-field">
-        <label>Location</label>
-        <input v-model="form.location" required placeholder="Where it happened…" />
-      </div>
-      <div class="q-field">
-        <label>Mood</label>
-        <input v-model="form.mood" placeholder="obsessive, hollow, serene…" />
-      </div>
+    <div class="q-field">
+      <label>Location</label>
+      <input v-model="form.location" required placeholder="Where it happened…" />
     </div>
 
     <div class="q-field">

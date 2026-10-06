@@ -1,13 +1,13 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
-import { onMounted, onUnmounted, watch } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { supabase } from '@/lib/supabase.js'
 import { useAuth } from '@/composables/useAuth'
 import QuinlanEntryForm from '@/components/QuinlanEntryForm.vue'
 import DiaryNav from '@/components/DiaryNav.vue'
 import headerImg from '@/assets/quinheader.png'
 
-const { user, isAdmin, profile, loading: authLoading } = useAuth()
+const { user, isAdmin, profile } = useAuth()
 const editing = ref(null)
 const creating = ref(false)
 
@@ -37,7 +37,6 @@ onUnmounted(() => {
 const headerStyle = { backgroundImage: `url(${headerImg})` }
 
 const entries = ref([])
-const entriesLoaded = ref(false)
 const entriesLoading = ref(true)
 const entriesError = ref(null)
 
@@ -51,14 +50,8 @@ const searchOpen = ref(false)
 const query = ref('')
 const searchInput = ref(null)
 
-// ADMIN-ONLY LOCKDOWN (temporary): the page is restricted to admins only
-// right now, regardless of the can_view_quinlan / can_post_quinlan toggles.
-// To reopen it to toggled-in users later, restore:
-//   const canView = computed(() => !!user.value && (isAdmin.value || profile.value.can_view_quinlan))
-//   const canWrite = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_quinlan))
-const canView = computed(() => !!user.value && isAdmin.value)
-const canWrite = computed(() => !!user.value && isAdmin.value)
-const showGate = computed(() => !authLoading.value && !canView.value)
+// Anyone can read (like Mory's diary); only admins + can_post_quinlan can write.
+const canWrite = computed(() => !!user.value && (isAdmin.value || profile.value.can_post_quinlan))
 
 // Reading order, like chapters in a book — ascending by session (toggleable).
 const sorted = computed(() =>
@@ -69,7 +62,7 @@ const visible = computed(() => {
   const q = query.value.trim().toLowerCase()
   if (!q) return sorted.value
   return sorted.value.filter(e =>
-      [e.title, e.location, e.mood, e.date].some(v => v && String(v).toLowerCase().includes(q))
+      [e.title, e.location, e.date].some(v => v && String(v).toLowerCase().includes(q))
   )
 })
 
@@ -139,38 +132,18 @@ function close() {
   activeEntry.value = null
 }
 
-// Muted, Notion-style tag colours: [background, text]
-const moodTags = {
-  obsessive: ['#5C1F26', '#F2C9CE'],
-  wrathful: ['#5C1F26', '#F2C9CE'],
-  ravenous: ['#5C1F26', '#F2C9CE'],
-  hollow: ['#373737', '#D4D4D4'],
-  neutral: ['#373737', '#D4D4D4'],
-  serene: ['#2B593F', '#D9EFE1'],
-  patient: ['#2B593F', '#D9EFE1'],
-  determined: ['#5C4B1E', '#F1E3BD'],
-}
-
-function moodStyle(mood) {
-  const [bg, fg] = moodTags[mood] || ['#4A3A28', '#EBD9C2']
-  return { background: bg, color: fg }
-}
-
 async function loadEntries() {
   entriesLoading.value = true
   const { data, error } = await supabase
       .from('quinlan_diary_entries')
-      .select('id, session, title, date, location, mood, images, body, highlights')
+      .select('id, session, title, date, location, images, body, highlights')
 
   if (error) entriesError.value = error
   else entries.value = data
-  entriesLoaded.value = true
   entriesLoading.value = false
 }
 
-watch(canView, (v) => {
-  if (v && !entriesLoaded.value) loadEntries()
-}, { immediate: true })
+onMounted(loadEntries)
 
 function startEdit(entry) {
   editing.value = entry
@@ -214,12 +187,6 @@ async function deleteEntry(entry) {
 
     <div class="cover" :style="headerStyle" role="img" aria-label="Torn, stained page with a red star" />
 
-    <div v-if="showGate" class="gate">
-      <p class="gate-text">The book remains sealed to the uninitiated.</p>
-      <router-link v-if="!user" to="/login" class="gate-link">Sign in</router-link>
-    </div>
-
-    <template v-else>
       <button v-if="canWrite" class="quill-fab" title="Inscribe a new entry" @click="startCreate">
         <svg viewBox="0 0 48 48" class="quill-icon" aria-hidden="true">
           <path d="M41 4C29 5 15 13 9 27c-2.5 5.5-3.5 10.5-3.5 14.5 3.5-1 8-2.3 12.5-4.6C32 31 41.5 19 43.5 7.5 43.8 5.7 43.8 4.6 41 4z" />
@@ -243,7 +210,6 @@ async function deleteEntry(entry) {
             <span v-if="activeEntry.date" class="meta-date">{{ activeEntry.date }}</span>
             <span v-if="activeEntry.date && activeEntry.location" class="meta-sep">·</span>
             <span v-if="activeEntry.location" class="meta-location">{{ activeEntry.location }}</span>
-            <span v-if="activeEntry.mood" class="tag" :style="moodStyle(activeEntry.mood)">{{ activeEntry.mood }}</span>
           </div>
 
           <hr class="divider" />
@@ -336,7 +302,7 @@ async function deleteEntry(entry) {
                 <span class="toc-title">{{ entry.title }}</span>
                 <span class="toc-dots" aria-hidden="true" />
                 <span class="toc-folio">{{ folio(i) }}</span>
-                <span v-if="isAdmin" class="admin-actions inline">
+                <span v-if="canWrite" class="admin-actions inline">
                   <button class="admin-btn" title="Edit" @click.stop="startEdit(entry)">✎</button>
                   <button class="admin-btn delete" title="Delete" @click.stop="deleteEntry(entry)">✕</button>
                 </span>
@@ -364,7 +330,6 @@ async function deleteEntry(entry) {
           <button class="lb-close" aria-label="Close" @click="lightboxImg = null">✕</button>
         </div>
       </transition>
-    </template>
   </div>
 </template>
 
@@ -449,37 +414,6 @@ button { font-family: inherit; }
   outline: 2px solid #5E8BC7;
   outline-offset: 2px;
 }
-
-/* ───────── Gate ───────── */
-.gate {
-  min-height: 45vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  text-align: center;
-  padding: 2rem;
-}
-
-.gate-text {
-  font-family: 'UnifrakturCook', serif;
-  font-size: 1.6rem;
-  color: var(--text-strong);
-  max-width: 26ch;
-  margin: 0;
-}
-
-.gate-link {
-  color: var(--text);
-  text-decoration: none;
-  padding: 0.45rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 0.9rem;
-}
-
-.gate-link:hover { background: var(--surface-hover); }
 
 /* ───────── Index header ───────── */
 .book-title {
