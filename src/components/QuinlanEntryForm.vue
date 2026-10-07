@@ -5,6 +5,7 @@ import { useSongForm, songFields } from '@/composables/useSongForm'
 import scarabImg from '@/assets/scarab.webp'
 import { useAuth } from '@/composables/useAuth'
 import { uploadEntryImage } from '@/lib/uploadEntryImage'
+import { presetScarabs, scarabSrc } from '@/lib/scarabs'
 
 const props = defineProps({
   editEntry: { type: Object, default: null }
@@ -41,6 +42,29 @@ async function onImageFile(e) {
     uploadingImage.value = false
   }
 }
+// ── scarab (small emblem shown at the foot of the entry) ──
+
+const scarab = ref(props.editEntry?.scarab ?? null)
+const scarabFileEl = ref(null)
+const uploadingScarab = ref(false)
+const scarabError = ref('')
+const customScarab = computed(() => scarab.value && !scarab.value.startsWith('preset:') ? scarab.value : null)
+
+async function onScarabFile(e) {
+  const file = e.target.files?.[0]
+  e.target.value = ''
+  if (!file) return
+  uploadingScarab.value = true
+  scarabError.value = ''
+  try {
+    scarab.value = await uploadEntryImage(file, user.value.id)
+  } catch (err) {
+    scarabError.value = err.message
+  } finally {
+    uploadingScarab.value = false
+  }
+}
+
 const highlightsInput = ref((props.editEntry?.highlights ?? []).join('\n'))
 const submitting = ref(false)
 const successMsg = ref('')
@@ -168,6 +192,7 @@ async function handleSubmit() {
     body: form.body,
     images,
     highlights,
+    scarab: scarab.value,
     ...songPayload()
   }
 
@@ -203,6 +228,7 @@ async function handleSubmit() {
   form.body = ''
   clearSong()
   imageUrlInput.value = ''
+  scarab.value = null
   highlightsInput.value = ''
 }
 </script>
@@ -213,6 +239,54 @@ async function handleSubmit() {
       <img :src="scarabImg" class="q-scarab" alt="" />
       <h3>{{ editEntry ? 'Amend the chapter' : 'Inscribe a new chapter' }}</h3>
     </header>
+
+    <fieldset class="q-section">
+      <legend>Scarab</legend>
+      <div class="q-scarab-picker" role="radiogroup" aria-label="Scarab for the foot of the entry">
+        <button
+            type="button"
+            class="q-scarab-opt q-scarab-none"
+            role="radio"
+            :aria-checked="!scarab"
+            :class="{ on: !scarab }"
+            title="No scarab"
+            @click="scarab = null"
+        >None</button>
+        <button
+            v-for="s in presetScarabs"
+            :key="s.id"
+            type="button"
+            class="q-scarab-opt"
+            role="radio"
+            :aria-checked="scarab === s.id"
+            :class="{ on: scarab === s.id }"
+            :title="s.name"
+            @click="scarab = s.id"
+        >
+          <img :src="s.url" :alt="s.name" />
+        </button>
+        <button
+            v-if="customScarab"
+            type="button"
+            class="q-scarab-opt on"
+            role="radio"
+            aria-checked="true"
+            title="Your uploaded scarab"
+        >
+          <img :src="scarabSrc(customScarab)" alt="Uploaded scarab" />
+        </button>
+        <button
+            type="button"
+            class="q-scarab-opt q-scarab-upload"
+            :disabled="uploadingScarab"
+            title="Upload your own PNG"
+            @click="scarabFileEl.click()"
+        >{{ uploadingScarab ? '…' : '+' }}</button>
+      </div>
+      <input ref="scarabFileEl" type="file" accept="image/png,image/*" class="q-hidden-input" @change="onScarabFile" />
+      <p class="q-hint">Sits small at the bottom of the entry, like a seal.</p>
+      <p v-if="scarabError" class="q-error">{{ scarabError }}</p>
+    </fieldset>
 
     <fieldset class="q-section">
       <legend>Chapter</legend>
@@ -378,7 +452,7 @@ async function handleSubmit() {
     </fieldset>
 
     <div class="q-actions">
-      <button type="submit" class="q-save" :disabled="submitting || uploadingImage">
+      <button type="submit" class="q-save" :disabled="submitting || uploadingImage || uploadingScarab">
         {{ submitting ? 'Inscribing…' : (editEntry ? 'Update chapter' : 'Save chapter') }}
       </button>
       <button type="button" class="q-cancel" @click="$emit('cancel')">Cancel</button>
@@ -524,7 +598,7 @@ async function handleSubmit() {
   border: 1px solid #2F2F2F;
   border-radius: 0 0 3px 3px;
   color: #E3E2DF;
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Spectral', serif;
   font-size: 1rem;
   padding: 0.7rem 0.8rem;
   line-height: 1.7;
@@ -656,7 +730,7 @@ async function handleSubmit() {
 }
 
 .q-preview-para {
-  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-family: 'Spectral', serif;
   font-size: 1.02rem;
   line-height: 1.8;
   color: #E3E2DF;
@@ -800,6 +874,55 @@ async function handleSubmit() {
 }
 
 .q-hidden-input { display: none; }
+
+.q-scarab-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.q-scarab-opt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 56px;
+  height: 56px;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid #2F2F2F;
+  border-radius: 4px;
+  background: #191919;
+  color: #9B9A97;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.q-scarab-opt img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.q-scarab-opt:hover:not(:disabled) { border-color: #5A5A58; color: #FFFFFF; }
+
+.q-scarab-opt.on {
+  border-color: #8A1424;
+  box-shadow: 0 0 0 2px rgba(138, 20, 36, 0.35);
+  color: #FFFFFF;
+}
+
+.q-scarab-upload {
+  border-style: dashed;
+  font-size: 1.3rem;
+}
+
+.q-scarab-upload:disabled { opacity: 0.6; cursor: default; }
 
 .q-image-actions {
   display: flex;
