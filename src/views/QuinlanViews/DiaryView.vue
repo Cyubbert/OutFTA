@@ -7,6 +7,7 @@ import QuinlanEntryForm from '@/components/QuinlanEntryForm.vue'
 import DiaryNav from '@/components/DiaryNav.vue'
 import SongPlayer from '@/components/SongPlayer.vue'
 import headerImg from '@/assets/quinheader.png'
+import { scarabSrc } from '@/lib/scarabs'
 
 const { user, isAdmin, profile } = useAuth()
 const editing = ref(null)
@@ -137,7 +138,7 @@ async function loadEntries() {
   entriesLoading.value = true
   const { data, error } = await supabase
       .from('quinlan_diary_entries')
-      .select('id, session, title, date, location, images, body, highlights, song_url, song_title, song_artist, song_cover')
+      .select('id, session, title, date, location, images, body, highlights, song_url, song_title, song_artist, song_cover, scarab')
 
   if (error) entriesError.value = error
   else entries.value = data
@@ -258,6 +259,9 @@ async function deleteEntry(entry) {
           </aside>
 
           <hr class="divider" />
+          <footer v-if="scarabSrc(activeEntry.scarab)" class="page-seal">
+            <img :src="scarabSrc(activeEntry.scarab)" alt="" />
+          </footer>
           <button class="back-btn" @click="close">
             <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
             Back to all entries
@@ -344,7 +348,7 @@ async function deleteEntry(entry) {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Inter:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 
 .quinlan-root {
   --bg: #191919;
@@ -429,9 +433,10 @@ button { font-family: inherit; }
 .book-title {
   font-family: 'UnifrakturCook', serif;
   font-weight: 700;
-  font-size: clamp(2.4rem, 4.2vw, 3.6rem);
+  font-size: clamp(2rem, 3.6vw, 3rem);
   line-height: 1.1;
-  color: var(--text-strong);
+  color: var(--blood);
+  text-align: center;
   margin: clamp(2rem, 5vw, 4.5rem) 0 1.25rem;
   letter-spacing: 0.01em;
 }
@@ -578,6 +583,7 @@ button { font-family: inherit; }
 }
 
 .toc-title {
+  font-family: 'Spectral', serif;
   flex-shrink: 0;
   max-width: 55%;
   color: var(--text-strong);
@@ -660,6 +666,7 @@ button { font-family: inherit; }
 
 .page-session {
   margin-top: 1.5rem;
+  text-align: center;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -671,6 +678,7 @@ button { font-family: inherit; }
   font-weight: 700;
   font-size: clamp(2.2rem, 5vw, 3.2rem);
   line-height: 1.12;
+  text-align: center;
   color: var(--text-strong);
   margin: 0.5rem 0 0.75rem;
 }
@@ -678,6 +686,7 @@ button { font-family: inherit; }
 .page-meta {
   display: flex;
   align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 1.25rem;
@@ -716,6 +725,7 @@ button { font-family: inherit; }
 .page-body { margin-bottom: 2rem; }
 
 .para {
+  font-family: 'Spectral', serif;
   font-size: 1rem;
   line-height: 1.75;
   color: var(--text);
@@ -808,6 +818,21 @@ button { font-family: inherit; }
 }
 
 .marginalia li::marker { color: var(--blood); }
+
+/* Scarab seal at the foot of the entry */
+.page-seal {
+  display: flex;
+  justify-content: center;
+  margin: -0.5rem 0 0.5rem;
+}
+
+.page-seal img {
+  height: 44px;
+  width: auto;
+  max-width: 64px;
+  object-fit: contain;
+  opacity: 0.9;
+}
 
 /* ───────── Lightbox ───────── */
 .lb-backdrop {
