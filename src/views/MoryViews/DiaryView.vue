@@ -96,14 +96,14 @@ function close() {
 }
 
 const moodColors = {
-  anxious: '#c11d0d',
-  happy: '#c66d13',
-  angry: '#f1ca08',
-  sarcastic: '#519300',
-  determined: '#2b67c0',
-  nostalgic: '#5e30a3',
-  glorious: '#ae06a6',
-  neutral: '#685c51',
+  anxious: '#C11D0DFF',
+  happy: '#C66D13FF',
+  angry: '#F1CA08FF',
+  sarcastic: '#519300FF',
+  determined: '#2B67C0FF',
+  nostalgic: '#5E30A3FF',
+  glorious: '#AE06A6FF',
+  neutral: '#685C51FF',
 }
 
 function moodColor(mood) {
