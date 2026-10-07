@@ -583,11 +583,11 @@ button { font-family: inherit; }
 }
 
 .toc-title {
-  font-family: 'UnifrakturCook', serif;
+  font-family: 'Spectral', serif;
   flex-shrink: 0;
   max-width: 55%;
   color: var(--text-strong);
-  font-weight: 700;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
