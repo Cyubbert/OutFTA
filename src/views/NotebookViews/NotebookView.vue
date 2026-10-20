@@ -353,7 +353,6 @@ async function deletePage(page) {
                     <span class="corner tl" /><span class="corner tr" />
                     <span class="corner bl" /><span class="corner br" />
                   </div>
-                  <span class="band" />
                 </template>
 
                 <!-- Inside covers -->
@@ -819,16 +818,6 @@ async function deletePage(page) {
 .corner.tr { top: -1px; right: -1px; border-top-width: 2px; border-right-width: 2px; }
 .corner.bl { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
 .corner.br { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
-
-.band {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 10%;
-  width: 4%;
-  background: linear-gradient(90deg, #8a6a2e, #d8b56a 50%, #8a6a2e);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
-}
 
 .back-star {
   position: absolute;
