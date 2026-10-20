@@ -710,7 +710,7 @@ async function deletePage(page) {
 
 /* Leather: uneven dye (low-frequency noise) over the base red, a pebbled
    grain (noise run through a lighting filter) blended on top, darkened
-   worn edges, and a gold-thread stitch line. */
+   worn edges. */
 .face.cover,
 .face.backcover {
   background-color: var(--ink);
@@ -740,17 +740,6 @@ async function deletePage(page) {
   mix-blend-mode: overlay;
   opacity: 0.55;
   pointer-events: none;
-}
-
-.face.cover::after,
-.face.backcover::after {
-  content: '';
-  position: absolute;
-  inset: 3.2%;
-  border: 1.5px dashed rgba(216, 181, 106, 0.5);
-  border-radius: 6px;
-  pointer-events: none;
-  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6));
 }
 
 .cover-frame {
