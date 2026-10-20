@@ -456,7 +456,7 @@ async function deletePage(page) {
   --gold-dim: rgba(216, 181, 106, 0.45);
   --ink: #5a0f17;
   --paper: #efe6d2;
-  --page-w: min(360px, calc((100vw - 2rem) / 2), calc((100vh - 240px) / 1.38));
+  --page-w: min(560px, calc((100vw - 2rem) / 2), calc((100vh - 190px) / 1.38));
   --page-h: calc(var(--page-w) * 1.38);
 
   position: relative;
@@ -559,7 +559,7 @@ async function deletePage(page) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2.5rem 1rem 4rem;
+  padding: 1.25rem 1rem 2rem;
 }
 
 .leave-link {
@@ -578,7 +578,7 @@ async function deletePage(page) {
 
 .page-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .eyebrow {
@@ -873,7 +873,7 @@ async function deletePage(page) {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  margin-top: 1.75rem;
+  margin-top: 1rem;
 }
 
 .ctrl {
