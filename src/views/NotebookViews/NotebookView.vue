@@ -288,7 +288,7 @@ async function deletePage(page) {
       <svg class="gate-star" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 0 L57 43 L100 50 L57 57 L50 100 L43 57 L0 50 L43 43 Z" />
       </svg>
-      <p class="gate-text">These pages were never meant for you.</p>
+      <p class="gate-text">These pages were not meant for you.</p>
       <router-link v-if="!user" to="/login" class="gate-link">Sign in</router-link>
     </div>
 
@@ -296,12 +296,12 @@ async function deletePage(page) {
       <router-link to="/" class="leave-link">← leave</router-link>
 
       <header class="page-header">
-        <p class="eyebrow">A gift, left in your keeping</p>
-        <h1 class="title">The Star Notebook</h1>
+        <p class="eyebrow">From Misha to Ray</p>
+        <h1 class="title">Notebook of the Stars</h1>
       </header>
 
       <p v-if="loading" class="status">Opening…</p>
-      <p v-else-if="error" class="status">The pages won’t open right now.</p>
+      <p v-else-if="error" class="status">You cannot read its contents...</p>
 
       <template v-else>
         <div
@@ -348,8 +348,8 @@ async function deletePage(page) {
                       </g>
                       <path class="north-star" d="M100 78 L104 96 L122 100 L104 104 L100 122 L96 104 L78 100 L96 96 Z" />
                     </svg>
-                    <h2 class="cover-title">Observations</h2>
-                    <p class="cover-sub">of the night sky</p>
+                    <h2 class="cover-title">Vael Norfaelriel</h2>
+                    <p class="cover-sub">May the stars lead my way</p>
                     <span class="corner tl" /><span class="corner tr" />
                     <span class="corner bl" /><span class="corner br" />
                   </div>
@@ -779,8 +779,8 @@ async function deletePage(page) {
   margin: 0;
   font-family: 'Cinzel', serif;
   font-weight: 600;
-  font-size: calc(var(--page-w) * 0.075);
-  letter-spacing: 0.14em;
+  font-size: calc(var(--page-w) * 0.064);
+  letter-spacing: 0.1em;
   color: var(--gold);
   /* Debossed foil: pressed into the leather, lit from the top left. */
   text-shadow:
