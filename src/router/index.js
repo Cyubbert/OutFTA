@@ -151,6 +151,11 @@ const router = createRouter({
             name: "quinlan",
             component: () => import("@/views/QuinlanViews/DiaryView.vue")
         },
+        {
+            path: "/notebook",
+            name: "notebook",
+            component: () => import("@/views/NotebookViews/NotebookView.vue")
+        },
 
         // ── Auth ──
 

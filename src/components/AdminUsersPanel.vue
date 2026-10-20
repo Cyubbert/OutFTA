@@ -15,6 +15,7 @@
           <div class="col-toggle">Post in Gallery</div>
           <div class="col-toggle">View NSFW</div>
           <div class="col-toggle">Post in Quinlan</div>
+          <div class="col-toggle">View Notebook</div>
         </div>
 
         <div v-for="u in users" :key="u.id" class="row">
@@ -86,8 +87,17 @@
                   @click="toggle(u, 'can_post_quinlan')"
               ><span class="knob" /></button>
             </div>
+            <div class="col-toggle">
+              <button
+                  class="toggle"
+                  :class="{ on: u.can_view_notebook }"
+                  :disabled="savingId === u.id"
+                  @click="toggle(u, 'can_view_notebook')"
+              ><span class="knob" /></button>
+            </div>
           </template>
           <template v-else>
+            <div class="col-toggle admin-dash">—</div>
             <div class="col-toggle admin-dash">—</div>
             <div class="col-toggle admin-dash">—</div>
             <div class="col-toggle admin-dash">—</div>
@@ -120,7 +130,7 @@ const saveError = ref('')
 onMounted(async () => {
   const { data, error: err } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, role, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw, can_view_quinlan, can_post_quinlan')
+      .select('id, username, avatar_url, role, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw, can_view_quinlan, can_post_quinlan, can_view_notebook')
       .order('username', { ascending: true, nullsFirst: false })
 
   if (err) error.value = err
@@ -208,7 +218,7 @@ async function toggleRole(u) {
 
 .row {
   display: grid;
-  grid-template-columns: minmax(150px, 1.4fr) repeat(7, minmax(80px, 1fr));
+  grid-template-columns: minmax(150px, 1.4fr) repeat(8, minmax(80px, 1fr));
   gap: 0.6rem;
   align-items: center;
   padding: 0.7rem 0.9rem;
@@ -327,7 +337,7 @@ async function toggleRole(u) {
 
 @media (max-width: 640px) {
   .row {
-    grid-template-columns: minmax(120px, 1.3fr) repeat(7, minmax(56px, 1fr));
+    grid-template-columns: minmax(120px, 1.3fr) repeat(8, minmax(56px, 1fr));
     gap: 0.35rem;
     padding: 0.6rem;
   }
