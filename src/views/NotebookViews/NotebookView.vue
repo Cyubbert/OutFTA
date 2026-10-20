@@ -709,15 +709,49 @@ async function deletePage(page) {
 
 /* Covers */
 
+/* Leather: uneven dye (low-frequency noise) over the base red, a pebbled
+   grain (noise run through a lighting filter) blended on top, darkened
+   worn edges, and a gold-thread stitch line. */
 .face.cover,
 .face.backcover {
   background-color: var(--ink);
   background-image:
-      radial-gradient(ellipse at 30% 25%, rgba(190, 50, 50, 0.35), transparent 60%),
-      repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 5px);
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='0.55'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse at 30% 22%, rgba(200, 60, 55, 0.45), transparent 55%),
+      radial-gradient(ellipse at 75% 85%, rgba(30, 0, 4, 0.5), transparent 60%);
+  background-size: cover;
+  border-radius: 2px 10px 10px 2px;
   box-shadow:
-      inset 0 0 0 1px rgba(216, 181, 106, 0.25),
-      inset 0 0 40px rgba(0, 0, 0, 0.6);
+      inset 0 0 0 1px rgba(0, 0, 0, 0.55),
+      inset 0 0 18px 4px rgba(20, 0, 3, 0.75),
+      inset 0 0 60px rgba(0, 0, 0, 0.45);
+}
+
+.face.backcover {
+  border-radius: 10px 2px 2px 10px;
+}
+
+.face.cover::before,
+.face.backcover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeDiffuseLighting lighting-color='%23fff' surfaceScale='2.2'%3E%3CfeDistantLight azimuth='225' elevation='50'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 260px 260px;
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.face.cover::after,
+.face.backcover::after {
+  content: '';
+  position: absolute;
+  inset: 3.2%;
+  border: 1.5px dashed rgba(216, 181, 106, 0.5);
+  border-radius: 6px;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6));
 }
 
 .cover-frame {
@@ -760,7 +794,10 @@ async function deletePage(page) {
   font-size: calc(var(--page-w) * 0.075);
   letter-spacing: 0.14em;
   color: var(--gold);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+  /* Debossed foil: pressed into the leather, lit from the top left. */
+  text-shadow:
+      0 -1px 0 rgba(0, 0, 0, 0.7),
+      0 1px 0 rgba(255, 210, 160, 0.18);
 }
 
 .cover-sub {
