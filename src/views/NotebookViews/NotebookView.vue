@@ -455,6 +455,7 @@ async function deletePage(page) {
   --gold: #d8b56a;
   --gold-dim: rgba(216, 181, 106, 0.45);
   --ink: #5a0f17;
+  --leather: #3b2214;
   --paper: #efe6d2;
   --page-w: min(560px, calc((100vw - 2rem) / 2), calc((100vh - 190px) / 1.38));
   --page-h: calc(var(--page-w) * 1.38);
@@ -713,16 +714,16 @@ async function deletePage(page) {
    worn edges. */
 .face.cover,
 .face.backcover {
-  background-color: var(--ink);
+  background-color: var(--leather);
   background-image:
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='0.55'/%3E%3C/svg%3E"),
-      radial-gradient(ellipse at 30% 22%, rgba(200, 60, 55, 0.45), transparent 55%),
-      radial-gradient(ellipse at 75% 85%, rgba(30, 0, 4, 0.5), transparent 60%);
+      radial-gradient(ellipse at 30% 22%, rgba(150, 90, 45, 0.32), transparent 55%),
+      radial-gradient(ellipse at 75% 85%, rgba(28, 14, 5, 0.5), transparent 60%);
   background-size: cover;
   border-radius: 2px 10px 10px 2px;
   box-shadow:
       inset 0 0 0 1px rgba(0, 0, 0, 0.55),
-      inset 0 0 18px 4px rgba(20, 0, 3, 0.75),
+      inset 0 0 18px 4px rgba(22, 11, 3, 0.75),
       inset 0 0 60px rgba(0, 0, 0, 0.45);
 }
 
