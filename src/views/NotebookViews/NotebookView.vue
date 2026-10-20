@@ -5,7 +5,7 @@ import { useAuth } from '@/composables/useAuth'
 
 const { user, isAdmin, profile, loading: authLoading } = useAuth()
 
-const PAGE_BG = '#05060f'
+const PAGE_BG = '#0c0405'
 const PAGE_FG = '#d9d4c7'
 const FLIP_MS = 900
 
@@ -455,7 +455,7 @@ async function deletePage(page) {
 .notebook-root {
   --gold: #d8b56a;
   --gold-dim: rgba(216, 181, 106, 0.45);
-  --ink: #0b1030;
+  --ink: #5a0f17;
   --paper: #efe6d2;
   --page-w: min(360px, calc((100vw - 2rem) / 2), calc((100vh - 240px) / 1.38));
   --page-h: calc(var(--page-w) * 1.38);
@@ -465,7 +465,7 @@ async function deletePage(page) {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   overflow-x: hidden;
-  background: radial-gradient(ellipse 80% 60% at 50% 30%, #121a3d 0%, #070a1c 55%, #05060f 100%);
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, #3a0c12 0%, #1a0608 55%, #0c0405 100%);
   color: #d9d4c7;
   font-family: 'Cormorant Garamond', serif;
 }
@@ -533,7 +533,7 @@ async function deletePage(page) {
 
 .gate-text {
   font-style: italic;
-  color: #9a96a8;
+  color: #b0948c;
   font-size: 1.2rem;
 }
 
@@ -567,7 +567,7 @@ async function deletePage(page) {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  color: #6f6b86;
+  color: #8a6a64;
   text-decoration: none;
   font-size: 0.95rem;
   font-style: italic;
@@ -587,7 +587,7 @@ async function deletePage(page) {
   font-size: 0.72rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #7c7899;
+  color: #9c7a72;
 }
 
 .title {
@@ -601,7 +601,7 @@ async function deletePage(page) {
 }
 
 .status {
-  color: #7c7899;
+  color: #9c7a72;
   font-style: italic;
   font-size: 1.1rem;
   padding: 2rem 0;
@@ -713,7 +713,7 @@ async function deletePage(page) {
 .face.backcover {
   background-color: var(--ink);
   background-image:
-      radial-gradient(ellipse at 30% 25%, rgba(70, 90, 170, 0.35), transparent 60%),
+      radial-gradient(ellipse at 30% 25%, rgba(190, 50, 50, 0.35), transparent 60%),
       repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.015) 0 2px, transparent 2px 5px);
   box-shadow:
       inset 0 0 0 1px rgba(216, 181, 106, 0.25),
@@ -789,7 +789,7 @@ async function deletePage(page) {
   bottom: 0;
   right: 10%;
   width: 4%;
-  background: linear-gradient(90deg, #3a1420, #5a2232 50%, #3a1420);
+  background: linear-gradient(90deg, #8a6a2e, #d8b56a 50%, #8a6a2e);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
 }
 
@@ -866,7 +866,7 @@ async function deletePage(page) {
   height: 40px;
   border-radius: 50%;
   border: 1px solid var(--gold-dim);
-  background: rgba(11, 16, 48, 0.6);
+  background: rgba(60, 10, 16, 0.6);
   color: var(--gold);
   font-size: 1.5rem;
   line-height: 1;
@@ -904,7 +904,7 @@ async function deletePage(page) {
   background: none;
   border: none;
   padding: 0.25rem 0;
-  color: #7c7899;
+  color: #9c7a72;
   font-family: 'Cormorant Garamond', serif;
   font-size: 1rem;
   font-style: italic;
@@ -916,7 +916,7 @@ async function deletePage(page) {
 }
 
 .text-btn.admin {
-  color: #8fa4d8;
+  color: #e09a6a;
 }
 
 /* ── Overlays ── */
@@ -930,7 +930,7 @@ async function deletePage(page) {
   justify-content: center;
   padding: 2.5rem 1rem;
   overflow-y: auto;
-  background: rgba(3, 4, 12, 0.88);
+  background: rgba(12, 3, 4, 0.88);
 }
 
 .overlay.zoom {
@@ -956,7 +956,7 @@ async function deletePage(page) {
 .manage-panel {
   width: 100%;
   max-width: 520px;
-  background: #0b1030;
+  background: #2a080d;
   border: 1px solid var(--gold-dim);
   border-radius: 8px;
   padding: 1.25rem 1.5rem 1.5rem;
@@ -980,7 +980,7 @@ async function deletePage(page) {
 .manage-hint {
   margin: 0.5rem 0 1rem;
   font-size: 0.95rem;
-  color: #7c7899;
+  color: #9c7a72;
 }
 
 .add-btn {
