@@ -454,7 +454,7 @@ async function deletePage(page) {
 .notebook-root {
   --gold: #d8b56a;
   --gold-dim: rgba(216, 181, 106, 0.45);
-  --ink: #5a0f17;
+  --ink: #2e1a0f;
   --leather: #3b2214;
   --paper: #efe6d2;
   --page-w: min(560px, calc((100vw - 2rem) / 2), calc((100vh - 190px) / 1.38));
