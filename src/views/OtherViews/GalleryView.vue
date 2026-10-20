@@ -9,7 +9,7 @@ const router = useRouter()
 const { user, isAdmin, profile } = useAuth()
 
 const CHARACTER_TAGS = ['waesstan', 'marvers', 'ray']
-const FILTER_TAGS = ['waesstan', 'marvers', 'ray', 'other']
+const FILTER_TAGS = ['waesstan', 'marvers', 'ray', 'other', 'handout']
 
 const images = ref([])
 const galleryLoading = ref(true)
@@ -42,7 +42,9 @@ function isNsfw(img) {
 }
 
 function tagLabel(tag) {
-  return tag === 'nsfw' ? 'NSFW' : tag.charAt(0).toUpperCase() + tag.slice(1)
+  if (tag === 'nsfw') return 'NSFW'
+  if (tag === 'handout') return 'Session Handouts'
+  return tag.charAt(0).toUpperCase() + tag.slice(1)
 }
 
 function goToProfile(tag) {
@@ -195,6 +197,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
                 :class="{ 'nsfw-blur': isNsfw(img) && !showNsfw }"
             />
             <span v-if="isNsfw(img)" class="nsfw-badge">NSFW</span>
+            <span v-else-if="img.tags?.includes('handout')" class="nsfw-badge handout-badge">Handout</span>
 
             <div v-if="canEdit(img)" class="admin-actions">
               <button class="admin-btn" title="Edit" @click.stop="startEdit(img)">✎</button>
@@ -235,7 +238,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
                   v-for="tag in lightbox.tags"
                   :key="tag"
                   class="tag-chip"
-                  :class="{ nsfw: tag === 'nsfw', clickable: isCharacterTag(tag) }"
+                  :class="{ nsfw: tag === 'nsfw', handout: tag === 'handout', clickable: isCharacterTag(tag) }"
                   :disabled="!isCharacterTag(tag)"
                   @click="isCharacterTag(tag) && goToProfile(tag)"
               >#{{ tag }}</button>
@@ -422,12 +425,22 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   border-radius: 4px;
 }
 
+.handout-badge {
+  background: rgba(212, 175, 95, 0.9);
+  color: #121212;
+}
+
 .gallery-img.nsfw-blur {
   filter: blur(22px);
   transform: scale(1.15);
 }
 
-.gallery-item:hover .gallery-img.nsfw-blur {
+.gallery-item:hover .handout-badge {
+  background: rgba(212, 175, 95, 0.9);
+  color: #121212;
+}
+
+.gallery-img.nsfw-blur {
   transform: scale(1.2);
 }
 
@@ -597,6 +610,11 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   color: #e08a8a;
   border-color: #3a1a1a;
   cursor: default;
+}
+
+.tag-chip.handout {
+  color: #d4af5f;
+  border-color: #3a3018;
 }
 
 .lb-actions {

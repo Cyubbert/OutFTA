@@ -21,9 +21,9 @@
 
     <label>Tags</label>
     <div class="tag-checks">
-      <label v-for="tag in TAG_OPTIONS" :key="tag.value" class="tag-check">
+      <label v-for="tag in visibleTagOptions" :key="tag.value" class="tag-check">
         <input type="checkbox" :value="tag.value" v-model="form.tags" />
-        <span :class="{ nsfw: tag.value === 'nsfw' }">#{{ tag.value }}</span>
+        <span :class="{ nsfw: tag.value === 'nsfw', handout: tag.value === 'handout' }">#{{ tag.value }}</span>
       </label>
     </div>
 
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/composables/useAuth'
 
@@ -49,6 +49,7 @@ const TAG_OPTIONS = [
   { value: 'marvers' },
   { value: 'ray' },
   { value: 'other' },
+  { value: 'handout', adminOnly: true },
 ]
 
 const props = defineProps({
@@ -56,7 +57,9 @@ const props = defineProps({
 })
 const emit = defineEmits(['saved', 'cancel'])
 
-const { user, profile } = useAuth()
+const { user, profile, isAdmin } = useAuth()
+
+const visibleTagOptions = computed(() => TAG_OPTIONS.filter(tag => !tag.adminOnly || isAdmin.value))
 
 const form = reactive({
   display_name: props.editPost?.display_name ?? profile.value.username ?? '',
@@ -226,6 +229,9 @@ input:focus, textarea:focus {
 }
 .tag-check .nsfw {
   color: #e08a8a;
+}
+.tag-check .handout {
+  color: #d4af5f;
 }
 .form-actions {
   display: flex;
