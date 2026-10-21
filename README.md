@@ -41,10 +41,10 @@ The site began as a static HTML/CSS page and has since been rebuilt around Vue, 
 
 ### Roadmap
 
-- [ ] Finish migrating remaining lore content to the database
-- [ ] Add User Login
-- [ ] Anonymous Posting / Discussion Ground
-- [ ] User Edit Gallery
+- [x] Finish migrating remaining lore content to the database
+- [x] Add User Login
+- [x] Anonymous Posting / Discussion Ground
+- [x] User Edit Gallery
 - [ ] Personal Letter Storage
 
 ## Getting Started
