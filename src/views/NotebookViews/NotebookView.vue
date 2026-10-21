@@ -457,14 +457,14 @@ async function deletePage(page) {
   --ink: #2e1a0f;
   --leather: #3b2214;
   --paper: #efe6d2;
-  --page-w: min(560px, calc((100vw - 2rem) / 2), calc((100vh - 190px) / 1.38));
+  --page-w: min(530px, calc((100vw - 2rem) / 2), calc((100dvh - 260px) / 1.38));
   --page-h: calc(var(--page-w) * 1.38);
 
   position: relative;
-  min-height: 100vh;
+  height: 100dvh;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  overflow-x: hidden;
+  overflow: hidden;
   background: radial-gradient(ellipse 80% 60% at 50% 30%, #3a0c12 0%, #1a0608 55%, #0c0405 100%);
   color: #d9d4c7;
   font-family: 'Cormorant Garamond', serif;
@@ -515,7 +515,7 @@ async function deletePage(page) {
 
 .gate {
   position: relative;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
