@@ -297,7 +297,7 @@ async function deletePage(page) {
 
       <header class="page-header">
         <p class="eyebrow">From Misha to Ray</p>
-        <h1 class="title">Notebook of the Stars</h1>
+        <h1 class="title">Sidus Calendarium</h1>
       </header>
 
       <p v-if="loading" class="status">Opening…</p>
