@@ -329,39 +329,8 @@ async function deletePage(page) {
                 <!-- Front cover -->
                 <template v-if="leaf[face].kind === 'cover'">
                   <div class="cover-frame">
-                    <svg class="constellation" viewBox="0 0 200 200" aria-hidden="true">
-                      <g class="lines">
-                        <polyline points="30,52 62,38 96,60 128,44 168,70" />
-                        <polyline points="96,60 100,100" />
-                        <polyline points="44,150 74,132 100,100 132,138 160,150" />
-                      </g>
-                      <g class="dots">
-                        <circle cx="30" cy="52" r="2.2" />
-                        <circle cx="62" cy="38" r="1.6" />
-                        <circle cx="96" cy="60" r="2.6" />
-                        <circle cx="128" cy="44" r="1.8" />
-                        <circle cx="168" cy="70" r="2.2" />
-                        <circle cx="44" cy="150" r="1.8" />
-                        <circle cx="74" cy="132" r="2.2" />
-                        <circle cx="132" cy="138" r="1.6" />
-                        <circle cx="160" cy="150" r="2.4" />
-                      </g>
-                      <path class="north-star" d="M100 78 L104 96 L122 100 L104 104 L100 122 L96 104 L78 100 L96 96 Z" />
-                    </svg>
-                    <h2 class="cover-title">Vael Norfaelriel</h2>
-                    <p class="cover-sub">May the stars lead my way</p>
                     <span class="corner tl" /><span class="corner tr" />
                     <span class="corner bl" /><span class="corner br" />
-                  </div>
-                </template>
-
-                <!-- Inside covers -->
-                <template v-else-if="leaf[face].kind === 'endpaper'">
-                  <div v-if="!leaf[face].end" class="inscription">
-                    <p>If found, keep looking up.</p>
-                    <svg class="tiny-star" viewBox="0 0 100 100" aria-hidden="true">
-                      <path d="M50 0 L57 43 L100 50 L57 57 L50 100 L43 57 L0 50 L43 43 Z" />
-                    </svg>
                   </div>
                 </template>
 
@@ -374,14 +343,6 @@ async function deletePage(page) {
                       loading="lazy"
                       draggable="false"
                   />
-                  <span class="page-num">✦ {{ leaf[face].num }}</span>
-                </template>
-
-                <!-- Back cover -->
-                <template v-else-if="leaf[face].kind === 'backcover'">
-                  <svg class="back-star" viewBox="0 0 100 100" aria-hidden="true">
-                    <path d="M50 0 L57 43 L100 50 L57 57 L50 100 L43 57 L0 50 L43 43 Z" />
-                  </svg>
                 </template>
 
                 <div class="shade" />
@@ -696,17 +657,6 @@ async function deletePage(page) {
   pointer-events: none;
 }
 
-.page-num {
-  position: absolute;
-  bottom: 2.5%;
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-size: 0.8rem;
-  color: #8a7350;
-  letter-spacing: 0.1em;
-}
-
 /* Covers */
 
 /* Leather: uneven dye (low-frequency noise) over the base red, a pebbled
@@ -749,51 +699,6 @@ async function deletePage(page) {
   border: 1px solid var(--gold-dim);
   outline: 1px solid rgba(216, 181, 106, 0.18);
   outline-offset: 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.constellation {
-  width: 72%;
-  margin-bottom: 4%;
-}
-
-.constellation .lines {
-  fill: none;
-  stroke: var(--gold-dim);
-  stroke-width: 0.6;
-}
-
-.constellation .dots {
-  fill: #f3dc9e;
-}
-
-.north-star {
-  fill: var(--gold);
-  filter: drop-shadow(0 0 4px rgba(243, 220, 158, 0.8));
-}
-
-.cover-title {
-  margin: 0;
-  font-family: 'Cinzel', serif;
-  font-weight: 600;
-  font-size: calc(var(--page-w) * 0.064);
-  letter-spacing: 0.1em;
-  color: var(--gold);
-  /* Debossed foil: pressed into the leather, lit from the top left. */
-  text-shadow:
-      0 -1px 0 rgba(0, 0, 0, 0.7),
-      0 1px 0 rgba(255, 210, 160, 0.18);
-}
-
-.cover-sub {
-  margin: 0.3em 0 0;
-  font-style: italic;
-  font-size: calc(var(--page-w) * 0.045);
-  color: #b9a37a;
 }
 
 .corner {
@@ -809,15 +714,6 @@ async function deletePage(page) {
 .corner.bl { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
 .corner.br { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
 
-.back-star {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 14%;
-  transform: translate(-50%, -50%);
-  fill: var(--gold-dim);
-}
-
 /* Endpapers: a faint star chart */
 
 .face.endpaper {
@@ -830,42 +726,6 @@ async function deletePage(page) {
       radial-gradient(1.5px 1.5px at 70px 10px, rgba(243, 220, 158, 0.8), transparent);
   background-size: 100% 100%, 100% 100%, 80px 80px, 80px 80px, 80px 80px;
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
-}
-
-.inscription {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  text-align: center;
-  padding: 0 12%;
-}
-
-.inscription p {
-  margin: 0;
-  font-style: italic;
-  font-size: calc(var(--page-w) * 0.06);
-  color: #e6d6ab;
-}
-
-.tiny-star {
-  width: 12px;
-  fill: var(--gold);
-}
-
-/* Blank filler page */
-
-.face.blank::before {
-  content: '✦';
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(138, 115, 80, 0.35);
 }
 
 /* ── Controls ── */
