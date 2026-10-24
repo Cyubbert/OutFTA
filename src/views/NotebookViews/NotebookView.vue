@@ -410,8 +410,6 @@ async function deletePage(page) {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
-
 .notebook-root {
   --gold: #d8b56a;
   --gold-dim: rgba(216, 181, 106, 0.45);
@@ -428,7 +426,7 @@ async function deletePage(page) {
   overflow: hidden;
   background: radial-gradient(ellipse 80% 60% at 50% 30%, #3a0c12 0%, #1a0608 55%, #0c0405 100%);
   color: #d9d4c7;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Jost', sans-serif;
 }
 
 /* ── Starfield ── */
@@ -499,19 +497,19 @@ async function deletePage(page) {
 }
 
 .gate-link {
-  border: 1px solid var(--gold-dim);
-  color: var(--gold);
+  background: #90caf9;
+  color: #121212;
   text-decoration: none;
-  padding: 0.5rem 1.3rem;
-  border-radius: 3px;
-  font-family: 'Cinzel', serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
+  padding: 0.55rem 1.2rem;
+  border-radius: 6px;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
   transition: background 0.2s;
 }
 
 .gate-link:hover {
-  background: rgba(216, 181, 106, 0.1);
+  background: #64b5f6;
 }
 
 /* ── Page ── */
@@ -553,7 +551,7 @@ async function deletePage(page) {
 
 .title {
   margin: 0;
-  font-family: 'Cinzel', serif;
+  font-family: 'Iosevka Charon', monospace;
   font-weight: 400;
   font-size: clamp(1.6rem, 5vw, 2.4rem);
   letter-spacing: 0.08em;
@@ -740,10 +738,11 @@ async function deletePage(page) {
 .ctrl {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--gold-dim);
-  background: rgba(60, 10, 16, 0.6);
-  color: var(--gold);
+  border-radius: 6px;
+  border: none;
+  background: #333;
+  color: #fff;
+  font-family: 'Jost', sans-serif;
   font-size: 1.5rem;
   line-height: 1;
   cursor: pointer;
@@ -751,7 +750,7 @@ async function deletePage(page) {
 }
 
 .ctrl:hover:not(:disabled) {
-  background: rgba(216, 181, 106, 0.12);
+  background: #64b5f6;
 }
 
 .ctrl:disabled {
@@ -762,7 +761,7 @@ async function deletePage(page) {
 .page-label {
   min-width: 9rem;
   text-align: center;
-  font-family: 'Cinzel', serif;
+  font-family: 'Iosevka Charon', monospace;
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   color: #b9a37a;
@@ -778,21 +777,33 @@ async function deletePage(page) {
 
 .text-btn {
   background: none;
-  border: none;
-  padding: 0.25rem 0;
-  color: #9c7a72;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  font-style: italic;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #888;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
 }
 
 .text-btn:hover {
-  color: var(--gold);
+  border-color: #90caf9;
+  color: #90caf9;
 }
 
 .text-btn.admin {
-  color: #e09a6a;
+  background: #90caf9;
+  border-color: #90caf9;
+  color: #121212;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.text-btn.admin:hover {
+  background: #64b5f6;
+  border-color: #64b5f6;
+  color: #121212;
 }
 
 /* ── Overlays ── */
@@ -846,7 +857,7 @@ async function deletePage(page) {
 
 .manage-header h2 {
   margin: 0;
-  font-family: 'Cinzel', serif;
+  font-family: 'Iosevka Charon', monospace;
   font-weight: 400;
   font-size: 1.2rem;
   letter-spacing: 0.1em;
@@ -861,19 +872,20 @@ async function deletePage(page) {
 
 .add-btn {
   width: 100%;
-  padding: 0.65rem;
-  border: 1px dashed var(--gold-dim);
+  padding: 0.6rem;
+  border: none;
   border-radius: 6px;
-  background: transparent;
-  color: var(--gold);
-  font-family: 'Cinzel', serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
+  background: #90caf9;
+  color: #121212;
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
 .add-btn:hover:not(:disabled) {
-  background: rgba(216, 181, 106, 0.08);
+  background: #64b5f6;
 }
 
 .add-btn:disabled {
@@ -908,7 +920,7 @@ async function deletePage(page) {
 .manage-num {
   width: 1.6rem;
   text-align: right;
-  font-family: 'Cinzel', serif;
+  font-family: 'Iosevka Charon', monospace;
   color: #b9a37a;
 }
 
@@ -929,11 +941,17 @@ async function deletePage(page) {
 .manage-actions button {
   width: 32px;
   height: 32px;
-  border-radius: 4px;
-  border: 1px solid rgba(216, 181, 106, 0.25);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   background: transparent;
-  color: #d9d4c7;
+  color: #888;
   cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.manage-actions button:hover:not(:disabled) {
+  border-color: #90caf9;
+  color: #90caf9;
 }
 
 .manage-actions button:disabled {
