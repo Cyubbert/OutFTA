@@ -8,6 +8,9 @@ const emptyProfile = () => ({
     title: '',
     bio: '',
     accent_color: '',
+    playlist_url: '',
+    playlist_title: '',
+    playlist_cover: '',
     can_view_moryquinau: false,
     can_post_community: false,
     can_post_moryquinau: false,
@@ -31,7 +34,7 @@ async function checkAdminStatus(userId) {
     }
     const { data, error } = await supabase
         .from('profiles')
-        .select('role, username, avatar_url, banner_url, title, bio, accent_color, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw, can_view_quinlan, can_post_quinlan, can_view_notebook')
+        .select('role, username, avatar_url, banner_url, title, bio, accent_color, playlist_url, playlist_title, playlist_cover, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw, can_view_quinlan, can_post_quinlan, can_view_notebook')
         .eq('id', userId)
         .single()
 
@@ -43,6 +46,9 @@ async function checkAdminStatus(userId) {
         title: data?.title || '',
         bio: data?.bio || '',
         accent_color: data?.accent_color || '',
+        playlist_url: data?.playlist_url || '',
+        playlist_title: data?.playlist_title || '',
+        playlist_cover: data?.playlist_cover || '',
         can_view_moryquinau: data?.can_view_moryquinau || false,
         can_post_community: data?.can_post_community || false,
         can_post_moryquinau: data?.can_post_moryquinau || false,

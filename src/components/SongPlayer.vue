@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { parseYouTubeId } from '@/lib/songLookup'
+import { loadYouTubeApi } from '@/lib/youtubeApi'
 
 const props = defineProps({
   url: { type: String, required: true },
@@ -8,25 +9,6 @@ const props = defineProps({
   artist: { type: String, default: '' },
   cover: { type: String, default: '' }
 })
-
-// The YouTube IFrame API is a global script; load it once and share the promise.
-let ytApiPromise = null
-function loadYouTubeApi() {
-  if (window.YT?.Player) return Promise.resolve(window.YT)
-  if (!ytApiPromise) {
-    ytApiPromise = new Promise((resolve) => {
-      const prev = window.onYouTubeIframeAPIReady
-      window.onYouTubeIframeAPIReady = () => {
-        prev?.()
-        resolve(window.YT)
-      }
-      const s = document.createElement('script')
-      s.src = 'https://www.youtube.com/iframe_api'
-      document.head.appendChild(s)
-    })
-  }
-  return ytApiPromise
-}
 
 const mountEl = ref(null)
 const ready = ref(false)

@@ -84,6 +84,68 @@
         </div>
       </section>
 
+      <section class="customize-section">
+        <h3 class="collection-title">Character Playlist</h3>
+
+        <PlaylistPlayer
+            v-if="profile.playlist_url"
+            :key="profile.playlist_url"
+            :url="profile.playlist_url"
+            :title="profile.playlist_title"
+            :cover="profile.playlist_cover"
+            :owner="profile.username"
+            :accent="profile.accent_color || DEFAULT_ACCENT"
+        />
+
+        <div class="customize-form">
+          <label class="customize-label" for="playlist-url-input">YouTube Music playlist link</label>
+          <div class="playlist-link-row">
+            <input
+                id="playlist-url-input"
+                v-model="playlistUrlInput"
+                placeholder="https://music.youtube.com/playlist?list=…"
+                class="customize-input"
+                @change="onPlaylistUrlChange"
+            />
+            <button class="save-btn" :disabled="!playlistUrlInput.trim() || playlistLooking" @click="fetchPlaylist">
+              {{ playlistLooking ? 'Looking up…' : 'Look up' }}
+            </button>
+          </div>
+          <p class="playlist-hint">The playlist needs to be public or unlisted.</p>
+
+          <template v-if="playlistUrlInput.trim()">
+            <label class="customize-label" for="playlist-title-input">Playlist name</label>
+            <input id="playlist-title-input" v-model="playlistTitleInput" maxlength="100" class="customize-input" />
+
+            <label class="customize-label">Playlist picture</label>
+            <div class="playlist-cover-row">
+              <button class="playlist-cover-btn" :disabled="uploadingPlaylistCover" @click="playlistCoverInputEl.click()">
+                <img v-if="playlistCoverInput" :src="playlistCoverInput" alt="Playlist picture" />
+                <span v-else>♪</span>
+                <span class="playlist-cover-overlay">{{ uploadingPlaylistCover ? 'Uploading…' : 'Upload' }}</span>
+              </button>
+              <div class="playlist-cover-actions">
+                <span class="playlist-hint">Click to upload your own square picture.</span>
+                <button
+                    v-if="lookedUpCover && playlistCoverInput !== lookedUpCover"
+                    class="reset-accent-btn"
+                    @click="playlistCoverInput = lookedUpCover"
+                >Use the playlist's picture</button>
+              </div>
+            </div>
+            <input ref="playlistCoverInputEl" type="file" accept="image/*" class="hidden-input" @change="onPlaylistCoverChange" />
+          </template>
+
+          <div class="customize-actions">
+            <button class="save-btn" :disabled="savingPlaylist || uploadingPlaylistCover || playlistLooking" @click="savePlaylist">
+              {{ savingPlaylist ? 'Saving…' : 'Save playlist' }}
+            </button>
+            <button v-if="profile.playlist_url" class="cancel-btn" :disabled="savingPlaylist" @click="removePlaylist">Remove</button>
+            <span v-if="playlistMsg" class="username-msg" :class="{ error: playlistError }">{{ playlistMsg }}</span>
+          </div>
+        </div>
+      </section>
+
       <h3 class="collection-title">Character Sheets</h3>
 
       <p v-if="sheetsLoading" class="page-loading">Loading…</p>
@@ -204,6 +266,19 @@
     />
 
     <ImageCropper
+        v-if="croppingPlaylistCoverFile"
+        :file="croppingPlaylistCoverFile"
+        :viewport-width="280"
+        :viewport-height="280"
+        :output-width="640"
+        :output-height="640"
+        shape="rect"
+        title="Crop playlist picture"
+        @cropped="onPlaylistCoverCropped"
+        @cancel="croppingPlaylistCoverFile = null"
+    />
+
+    <ImageCropper
         v-if="croppingBannerFile"
         :file="croppingBannerFile"
         :viewport-width="560"
@@ -226,6 +301,8 @@ import LoginForm from '@/components/LoginForm.vue'
 import CharacterSheetForm from '@/components/CharacterSheetForm.vue'
 import CharacterSheetDetail from '@/components/CharacterSheetDetail.vue'
 import ImageCropper from '@/components/ImageCropper.vue'
+import PlaylistPlayer from '@/components/PlaylistPlayer.vue'
+import { lookupPlaylist, parsePlaylistId } from '@/lib/songLookup'
 
 const { user, loading, profile, signOut } = useAuth()
 
@@ -253,6 +330,18 @@ const uploadingBanner = ref(false)
 const bannerError = ref('')
 const croppingBannerFile = ref(null)
 
+const playlistUrlInput = ref('')
+const playlistTitleInput = ref('')
+const playlistCoverInput = ref('')
+const lookedUpCover = ref('')
+const playlistLooking = ref(false)
+const playlistCoverInputEl = ref(null)
+const uploadingPlaylistCover = ref(false)
+const croppingPlaylistCoverFile = ref(null)
+const savingPlaylist = ref(false)
+const playlistMsg = ref('')
+const playlistError = ref(false)
+
 const sheets = ref([])
 const sheetsLoading = ref(true)
 const creating = ref(false)
@@ -276,6 +365,9 @@ watch(profile, (p) => {
   titleInput.value = p.title || ''
   bioInput.value = p.bio || ''
   accentColorInput.value = p.accent_color || DEFAULT_ACCENT
+  playlistUrlInput.value = p.playlist_url || ''
+  playlistTitleInput.value = p.playlist_title || ''
+  playlistCoverInput.value = p.playlist_cover || ''
 }, { immediate: true })
 
 watch(user, async (u) => {
@@ -366,6 +458,104 @@ async function saveCustomization() {
     accent_color: accentColorInput.value
   }
   customizationMsg.value = 'Saved.'
+}
+
+async function fetchPlaylist() {
+  playlistMsg.value = ''
+  playlistError.value = false
+  playlistLooking.value = true
+  try {
+    const found = await lookupPlaylist(playlistUrlInput.value)
+    playlistTitleInput.value = found.title
+    // Keep an uploaded picture; only fill in the playlist's own when there's none
+    if (!playlistCoverInput.value || playlistCoverInput.value === lookedUpCover.value) playlistCoverInput.value = found.cover
+    lookedUpCover.value = found.cover
+  } catch (e) {
+    playlistError.value = true
+    playlistMsg.value = e.message
+  } finally {
+    playlistLooking.value = false
+  }
+}
+
+// Auto-fill when a new link is pasted in.
+function onPlaylistUrlChange() {
+  if (playlistUrlInput.value.trim() && playlistUrlInput.value.trim() !== profile.value.playlist_url) fetchPlaylist()
+}
+
+function onPlaylistCoverChange(e) {
+  const file = e.target.files?.[0]
+  e.target.value = ''
+  if (!file) return
+  croppingPlaylistCoverFile.value = file
+}
+
+async function onPlaylistCoverCropped(blob) {
+  croppingPlaylistCoverFile.value = null
+  uploadingPlaylistCover.value = true
+  playlistMsg.value = ''
+  playlistError.value = false
+
+  const path = `playlists/${user.value.id}/cover.webp`
+
+  const { error } = await supabase.storage
+      .from('images')
+      .upload(path, blob, { upsert: true, contentType: 'image/webp' })
+
+  uploadingPlaylistCover.value = false
+
+  if (error) {
+    playlistError.value = true
+    playlistMsg.value = error.message
+    return
+  }
+
+  const { data: pub } = supabase.storage.from('images').getPublicUrl(path)
+  playlistCoverInput.value = `${pub.publicUrl}?t=${Date.now()}`
+}
+
+async function writePlaylist(fields) {
+  savingPlaylist.value = true
+  playlistMsg.value = ''
+  playlistError.value = false
+
+  const { error } = await supabase.from('profiles').update(fields).eq('id', user.value.id)
+
+  savingPlaylist.value = false
+
+  if (error) {
+    playlistError.value = true
+    playlistMsg.value = error.message
+    return false
+  }
+
+  profile.value = {
+    ...profile.value,
+    playlist_url: fields.playlist_url || '',
+    playlist_title: fields.playlist_title || '',
+    playlist_cover: fields.playlist_cover || ''
+  }
+  return true
+}
+
+async function savePlaylist() {
+  const url = playlistUrlInput.value.trim()
+  if (url && !parsePlaylistId(url)) {
+    playlistError.value = true
+    playlistMsg.value = "That doesn't look like a YouTube playlist link."
+    return
+  }
+  const ok = await writePlaylist({
+    playlist_url: url || null,
+    playlist_title: url ? playlistTitleInput.value.trim() || null : null,
+    playlist_cover: url ? playlistCoverInput.value || null : null
+  })
+  if (ok) playlistMsg.value = 'Saved.'
+}
+
+async function removePlaylist() {
+  const ok = await writePlaylist({ playlist_url: null, playlist_title: null, playlist_cover: null })
+  if (ok) lookedUpCover.value = ''
 }
 
 function triggerAvatarPick() {
@@ -911,6 +1101,75 @@ async function deleteImage(img) {
 
 .reset-accent-btn:hover {
   color: #90caf9;
+}
+
+.playlist-link-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.playlist-link-row .customize-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.playlist-link-row .save-btn { flex-shrink: 0; }
+
+.playlist-hint {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+}
+
+.playlist-cover-row {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.playlist-cover-btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: #666;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.playlist-cover-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.playlist-cover-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.8rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.playlist-cover-btn:hover .playlist-cover-overlay,
+.playlist-cover-btn:focus-visible .playlist-cover-overlay,
+.playlist-cover-btn:disabled .playlist-cover-overlay { opacity: 1; }
+
+.playlist-cover-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
 }
 
 .customize-actions {

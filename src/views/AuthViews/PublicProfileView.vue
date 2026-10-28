@@ -26,6 +26,18 @@
       <p v-if="profile.title" class="profile-title" :style="{ color: accentColor }">{{ profile.title }}</p>
       <p v-if="profile.bio" class="profile-bio">{{ profile.bio }}</p>
 
+      <template v-if="profile.playlist_url">
+        <h3 class="collection-title" :style="{ color: accentColor }">Character Playlist</h3>
+        <PlaylistPlayer
+            :key="profile.playlist_url"
+            :url="profile.playlist_url"
+            :title="profile.playlist_title"
+            :cover="profile.playlist_cover"
+            :owner="profile.username"
+            :accent="accentColor"
+        />
+      </template>
+
       <h3 class="collection-title" :style="{ color: accentColor }">Character Sheets</h3>
 
       <p v-if="sheetsLoading" class="page-loading">Loading…</p>
@@ -90,6 +102,7 @@ import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import CharacterSheetDetail from '@/components/CharacterSheetDetail.vue'
+import PlaylistPlayer from '@/components/PlaylistPlayer.vue'
 
 const route = useRoute()
 const username = computed(() => route.params.username)
@@ -118,7 +131,7 @@ async function load() {
 
   const { data, error } = await supabase
       .from('profiles')
-      .select('id, username, avatar_url, banner_url, title, bio, accent_color')
+      .select('id, username, avatar_url, banner_url, title, bio, accent_color, playlist_url, playlist_title, playlist_cover')
       .ilike('username', username.value)
       .maybeSingle()
 
