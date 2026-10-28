@@ -95,6 +95,26 @@
       </div>
     </fieldset>
 
+    <fieldset class="section">
+      <legend>Wax seal</legend>
+      <div class="seal-picker">
+        <img v-if="seal" :src="seal" class="seal-opt on" alt="Uploaded seal" />
+        <button
+            type="button"
+            class="seal-opt seal-upload"
+            :disabled="uploadingSeal"
+            :title="seal ? 'Replace with another PNG' : 'Upload a PNG'"
+            @click="sealFileEl.click()"
+        >{{ uploadingSeal ? '…' : '+' }}</button>
+      </div>
+      <input ref="sealFileEl" type="file" accept="image/png,image/*" class="hidden-input" @change="onSealFile" />
+      <div v-if="seal" class="image-actions">
+        <button type="button" class="link-btn" @click="seal = null">Remove seal</button>
+      </div>
+      <p class="hint">Pressed small at the bottom of the entry.</p>
+      <p v-if="sealError" class="error">{{ sealError }}</p>
+    </fieldset>
+
     <div class="field">
       <label for="mf-body">Entry</label>
       <textarea id="mf-body" v-model="form.body" rows="10" required placeholder="Dear…"></textarea>
@@ -107,7 +127,7 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary" :disabled="submitting || uploadingImage">
+      <button type="submit" class="btn-primary" :disabled="submitting || uploadingImage || uploadingSeal">
         {{ submitting ? 'Saving…' : (editEntry ? 'Update entry' : 'Save entry') }}
       </button>
       <button type="button" class="btn-ghost" @click="$emit('cancel')">Cancel</button>
@@ -164,6 +184,28 @@ async function onImageFile(e) {
     uploadingImage.value = false
   }
 }
+
+// ── wax seal (small emblem shown at the foot of the entry) ──
+const seal = ref(props.editEntry?.seal ?? null)
+const sealFileEl = ref(null)
+const uploadingSeal = ref(false)
+const sealError = ref('')
+
+async function onSealFile(e) {
+  const file = e.target.files?.[0]
+  e.target.value = ''
+  if (!file) return
+  uploadingSeal.value = true
+  sealError.value = ''
+  try {
+    seal.value = await uploadEntryImage(file, user.value.id)
+  } catch (err) {
+    sealError.value = err.message
+  } finally {
+    uploadingSeal.value = false
+  }
+}
+
 const highlightsInput = ref((props.editEntry?.highlights ?? []).join('\n'))
 const submitting = ref(false)
 const successMsg = ref('')
@@ -192,6 +234,7 @@ async function handleSubmit() {
     body: form.body,
     images,
     highlights,
+    seal: seal.value,
     ...songPayload()
   }
 
@@ -228,6 +271,7 @@ async function handleSubmit() {
   form.body = ''
   clearSong()
   imageUrlInput.value = ''
+  seal.value = null
   highlightsInput.value = ''
 }
 </script>
@@ -476,6 +520,48 @@ textarea {
   flex-direction: column;
   gap: 0.75rem;
 }
+
+.seal-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.seal-opt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 56px;
+  height: 56px;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fbf8f2;
+  color: var(--faded);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+img.seal-opt { object-fit: contain; }
+
+.seal-opt:hover:not(:disabled) { border-color: var(--red); color: var(--red); }
+
+.seal-opt.on {
+  border-color: var(--red);
+  box-shadow: 0 0 0 2px rgba(192, 57, 43, 0.25);
+  color: var(--ink);
+}
+
+.seal-upload {
+  border-style: dashed;
+  font-size: 1.3rem;
+}
+
+.seal-upload:disabled { opacity: 0.6; cursor: default; }
 
 .hint {
   margin: 0.2rem 0 0;

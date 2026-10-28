@@ -113,7 +113,7 @@ function moodColor(mood) {
 onMounted(async () => {
   const { data, error } = await supabase
       .from('diary_entries')
-      .select('id, session, title, date, location, mood, images, body, highlights, song_url, song_title, song_artist, song_cover')
+      .select('id, session, title, date, location, mood, images, body, highlights, song_url, song_title, song_artist, song_cover, seal')
 
   if (error) entriesError.value = error
   else entries.value = data
@@ -222,6 +222,10 @@ async function deleteEntry(entry) {
             <li v-for="h in activeEntry.highlights" :key="h">{{ h }}</li>
           </ul>
         </div>
+
+        <footer v-if="activeEntry.seal" class="page-seal">
+          <img :src="activeEntry.seal" alt="" />
+        </footer>
 
         <div class="detail-footer">
           <div class="detail-rule"/>
@@ -743,6 +747,20 @@ async function deleteEntry(entry) {
   left: 0;
   color: #c0392b;
   opacity: 0.5;
+}
+
+.page-seal {
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem 0 -1.5rem;
+}
+
+.page-seal img {
+  height: 44px;
+  width: auto;
+  max-width: 64px;
+  object-fit: contain;
+  opacity: 0.9;
 }
 
 .detail-footer {
