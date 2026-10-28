@@ -72,10 +72,18 @@
       <p v-if="songError" class="error">{{ songError }}</p>
 
       <div v-if="hasSong" class="song-details">
-        <div class="song-cover">
+        <button
+            type="button"
+            class="song-cover"
+            :disabled="uploadingCover"
+            title="Upload your own cover"
+            @click="coverFileEl.click()"
+        >
           <img v-if="form.song_cover" :src="form.song_cover" alt="" />
           <span v-else aria-hidden="true">♪</span>
-        </div>
+          <span class="song-cover-change">{{ uploadingCover ? 'Uploading…' : 'Upload' }}</span>
+        </button>
+        <input ref="coverFileEl" type="file" accept="image/*" class="hidden-input" @change="onCoverFile" />
         <div class="song-fields">
           <div class="grid">
             <div class="field">
@@ -90,6 +98,7 @@
           <div class="field">
             <label for="mf-song-cover">Album cover URL</label>
             <input id="mf-song-cover" v-model="form.song_cover" placeholder="https://…" />
+            <p v-if="coverError" class="error">{{ coverError }}</p>
           </div>
         </div>
       </div>
@@ -127,7 +136,7 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn-primary" :disabled="submitting || uploadingImage || uploadingSeal">
+      <button type="submit" class="btn-primary" :disabled="submitting || uploadingImage || uploadingSeal || uploadingCover">
         {{ submitting ? 'Saving…' : (editEntry ? 'Update entry' : 'Save entry') }}
       </button>
       <button type="button" class="btn-ghost" @click="$emit('cancel')">Cancel</button>
@@ -203,6 +212,26 @@ async function onSealFile(e) {
     sealError.value = err.message
   } finally {
     uploadingSeal.value = false
+  }
+}
+
+// Song cover: filled by the lookup, or uploaded by clicking the cover square.
+const coverFileEl = ref(null)
+const uploadingCover = ref(false)
+const coverError = ref('')
+
+async function onCoverFile(e) {
+  const file = e.target.files?.[0]
+  e.target.value = ''
+  if (!file) return
+  uploadingCover.value = true
+  coverError.value = ''
+  try {
+    form.song_cover = await uploadEntryImage(file, user.value.id)
+  } catch (err) {
+    coverError.value = err.message
+  } finally {
+    uploadingCover.value = false
   }
 }
 
@@ -494,6 +523,9 @@ textarea {
 }
 
 .song-cover {
+  position: relative;
+  padding: 0;
+  cursor: pointer;
   flex-shrink: 0;
   width: 92px;
   height: 92px;
@@ -511,6 +543,29 @@ textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.song-cover:hover:not(:disabled) { border-color: var(--red); }
+.song-cover:disabled { cursor: default; }
+
+.song-cover-change {
+  position: absolute;
+  inset: auto 0 0;
+  padding: 0.2rem 0;
+  background: rgba(245, 240, 232, 0.92);
+  color: var(--ink);
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.song-cover:hover .song-cover-change,
+.song-cover:focus-visible .song-cover-change,
+.song-cover:disabled .song-cover-change { opacity: 1; }
+
+@media (hover: none) {
+  .song-cover-change { opacity: 1; }
 }
 
 .song-fields {
