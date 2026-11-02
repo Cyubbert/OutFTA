@@ -381,8 +381,8 @@ async function deleteEntry(entry) {
   --tag-green-fg: #D9EFE1;
 
   min-height: 100vh;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;

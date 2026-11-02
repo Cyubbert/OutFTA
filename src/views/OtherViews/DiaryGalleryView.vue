@@ -289,8 +289,8 @@ onUnmounted(() => {
 
 .dg-root {
   min-height: 100vh;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
+  overflow-x: clip;
   background: var(--bg);
   color: var(--text);
   font-family: var(--body-font);

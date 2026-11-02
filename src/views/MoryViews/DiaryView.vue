@@ -320,8 +320,8 @@ async function deleteEntry(entry) {
   color: #1a1008;
   font-family: 'EB Garamond', serif;
   position: relative;
-  width: 100vw;
-  margin-left: calc(-50vw + 50%);
+  width: 100%;
+  overflow-x: clip;
 }
 
 .diary-list {
