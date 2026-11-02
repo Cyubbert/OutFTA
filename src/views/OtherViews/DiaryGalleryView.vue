@@ -169,8 +169,8 @@ onUnmounted(() => {
 
     <section class="dg-page">
       <header class="dg-header">
+        <div class="dg-mark" aria-hidden="true">✦</div>
         <h1 class="dg-title">Gallery</h1>
-        <p class="dg-subtitle">Art of Mory &amp; Quinlan</p>
 
         <div class="dg-tabs">
           <button class="dg-tab" :class="{ active: filterTag === 'all' }" @click="filterTag = 'all'">All</button>
@@ -199,7 +199,6 @@ onUnmounted(() => {
       <p v-if="galleryLoading" class="empty-state">Loading…</p>
       <p v-else-if="galleryError" class="empty-state">Couldn't load the gallery.</p>
       <template v-else>
-        <p class="count-label">{{ filtered.length }} work{{ filtered.length !== 1 ? 's' : '' }}</p>
         <div v-if="!filtered.length" class="empty-state">No pictures yet.</div>
 
         <transition-group name="fade" tag="div" class="dg-grid">
@@ -269,21 +268,22 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=UnifrakturCook:wght@700&display=swap');
 
-/* ───────── Theme: Quinlan's dark page, Mory's type and ink ───────── */
+/* ───────── Theme: gothic — Quinlan's dark page, Mory's type and ink ───────── */
 .dg-root {
-  --bg: #191919;
+  --bg: #141212;
   --text: #e8dcc8;
-  --surface: #202020;
-  --surface-hover: #262626;
+  --surface: #1c1818;
+  --surface-hover: #241d1d;
   --border: #2F2F2F;
   --muted: #9a8878;
-  --accent: #c0392b;
+  --accent: #8A1424;
   --accent-text: #fff;
+  --gold: #b17a2a;
+  --gold-faint: rgba(177, 122, 42, 0.35);
+  --blackletter: 'UnifrakturCook', serif;
   --title-font: 'Cormorant Garamond', serif;
-  --title-weight: 300;
-  --title-style: italic;
   --body-font: 'EB Garamond', serif;
 }
 
@@ -291,13 +291,17 @@ onUnmounted(() => {
   min-height: 100vh;
   width: 100%;
   overflow-x: clip;
-  background: var(--bg);
   color: var(--text);
   font-family: var(--body-font);
+  /* Candlelit vignette: a faint red glow from above, darkness at the edges. */
+  background:
+      radial-gradient(ellipse 80% 45% at 50% 0%, rgba(138, 20, 36, 0.22), transparent 70%),
+      radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+      var(--bg);
 }
 
 .dg-page {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 3rem 1rem 6rem;
 }
@@ -307,88 +311,96 @@ onUnmounted(() => {
   text-align: center;
 }
 
-.dg-title {
-  font-family: var(--title-font);
-  font-weight: var(--title-weight);
-  font-style: var(--title-style);
-  font-size: 3rem;
-  margin: 0 0 0.25rem;
-  letter-spacing: 0.04em;
+.dg-mark {
+  color: var(--accent);
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-bottom: 0.5rem;
 }
 
-.dg-subtitle {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.25em;
-  color: var(--muted);
-  margin: 0 0 1.5rem;
+.dg-title {
+  font-family: var(--blackletter);
+  font-weight: 700;
+  font-size: clamp(3rem, 9vw, 4.6rem);
+  line-height: 1.05;
+  margin: 0 0 1.75rem;
+  color: var(--text);
 }
 
 .dg-tabs {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 1rem;
+  gap: 0.35rem 1.4rem;
+  margin-bottom: 1.5rem;
 }
 
 .dg-tab {
-  padding: 0.45rem 1.2rem;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
+  padding: 0.3rem 0.1rem;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: none;
+  color: var(--muted);
   cursor: pointer;
-  font-family: inherit;
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  transition: background 0.2s, border-color 0.2s;
+  font-family: var(--title-font);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s, text-shadow 0.2s;
 }
 
 .dg-tab:hover:not(.active) {
-  background: var(--surface-hover);
+  color: var(--text);
 }
 
 .dg-tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-text);
+  color: var(--text);
+  border-bottom-color: var(--accent);
+  text-shadow: 0 0 10px rgba(138, 20, 36, 0.55);
 }
 
 .nsfw-tab:not(.active) {
-  color: #c46c6c;
-  border-color: rgba(196, 108, 108, 0.45);
+  color: var(--accent);
 }
 
 .nsfw-tab.active {
-  background: #c46c6c;
-  border-color: #c46c6c;
+  color: var(--text);
+  border-bottom-color: var(--accent);
 }
 
 .composer-row {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .upload-btn {
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
-  padding: 0.6rem 1.4rem;
-  border-radius: 6px;
-  font-family: inherit;
-  font-size: 0.9rem;
+  background: rgba(138, 20, 36, 0.18);
+  color: var(--text);
+  border: 1px solid var(--accent);
+  outline: 1px solid var(--gold-faint);
+  outline-offset: 3px;
+  padding: 0.55rem 1.6rem;
+  border-radius: 0;
+  font-family: var(--title-font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: filter 0.2s;
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .upload-btn:hover {
-  filter: brightness(1.12);
+  background: rgba(138, 20, 36, 0.4);
+  box-shadow: 0 0 18px rgba(138, 20, 36, 0.35);
 }
 
 .sign-in-note {
-  font-size: 0.85rem;
+  font-family: var(--title-font);
+  font-style: italic;
+  font-size: 1rem;
   color: var(--muted);
 }
 
@@ -396,18 +408,12 @@ onUnmounted(() => {
   color: var(--accent);
 }
 
-.count-label {
-  font-size: 0.7rem;
-  color: var(--muted);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
 .empty-state {
   text-align: center;
+  font-family: var(--title-font);
   color: var(--muted);
   font-style: italic;
+  font-size: 1.1rem;
   padding: 3rem 0;
 }
 
@@ -415,50 +421,53 @@ onUnmounted(() => {
 .dg-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 14px;
 }
 
 .dg-item {
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  border: 1px solid var(--accent);
+  background: #0f0d0d;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-  transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
 }
 
 .dg-item:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 22px rgba(138, 20, 36, 0.45);
 }
 
+/* Thumbnails fill the tile; the full, uncropped picture shows in the viewer. */
 .dg-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   transition: transform 0.35s;
 }
 
 .dg-item:hover .dg-img {
-  transform: scale(1.07);
+  transform: scale(1.05);
 }
 
 .nsfw-badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 2;
-  background: rgba(196, 108, 108, 0.9);
-  color: #fff;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  padding: 2px 6px;
-  border-radius: 4px;
+  background: rgba(20, 8, 8, 0.85);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: var(--title-font);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  padding: 1px 8px;
 }
 
 .admin-actions {
@@ -473,28 +482,30 @@ onUnmounted(() => {
 .admin-btn {
   width: 26px;
   height: 26px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(18, 18, 18, 0.8);
-  color: #e0e0e0;
+  border-radius: 0;
+  border: 1px solid var(--gold-faint);
+  background: rgba(15, 13, 13, 0.85);
+  color: var(--text);
   cursor: pointer;
   font-size: 0.8rem;
   line-height: 1;
   transition: border-color 0.2s, color 0.2s;
 }
-.admin-btn:hover { border-color: #e0e0e0; color: #fff; }
-.admin-btn.delete:hover { border-color: #e05252; color: #e05252; }
+.admin-btn:hover { border-color: var(--gold); color: #fff; }
+.admin-btn.delete:hover { border-color: #8A1424; color: #8A1424; }
 
 .dg-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+  background: linear-gradient(to top, rgba(8, 4, 4, 0.92) 0%, rgba(8, 4, 4, 0.15) 50%, transparent 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0.8rem 0.9rem;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0.9rem;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.25s;
 }
 
 .dg-item:hover .dg-overlay {
@@ -503,14 +514,17 @@ onUnmounted(() => {
 
 .art-title {
   font-family: var(--title-font);
-  font-size: 1rem;
+  font-style: italic;
+  font-size: 1.15rem;
   color: #fff;
 }
 
 .art-artist {
+  font-family: var(--title-font);
   font-size: 0.72rem;
-  color: #d8cfc2;
-  letter-spacing: 0.05em;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   margin-top: 2px;
 }
 
@@ -586,33 +600,43 @@ onUnmounted(() => {
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(10, 5, 0, 0.93);
+  background: radial-gradient(ellipse at center, rgba(30, 8, 10, 0.93), rgba(5, 2, 2, 0.97));
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  /* Room above for the close button, so a tall picture never sits under it. */
+  padding: 4rem 1rem 1.5rem;
 }
 
+/* The picture shrinks to whatever room the caption leaves, so the viewer never scrolls. */
 .lb-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
+  width: 100%;
+  height: 100%;
   max-width: 90vw;
-  max-height: 90vh;
-  overflow-y: auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .lb-img {
-  max-width: 90vw;
-  max-height: 70vh;
+  flex: 0 1 auto;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  border-radius: 4px;
-  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--accent);
+  outline: 1px solid rgba(138, 20, 36, 0.4);
+  outline-offset: 5px;
+  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.9), 0 0 40px rgba(138, 20, 36, 0.25);
 }
 
 .lb-info {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -623,14 +647,17 @@ onUnmounted(() => {
 
 .lb-title {
   font-family: var(--title-font);
-  font-size: 1.2rem;
+  font-style: italic;
+  font-size: 1.4rem;
   color: #fff;
 }
 
 .lb-artist {
-  font-size: 0.8rem;
-  color: #d8cfc2;
-  letter-spacing: 0.06em;
+  font-family: var(--title-font);
+  font-size: 0.78rem;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .lb-body {
@@ -638,6 +665,8 @@ onUnmounted(() => {
   color: #ccc;
   margin: 0.5rem 0 0;
   line-height: 1.6;
+  max-height: 6.4em;
+  overflow-y: auto;
 }
 
 .lb-tags {
@@ -658,8 +687,8 @@ onUnmounted(() => {
 }
 
 .tag-chip.nsfw {
-  color: #e08a8a;
-  border-color: #3a1a1a;
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 .lb-actions {
@@ -680,7 +709,7 @@ onUnmounted(() => {
   transition: border-color 0.2s, color 0.2s;
 }
 .lb-action-btn:hover { border-color: #fff; color: #fff; }
-.lb-action-btn.danger:hover { border-color: #e05252; color: #e05252; }
+.lb-action-btn.danger:hover { border-color: #8A1424; color: #8A1424; }
 
 .lb-close {
   position: absolute;
@@ -733,8 +762,7 @@ onUnmounted(() => {
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 
 @media (max-width: 600px) {
-  .dg-title { font-size: 2.4rem; }
-  .dg-grid { grid-template-columns: repeat(2, 1fr); }
+  .dg-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .lb-nav { display: none; }
 }
 

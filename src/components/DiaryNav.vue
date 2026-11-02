@@ -93,7 +93,7 @@ defineProps({
 /* Gallery theme: Quinlan's dark bar, Mory's red ink */
 .diary-nav.gallery {
   background: rgba(25, 25, 25, 0.9);
-  border-bottom: 1px solid rgba(192, 57, 43, 0.25);
+  border-bottom: 1px solid rgba(138, 20, 36, 0.45);
 }
 .diary-nav.gallery .diary-nav-link {
   color: #9a8878;
@@ -103,10 +103,10 @@ defineProps({
 }
 .diary-nav.gallery .diary-nav-link.active {
   color: #e8dcc8;
-  border-bottom-color: #c0392b;
+  border-bottom-color: #8A1424;
 }
 .diary-nav.gallery .diary-nav-sep {
-  color: #c0392b;
+  color: #8A1424;
   font-size: 0.7rem;
   opacity: 0.7;
 }
