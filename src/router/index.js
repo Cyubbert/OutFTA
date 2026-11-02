@@ -17,24 +17,9 @@ const router = createRouter({
             component: () => import("@/views/WorldViews/WorldView.vue")
         },
         {
-            path: "/world/norrun",
-            name: "norrun",
-            component: () => import("@/views/WorldViews/NorrunView.vue")
-        },
-        {
-            path: "/world/liira",
-            name: "liira",
-            component: () => import("@/views/DeityViews/LiiraView.vue")
-        },
-        {
-            path: "/world/sune",
-            name: "sune",
-            component: () => import("@/views/DeityViews/SuneView.vue")
-        },
-        {
-            path: "/world/talona",
-            name: "talona",
-            component: () => import("@/views/DeityViews/TalonaView.vue")
+            path: "/world/:slug",
+            name: "world-page",
+            component: () => import("@/views/WorldViews/PageView.vue")
         },
 
         // ── Kingdom ──
@@ -45,29 +30,9 @@ const router = createRouter({
             component: () => import("@/views/WorldViews/KingdomView.vue")
         },
         {
-            path: "/kingdom/dredel",
-            name: "dredel",
-            component: () => import("@/views/WorldViews/DredelView.vue")
-        },
-        {
-            path: "/kingdom/lacrima",
-            name: "lacrima",
-            component: () => import("@/views/WorldViews/LacrimaView.vue")
-        },
-        {
-            path: "/kingdom/duweil",
-            name: "duweil",
-            component: () => import("@/views/WorldViews/DuweilView.vue")
-        },
-        {
-            path: "/kingdom/ivia",
-            name: "ivia",
-            component: () => import("@/views/WorldViews/IviaView.vue")
-        },
-        {
-            path: "/kingdom/letlon",
-            name: "letlon",
-            component: () => import("@/views/WorldViews/LetlonView.vue")
+            path: "/kingdom/:slug",
+            name: "kingdom-page",
+            component: () => import("@/views/WorldViews/PageView.vue")
         },
 
         // ── NPCs ──
@@ -78,29 +43,9 @@ const router = createRouter({
             component: () => import("@/views/NPCViews/NpcsView.vue")
         },
         {
-            path: "/npcs/aarely",
-            name: "aarely",
-            component: () => import("@/views/NPCViews/AarelyView.vue")
-        },
-        {
-            path: "/npcs/virex",
-            name: "virex",
-            component: () => import("@/views/NPCViews/VirexView.vue")
-        },
-        {
-            path: "/npcs/aasmias",
-            name: "aasmias",
-            component: () => import("@/views/NPCViews/AasmiasView.vue")
-        },
-        {
-            path: "/npcs/moltyn",
-            name: "moltyn",
-            component: () => import("@/views/NPCViews/MoltynView.vue")
-        },
-        {
-            path: "/npcs/selene",
-            name: "selene",
-            component: () => import("@/views/NPCViews/SeleneView.vue")
+            path: "/npcs/:slug",
+            name: "npc-page",
+            component: () => import("@/views/WorldViews/PageView.vue")
         },
 
         // ── Sessions ──

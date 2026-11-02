@@ -358,7 +358,7 @@ async function deletePage(page) {
         </nav>
 
         <div class="sub-controls">
-          <button v-if="openImages.length" class="text-btn" @click="openZoom">Look closer</button>
+          <button v-if="openImages.length" class="text-btn" @click="openZoom">Take a closer look</button>
           <button v-if="!isClosed" class="text-btn" @click="turnTo(0)">Close the book</button>
           <button v-if="isAdmin" class="text-btn admin" @click="managing = true">Manage pages</button>
         </div>
@@ -821,20 +821,23 @@ async function deletePage(page) {
 }
 
 .overlay.zoom {
-  align-items: center;
   cursor: zoom-out;
 }
 
+/* Centred with auto margins rather than align-items: center, so pages taller than
+   the screen (two pages stacked on a phone) scroll instead of being cut off at the top. */
 .zoom-pages {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
+  margin: auto 0;
 }
 
 .zoom-pages img {
   max-width: min(92vw, 720px);
   max-height: 88vh;
+  max-height: 88dvh;
   object-fit: contain;
   border-radius: 4px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const props = defineProps({
   title: { type: String, required: true },
-  coverImage: { type: String, required: true },
+  coverImage: { type: String, default: '' },
   coverAlt: { type: String, default: '' },
   sections: { type: Array, default: () => [] },
   mapImage: { type: Object, default: null },
@@ -16,7 +16,7 @@ const closeMoodboard = () => (activeMoodboard.value = null)
 </script>
 
 <template>
-  <header class="page-header">
+  <header v-if="coverImage" class="page-header">
     <img class="page-cover-image" :src="coverImage" :alt="coverAlt" />
   </header>
 
