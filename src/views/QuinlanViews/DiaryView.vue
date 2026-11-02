@@ -60,6 +60,12 @@ const sorted = computed(() =>
     [...entries.value].sort((a, b) => sortAsc.value ? a.session - b.session : b.session - a.session)
 )
 
+// Prev/next always turn pages in chapter order, whatever the index sort.
+const chapters = computed(() => [...entries.value].sort((a, b) => a.session - b.session))
+const activeIndex = computed(() => chapters.value.findIndex(e => e.id === activeEntry.value?.id))
+const prevEntry = computed(() => activeIndex.value > 0 ? chapters.value[activeIndex.value - 1] : null)
+const nextEntry = computed(() => activeIndex.value === -1 ? null : chapters.value[activeIndex.value + 1] ?? null)
+
 const visible = computed(() => {
   const q = query.value.trim().toLowerCase()
   if (!q) return sorted.value
@@ -262,10 +268,19 @@ async function deleteEntry(entry) {
           <footer v-if="scarabSrc(activeEntry.scarab)" class="page-seal">
             <img :src="scarabSrc(activeEntry.scarab)" alt="" />
           </footer>
-          <button class="back-btn" @click="close">
-            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
-            Back to all entries
-          </button>
+          <nav class="entry-nav">
+            <button v-if="prevEntry" class="entry-nav-btn" @click="open(prevEntry)">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" /></svg>
+              <span>{{ prevEntry.title }}</span>
+            </button>
+            <span v-else class="entry-nav-spacer" />
+            <button class="entry-nav-btn center" @click="close">All entries</button>
+            <button v-if="nextEntry" class="entry-nav-btn next" @click="open(nextEntry)">
+              <span>{{ nextEntry.title }}</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m6 3 5 5-5 5" /></svg>
+            </button>
+            <span v-else class="entry-nav-spacer" />
+          </nav>
         </article>
       </transition>
 
@@ -663,6 +678,56 @@ button { font-family: inherit; }
 }
 
 .back-btn:hover { background: var(--surface-hover); color: var(--text); }
+
+.entry-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.entry-nav-btn,
+.entry-nav-spacer {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.entry-nav-btn span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entry-nav-btn:hover { background: var(--surface-hover); border-color: var(--blood); }
+
+.entry-nav-btn.center {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.entry-nav-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .page-session {
   margin-top: 1.5rem;

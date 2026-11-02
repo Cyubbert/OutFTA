@@ -44,6 +44,11 @@ const sorted = computed(() =>
     [...entries.value].sort((a, b) => b.session - a.session)
 )
 
+// Prev/next follow session order, like the session recaps.
+const activeIndex = computed(() => sorted.value.findIndex(e => e.id === activeEntry.value?.id))
+const prevEntry = computed(() => activeIndex.value === -1 ? null : sorted.value[activeIndex.value + 1] ?? null)
+const nextEntry = computed(() => activeIndex.value > 0 ? sorted.value[activeIndex.value - 1] : null)
+
 function splitParas(text) {
   return text.split('\n\n').map(p => p.trim()).filter(Boolean)
 }
@@ -229,7 +234,13 @@ async function deleteEntry(entry) {
 
         <div class="detail-footer">
           <div class="detail-rule"/>
-          <button class="back-btn-bottom" @click="close">← All Entries</button>
+          <nav class="entry-nav">
+            <button v-if="prevEntry" class="entry-nav-btn" @click="open(prevEntry)">← {{ prevEntry.title }}</button>
+            <span v-else class="entry-nav-spacer"/>
+            <button class="entry-nav-btn center" @click="close">All Entries</button>
+            <button v-if="nextEntry" class="entry-nav-btn" @click="open(nextEntry)">{{ nextEntry.title }} →</button>
+            <span v-else class="entry-nav-spacer"/>
+          </nav>
         </div>
       </div>
     </transition>
@@ -756,9 +767,9 @@ async function deleteEntry(entry) {
 }
 
 .page-seal img {
-  height: 44px;
+  height: 72px;
   width: auto;
-  max-width: 64px;
+  max-width: 104px;
   object-fit: contain;
   opacity: 0.9;
 }
@@ -767,23 +778,47 @@ async function deleteEntry(entry) {
   margin-top: 3rem;
 }
 
-.back-btn-bottom {
-  background: none;
-  border: none;
+.entry-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.entry-nav-btn,
+.entry-nav-spacer {
+  flex: 1;
+  min-width: 0;
+}
+
+.entry-nav-btn {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(26, 16, 8, 0.12);
+  border-radius: 4px;
+  background: #f0e8d8;
   font-family: 'EB Garamond', serif;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: #5a3828;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.entry-nav-btn:hover {
+  background: #e8dcc8;
+  border-color: rgba(192, 57, 43, 0.4);
+  color: #c0392b;
+}
+
+.entry-nav-btn.center {
+  flex: 0 0 auto;
+  font-style: normal;
+  font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #9a8878;
-  cursor: pointer;
-  padding: 0;
-  margin-top: 1rem;
-  transition: color 0.15s;
-  display: block;
-}
-
-.back-btn-bottom:hover {
-  color: #c0392b;
 }
 
 .lb-backdrop {

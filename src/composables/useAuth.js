@@ -18,7 +18,9 @@ const emptyProfile = () => ({
     can_view_nsfw: false,
     can_view_quinlan: false,
     can_post_quinlan: false,
-    can_view_notebook: false
+    can_view_notebook: false,
+    can_post_diary_gallery: false,
+    can_view_diary_nsfw: false
 })
 
 const user = ref(null)
@@ -34,7 +36,7 @@ async function checkAdminStatus(userId) {
     }
     const { data, error } = await supabase
         .from('profiles')
-        .select('role, username, avatar_url, banner_url, title, bio, accent_color, playlist_url, playlist_title, playlist_cover, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw, can_view_quinlan, can_post_quinlan, can_view_notebook')
+        .select('role, username, avatar_url, banner_url, title, bio, accent_color, playlist_url, playlist_title, playlist_cover, can_view_moryquinau, can_post_community, can_post_moryquinau, can_post_gallery, can_view_nsfw, can_view_quinlan, can_post_quinlan, can_view_notebook, can_post_diary_gallery, can_view_diary_nsfw')
         .eq('id', userId)
         .single()
 
@@ -56,7 +58,9 @@ async function checkAdminStatus(userId) {
         can_view_nsfw: data?.can_view_nsfw || false,
         can_view_quinlan: data?.can_view_quinlan || false,
         can_post_quinlan: data?.can_post_quinlan || false,
-        can_view_notebook: data?.can_view_notebook || false
+        can_view_notebook: data?.can_view_notebook || false,
+        can_post_diary_gallery: data?.can_post_diary_gallery || false,
+        can_view_diary_nsfw: data?.can_view_diary_nsfw || false
     }
 }
 

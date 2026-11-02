@@ -53,13 +53,17 @@ const TAG_OPTIONS = [
 ]
 
 const props = defineProps({
-  editPost: { type: Object, default: null }
+  editPost: { type: Object, default: null },
+  // Reused by the diary gallery, which has its own table, storage prefix and tags.
+  table: { type: String, default: 'gallery_images' },
+  storageFolder: { type: String, default: 'gallery-posts' },
+  tagOptions: { type: Array, default: null }
 })
 const emit = defineEmits(['saved', 'cancel'])
 
 const { user, profile, isAdmin } = useAuth()
 
-const visibleTagOptions = computed(() => TAG_OPTIONS.filter(tag => !tag.adminOnly || isAdmin.value))
+const visibleTagOptions = computed(() => (props.tagOptions ?? TAG_OPTIONS).filter(tag => !tag.adminOnly || isAdmin.value))
 
 const form = reactive({
   display_name: props.editPost?.display_name ?? profile.value.username ?? '',
@@ -87,7 +91,7 @@ async function onImageChange(e) {
   errorMsg.value = ''
 
   const ext = file.name.split('.').pop()
-  const path = `gallery-posts/${user.value.id}/${Date.now()}.${ext}`
+  const path = `${props.storageFolder}/${user.value.id}/${Date.now()}.${ext}`
 
   const { error: uploadError } = await supabase.storage.from('images').upload(path, file)
 
@@ -122,7 +126,7 @@ async function handleSubmit() {
 
   if (props.editPost) {
     const { data, error } = await supabase
-        .from('gallery_images')
+        .from(props.table)
         .update({ ...payload, edited_at: new Date().toISOString() })
         .eq('id', props.editPost.id)
         .select()
@@ -140,7 +144,7 @@ async function handleSubmit() {
   }
 
   const { data, error } = await supabase
-      .from('gallery_images')
+      .from(props.table)
       .insert({ ...payload, user_id: user.value.id })
       .select()
       .single()

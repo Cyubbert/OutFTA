@@ -152,6 +152,11 @@ const router = createRouter({
             component: () => import("@/views/QuinlanViews/DiaryView.vue")
         },
         {
+            path: "/diary-gallery",
+            name: "diary-gallery",
+            component: () => import("@/views/OtherViews/DiaryGalleryView.vue")
+        },
+        {
             path: "/notebook",
             name: "notebook",
             component: () => import("@/views/NotebookViews/NotebookView.vue")

@@ -1,17 +1,31 @@
 <script setup>
-defineProps({
-  active: { type: String, required: true } // 'mory' | 'quinlan'
+import { computed } from 'vue'
+
+const props = defineProps({
+  active: { type: String, required: true }, // 'mory' | 'quinlan' | 'gallery'
+  theme: { type: String, default: null }    // 'mory' | 'quinlan'; defaults to active
 })
+
+// The gallery is shared by both diaries and keeps the look of whichever one you came from.
+const navTheme = computed(() => props.theme || props.active)
 </script>
 
 <template>
-  <nav class="diary-nav" :class="active">
+  <nav class="diary-nav" :class="navTheme">
     <router-link to="/mory" class="diary-nav-link" :class="{ active: active === 'mory' }">
       Mory's Diary
     </router-link>
     <span class="diary-nav-sep">✦</span>
     <router-link to="/quinlan" class="diary-nav-link" :class="{ active: active === 'quinlan' }">
       Quinlan's Diary
+    </router-link>
+    <span class="diary-nav-sep">✦</span>
+    <router-link
+        :to="{ path: '/diary-gallery', query: { theme: navTheme } }"
+        class="diary-nav-link"
+        :class="{ active: active === 'gallery' }"
+    >
+      Gallery
     </router-link>
   </nav>
 </template>
@@ -24,6 +38,7 @@ defineProps({
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.9rem;
   padding: 0.85rem 1rem;
   font-family: 'EB Garamond', serif;
