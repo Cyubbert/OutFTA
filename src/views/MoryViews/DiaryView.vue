@@ -767,9 +767,9 @@ async function deleteEntry(entry) {
 }
 
 .page-seal img {
-  height: 72px;
+  height: 110px;
   width: auto;
-  max-width: 104px;
+  max-width: 160px;
   object-fit: contain;
   opacity: 0.9;
 }

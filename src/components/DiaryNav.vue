@@ -1,17 +1,11 @@
 <script setup>
-import { computed } from 'vue'
-
-const props = defineProps({
-  active: { type: String, required: true }, // 'mory' | 'quinlan' | 'gallery'
-  theme: { type: String, default: null }    // 'mory' | 'quinlan'; defaults to active
+defineProps({
+  active: { type: String, required: true } // 'mory' | 'quinlan' | 'gallery'
 })
-
-// The gallery is shared by both diaries and keeps the look of whichever one you came from.
-const navTheme = computed(() => props.theme || props.active)
 </script>
 
 <template>
-  <nav class="diary-nav" :class="navTheme">
+  <nav class="diary-nav" :class="active">
     <router-link to="/mory" class="diary-nav-link" :class="{ active: active === 'mory' }">
       Mory's Diary
     </router-link>
@@ -21,7 +15,7 @@ const navTheme = computed(() => props.theme || props.active)
     </router-link>
     <span class="diary-nav-sep">✦</span>
     <router-link
-        :to="{ path: '/diary-gallery', query: { theme: navTheme } }"
+        to="/diary-gallery"
         class="diary-nav-link"
         :class="{ active: active === 'gallery' }"
     >
@@ -94,5 +88,26 @@ const navTheme = computed(() => props.theme || props.active)
 .diary-nav.quinlan .diary-nav-sep {
   color: #7d0010;
   font-size: 0.7rem;
+}
+
+/* Gallery theme: Quinlan's dark bar, Mory's red ink */
+.diary-nav.gallery {
+  background: rgba(25, 25, 25, 0.9);
+  border-bottom: 1px solid rgba(192, 57, 43, 0.25);
+}
+.diary-nav.gallery .diary-nav-link {
+  color: #9a8878;
+}
+.diary-nav.gallery .diary-nav-link:hover {
+  color: #e8dcc8;
+}
+.diary-nav.gallery .diary-nav-link.active {
+  color: #e8dcc8;
+  border-bottom-color: #c0392b;
+}
+.diary-nav.gallery .diary-nav-sep {
+  color: #c0392b;
+  font-size: 0.7rem;
+  opacity: 0.7;
 }
 </style>

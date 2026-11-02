@@ -1,12 +1,10 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
 import { supabase } from '@/lib/supabase.js'
 import { useAuth } from '@/composables/useAuth'
 import DiaryNav from '@/components/DiaryNav.vue'
 import GalleryUploadForm from '@/components/GalleryUploadForm.vue'
 
-const route = useRoute()
 const { user, isAdmin, profile } = useAuth()
 
 const TABLE = 'diary_gallery_images'
@@ -18,12 +16,9 @@ const TAG_OPTIONS = [
   { value: 'other' },
 ]
 
-// Page colours follow whichever diary linked here (DiaryNav passes ?theme=).
-const THEMES = {
-  mory: { bg: '#f5f0e8', fg: '#1a1008' },
-  quinlan: { bg: '#191919', fg: '#E3E2DF' },
-}
-const theme = computed(() => THEMES[route.query.theme] ? route.query.theme : 'mory')
+// Shared by both diaries: Quinlan's dark page with Mory's type and red ink.
+const PAGE_BG = '#191919'
+const PAGE_FG = '#e8dcc8'
 
 const images = ref([])
 const galleryLoading = ref(true)
@@ -63,16 +58,14 @@ function tagLabel(tag) {
 }
 
 function applyPageStyles() {
-  document.body.style.backgroundColor = THEMES[theme.value].bg
-  document.body.style.color = THEMES[theme.value].fg
+  document.body.style.backgroundColor = PAGE_BG
+  document.body.style.color = PAGE_FG
   document.body.style.maxWidth = '100%'
   document.body.style.margin = '0'
   document.body.style.padding = '0'
   const navbar = document.querySelector('.navbar')
   if (navbar) navbar.style.display = 'none'
 }
-
-watch(theme, applyPageStyles)
 
 function openLightbox(img) {
   lightbox.value = img
@@ -171,8 +164,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="dg-root" :class="theme">
-    <DiaryNav active="gallery" :theme="theme" />
+  <div class="dg-root">
+    <DiaryNav active="gallery" />
 
     <section class="dg-page">
       <header class="dg-header">
@@ -276,15 +269,15 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=UnifrakturCook:wght@700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
 
-/* ───────── Themes ───────── */
-.dg-root.mory {
-  --bg: #f5f0e8;
-  --text: #1a1008;
-  --surface: #f0e8d8;
-  --surface-hover: #e8dcc8;
-  --border: rgba(26, 16, 8, 0.12);
+/* ───────── Theme: Quinlan's dark page, Mory's type and ink ───────── */
+.dg-root {
+  --bg: #191919;
+  --text: #e8dcc8;
+  --surface: #202020;
+  --surface-hover: #262626;
+  --border: #2F2F2F;
   --muted: #9a8878;
   --accent: #c0392b;
   --accent-text: #fff;
@@ -292,21 +285,6 @@ onUnmounted(() => {
   --title-weight: 300;
   --title-style: italic;
   --body-font: 'EB Garamond', serif;
-}
-
-.dg-root.quinlan {
-  --bg: #191919;
-  --text: #E3E2DF;
-  --surface: #202020;
-  --surface-hover: #262626;
-  --border: #2F2F2F;
-  --muted: #9B9A97;
-  --accent: #8A1424;
-  --accent-text: #fff;
-  --title-font: 'UnifrakturCook', serif;
-  --title-weight: 700;
-  --title-style: normal;
-  --body-font: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
 .dg-root {
