@@ -5,8 +5,8 @@ import { useAuth } from '@/composables/useAuth'
 
 const { user, isAdmin, profile, loading: authLoading } = useAuth()
 
-const PAGE_BG = '#0c0405'
-const PAGE_FG = '#d9d4c7'
+const PAGE_BG = '#efe4cc'
+const PAGE_FG = '#3b2a1c'
 const FLIP_MS = 900
 
 onMounted(() => {
@@ -279,11 +279,6 @@ async function deletePage(page) {
 
 <template>
   <div class="notebook-root">
-    <div class="sky" aria-hidden="true">
-      <div class="stars stars-far" />
-      <div class="stars stars-near" />
-    </div>
-
     <div v-if="showGate" class="gate">
       <svg class="gate-star" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 0 L57 43 L100 50 L57 57 L50 100 L43 57 L0 50 L43 43 Z" />
@@ -416,6 +411,7 @@ async function deletePage(page) {
   --ink: #2e1a0f;
   --leather: #3b2214;
   --paper: #efe6d2;
+  --torn-red: #7d1424;
   --page-w: min(530px, calc((100vw - 2rem) / 2), calc((100dvh - 260px) / 1.38));
   --page-h: calc(var(--page-w) * 1.38);
 
@@ -424,50 +420,25 @@ async function deletePage(page) {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   overflow: hidden;
-  background: radial-gradient(ellipse 80% 60% at 50% 30%, #3a0c12 0%, #1a0608 55%, #0c0405 100%);
-  color: #d9d4c7;
+  background: #efe4cc;
+  color: #3b2a1c;
   font-family: 'Jost', sans-serif;
 }
 
-/* ── Starfield ── */
-
-.sky {
+/* The paper lives on its own layer so it can be softly out of focus behind the book.
+   Inset past the edges so the blur doesn't fade out at the borders. */
+.notebook-root::before {
+  content: '';
   position: absolute;
-  inset: 0;
+  inset: -16px;
+  /* Cream paper: faint fibre grain over a warm base, darker toward the edges. */
+  background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.33 0 0 0 0 0.18 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 85% 75% at 50% 45%, transparent 55%, rgba(120, 85, 40, 0.22) 100%),
+      #efe4cc;
+  background-size: 300px 300px, 100% 100%, auto;
+  filter: blur(1.5px);
   pointer-events: none;
-  overflow: hidden;
-}
-
-.stars {
-  position: absolute;
-  inset: 0;
-  background-repeat: repeat;
-}
-
-.stars-far {
-  background-image:
-      radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-      radial-gradient(1px 1px at 120px 80px, rgba(255, 255, 255, 0.7), transparent),
-      radial-gradient(1px 1px at 200px 160px, #fff, transparent),
-      radial-gradient(1px 1px at 60px 190px, rgba(255, 255, 255, 0.6), transparent),
-      radial-gradient(1px 1px at 170px 20px, rgba(255, 255, 255, 0.8), transparent);
-  background-size: 230px 230px;
-  opacity: 0.5;
-}
-
-.stars-near {
-  background-image:
-      radial-gradient(1.5px 1.5px at 50px 60px, #fff6dc, transparent),
-      radial-gradient(1.5px 1.5px at 260px 200px, #fff, transparent),
-      radial-gradient(2px 2px at 330px 90px, #ffe9b0, transparent),
-      radial-gradient(1.5px 1.5px at 140px 310px, #fff, transparent);
-  background-size: 380px 380px;
-  animation: twinkle 5s ease-in-out infinite alternate;
-}
-
-@keyframes twinkle {
-  from { opacity: 0.35; }
-  to { opacity: 0.9; }
 }
 
 /* ── Gate ── */
@@ -492,7 +463,7 @@ async function deletePage(page) {
 
 .gate-text {
   font-style: italic;
-  color: #b0948c;
+  color: #7a5a4a;
   font-size: 1.2rem;
 }
 
@@ -526,14 +497,14 @@ async function deletePage(page) {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  color: #8a6a64;
+  color: #7a5a4a;
   text-decoration: none;
   font-size: 0.95rem;
   font-style: italic;
 }
 
 .leave-link:hover {
-  color: var(--gold);
+  color: var(--torn-red);
 }
 
 .page-header {
@@ -546,7 +517,7 @@ async function deletePage(page) {
   font-size: 0.72rem;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #9c7a72;
+  color: #8a6a5a;
 }
 
 .title {
@@ -555,12 +526,11 @@ async function deletePage(page) {
   font-weight: 400;
   font-size: clamp(1.6rem, 5vw, 2.4rem);
   letter-spacing: 0.08em;
-  color: #f1e6c8;
-  text-shadow: 0 0 18px rgba(216, 181, 106, 0.25);
+  color: var(--ink);
 }
 
 .status {
-  color: #9c7a72;
+  color: #7a5a4a;
   font-style: italic;
   font-size: 1.1rem;
   padding: 2rem 0;
@@ -573,10 +543,26 @@ async function deletePage(page) {
 /* ── Book ── */
 
 .stage {
+  position: relative;
   width: calc(var(--page-w) * 2);
   height: var(--page-h);
   touch-action: pan-y;
   user-select: none;
+}
+
+/* The torn red strip the book rests on. It spans the screen (wider on phones, so the
+   band isn't a thin line behind a small book) and the root's overflow: hidden trims the sides. */
+.stage::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100vw, calc(var(--page-h) * 2.6));
+  aspect-ratio: 1920 / 1080;
+  transform: translate(-50%, -50%);
+  background: url('@/assets/TornPaper.webp') center / contain no-repeat;
+  filter: blur(2px);
+  pointer-events: none;
 }
 
 /* Perspective lives here (not preserve-3d) so leaves composite flat in
@@ -587,6 +573,8 @@ async function deletePage(page) {
   height: 100%;
   perspective: 2400px;
   transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+  /* drop-shadow follows the visible pages, so a closed book shadows only its cover. */
+  filter: drop-shadow(0 18px 22px rgba(30, 6, 10, 0.45)) drop-shadow(0 4px 6px rgba(30, 6, 10, 0.35));
 }
 
 /* Closed: slide so the lone cover sits centered. */
@@ -712,17 +700,11 @@ async function deletePage(page) {
 .corner.bl { bottom: -1px; left: -1px; border-bottom-width: 2px; border-left-width: 2px; }
 .corner.br { bottom: -1px; right: -1px; border-bottom-width: 2px; border-right-width: 2px; }
 
-/* Endpapers: a faint star chart */
+/* Endpapers: plain dark paper, without the light highlight that .face gives the pages. */
 
 .face.endpaper {
   background-color: var(--ink);
-  background-image:
-      radial-gradient(circle at 50% 50%, transparent 38%, rgba(216, 181, 106, 0.12) 38.3%, transparent 38.8%),
-      radial-gradient(circle at 50% 50%, transparent 24%, rgba(216, 181, 106, 0.1) 24.3%, transparent 24.8%),
-      radial-gradient(1px 1px at 12px 18px, rgba(243, 220, 158, 0.7), transparent),
-      radial-gradient(1px 1px at 44px 52px, rgba(255, 255, 255, 0.5), transparent),
-      radial-gradient(1.5px 1.5px at 70px 10px, rgba(243, 220, 158, 0.8), transparent);
-  background-size: 100% 100%, 100% 100%, 80px 80px, 80px 80px, 80px 80px;
+  background-image: none;
   box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.5);
 }
 
@@ -740,8 +722,8 @@ async function deletePage(page) {
   height: 40px;
   border-radius: 6px;
   border: none;
-  background: #333;
-  color: #fff;
+  background: var(--torn-red);
+  color: #f5ecd8;
   font-family: 'Jost', sans-serif;
   font-size: 1.5rem;
   line-height: 1;
@@ -750,7 +732,7 @@ async function deletePage(page) {
 }
 
 .ctrl:hover:not(:disabled) {
-  background: #64b5f6;
+  background: #a3192c;
 }
 
 .ctrl:disabled {
@@ -764,7 +746,7 @@ async function deletePage(page) {
   font-family: 'Iosevka Charon', monospace;
   font-size: 0.78rem;
   letter-spacing: 0.12em;
-  color: #b9a37a;
+  color: #6e5236;
 }
 
 .sub-controls {
@@ -777,10 +759,10 @@ async function deletePage(page) {
 
 .text-btn {
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(59, 42, 28, 0.3);
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  color: #888;
+  color: #5e4434;
   font-family: 'Jost', sans-serif;
   font-size: 0.9rem;
   cursor: pointer;
@@ -788,22 +770,22 @@ async function deletePage(page) {
 }
 
 .text-btn:hover {
-  border-color: #90caf9;
-  color: #90caf9;
+  border-color: var(--torn-red);
+  color: var(--torn-red);
 }
 
 .text-btn.admin {
-  background: #90caf9;
-  border-color: #90caf9;
-  color: #121212;
+  background: var(--torn-red);
+  border-color: var(--torn-red);
+  color: #f5ecd8;
   font-weight: 600;
   transition: background 0.2s;
 }
 
 .text-btn.admin:hover {
-  background: #64b5f6;
-  border-color: #64b5f6;
-  color: #121212;
+  background: #a3192c;
+  border-color: #a3192c;
+  color: #f5ecd8;
 }
 
 /* ── Overlays ── */
@@ -968,7 +950,6 @@ async function deletePage(page) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stars-near { animation: none; }
   .book, .leaf { transition-duration: 0.01s; }
 }
 </style>
