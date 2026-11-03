@@ -262,7 +262,7 @@ async function deleteSession(s) {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(8, 8, 8, 0.75);
   z-index: 1000;
   display: flex;
   align-items: flex-start;
@@ -272,11 +272,12 @@ async function deleteSession(s) {
 }
 
 .modal-panel {
-  background: #181818;
-  border: 1px solid #333;
-  border-radius: 12px;
+  background: #202020;
+  border: 1px solid #2F2F2F;
+  border-radius: 10px;
   padding: 1.5rem;
   width: 100%;
-  max-width: 540px;
+  max-width: 700px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
 }
 </style>
